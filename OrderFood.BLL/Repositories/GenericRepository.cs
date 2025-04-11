@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OrderFood.BLL.Interfaces;
+using OrderFood.BLL.RepoTest;
 using OrderFood.DAL.Context;
 using OrderFood.DAL.Entities;
 using System;
@@ -19,14 +20,15 @@ namespace OrderFood.BLL.Repositories
             _dbContext = dbContext;
         }
 
+
         public void AddAsync(T entity)
-        => _dbContext.Set<T>().AddAsync(entity);
+        => _dbContext.AddAsync(entity);
 
         public void Delete(T entity)
-        => _dbContext.Set<T>().Remove(entity);
+        => _dbContext.Remove(entity);
 
         public void Update(T entity)
-        => _dbContext.Set<T>().Update(entity);
+        => _dbContext.Update(entity);
 
         public async Task<IEnumerable<T>> GetAllAsync()
         {

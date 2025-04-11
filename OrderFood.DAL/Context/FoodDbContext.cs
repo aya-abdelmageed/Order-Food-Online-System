@@ -15,6 +15,6 @@ namespace OrderFood.DAL.Context
         public FoodDbContext(DbContextOptions<FoodDbContext> options) : base(options)
         {
         }
-        
+
     }
 }
