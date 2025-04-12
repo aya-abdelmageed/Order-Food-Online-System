@@ -3,17 +3,20 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OrderFood.DAL.Context;
 
 #nullable disable
 
-namespace OrderFood.Pl.Migrations
+namespace OrderFood.DAL.Data.Migrations
 {
     [DbContext(typeof(FoodDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250412225325_OrderFoodMigrations")]
+    partial class OrderFoodMigrations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -194,38 +197,6 @@ namespace OrderFood.Pl.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("OrderFood.DAL.Entities.Models.Coupon", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("AdminId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("AmountPercentage")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("ExpireDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AdminId");
-
-                    b.ToTable("Coupons");
-                });
-
             modelBuilder.Entity("OrderFood.DAL.Entities.Models.Meal", b =>
                 {
                     b.Property<int>("Id")
@@ -250,7 +221,7 @@ namespace OrderFood.Pl.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
@@ -258,10 +229,6 @@ namespace OrderFood.Pl.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
-
-                    b.HasIndex("Name")
-                        .IsUnique()
-                        .HasDatabaseName("IX_Meal_Name");
 
                     b.ToTable("Meals");
                 });
@@ -273,9 +240,6 @@ namespace OrderFood.Pl.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("CouponId")
-                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedOrder")
                         .HasColumnType("datetime2");
@@ -314,8 +278,6 @@ namespace OrderFood.Pl.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CouponId");
 
                     b.HasIndex("CustomerId");
 
@@ -373,7 +335,7 @@ namespace OrderFood.Pl.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OwnerId")
                         .IsRequired()
@@ -381,49 +343,9 @@ namespace OrderFood.Pl.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Name")
-                        .IsUnique()
-                        .HasDatabaseName("IX_Restaurant_Name");
-
                     b.HasIndex("OwnerId");
 
                     b.ToTable("Restaurants");
-                });
-
-            modelBuilder.Entity("OrderFood.DAL.Entities.Models.Review", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Comment")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CustomerId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("Rate")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RestaurantId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("ReviewDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CustomerId");
-
-                    b.HasIndex("RestaurantId");
-
-                    b.ToTable("Reviews");
                 });
 
             modelBuilder.Entity("OrderFood.DAL.Entities.User.ApplicationUser", b =>
@@ -585,17 +507,6 @@ namespace OrderFood.Pl.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("OrderFood.DAL.Entities.Models.Coupon", b =>
-                {
-                    b.HasOne("OrderFood.DAL.Entities.User.ApplicationUser", "Admin")
-                        .WithMany()
-                        .HasForeignKey("AdminId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Admin");
-                });
-
             modelBuilder.Entity("OrderFood.DAL.Entities.Models.Meal", b =>
                 {
                     b.HasOne("OrderFood.DAL.Entities.Models.Category", "Category")
@@ -609,10 +520,6 @@ namespace OrderFood.Pl.Migrations
 
             modelBuilder.Entity("OrderFood.DAL.Entities.Models.Order", b =>
                 {
-                    b.HasOne("OrderFood.DAL.Entities.Models.Coupon", "Coupon")
-                        .WithMany("Orders")
-                        .HasForeignKey("CouponId");
-
                     b.HasOne("OrderFood.DAL.Entities.User.ApplicationUser", "Customer")
                         .WithMany()
                         .HasForeignKey("CustomerId")
@@ -622,8 +529,6 @@ namespace OrderFood.Pl.Migrations
                     b.HasOne("OrderFood.DAL.Entities.User.ApplicationUser", "Driver")
                         .WithMany()
                         .HasForeignKey("DriverId");
-
-                    b.Navigation("Coupon");
 
                     b.Navigation("Customer");
 
@@ -660,33 +565,9 @@ namespace OrderFood.Pl.Migrations
                     b.Navigation("Owner");
                 });
 
-            modelBuilder.Entity("OrderFood.DAL.Entities.Models.Review", b =>
-                {
-                    b.HasOne("OrderFood.DAL.Entities.User.ApplicationUser", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("OrderFood.DAL.Entities.Models.Restaurant", "Restaurant")
-                        .WithMany()
-                        .HasForeignKey("RestaurantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Customer");
-
-                    b.Navigation("Restaurant");
-                });
-
             modelBuilder.Entity("OrderFood.DAL.Entities.Models.Category", b =>
                 {
                     b.Navigation("Meals");
-                });
-
-            modelBuilder.Entity("OrderFood.DAL.Entities.Models.Coupon", b =>
-                {
-                    b.Navigation("Orders");
                 });
 
             modelBuilder.Entity("OrderFood.DAL.Entities.Models.Order", b =>
