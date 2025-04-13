@@ -1,0 +1,152 @@
+[
+  // 1 Admin
+  {
+    "Id": "user-1",
+    "UserName": "ahmed.elsayed@company.com",
+    "FirstName": "Ahmed",
+    "LastName": "Elsayed",
+    "Address": "123 Admin Street, Cairo, Egypt",
+    "DateOfBirth": "1985-01-01T00:00:00Z",
+    "Image": "images/DefaultUserImage.png",
+    "IsActive": true,
+    "IsDeleted": false,
+    "CreatedAt": "2025-04-13T12:00:00Z",
+    "Role": "Admin"
+  },
+
+  // 4 Owners
+  {
+    "Id": "user-2",
+    "UserName": "mohamed.ali@company.com",
+    "FirstName": "Mohamed",
+    "LastName": "Ali",
+    "Address": "456 Owner Avenue, Alexandria, Egypt",
+    "DateOfBirth": "1986-01-01T00:00:00Z",
+    "Image": "images/DefaultUserImage.png",
+    "IsActive": true,
+    "IsDeleted": false,
+    "CreatedAt": "2025-04-13T12:00:00Z",
+    "Role": "Owner"
+  },
+  {
+    "Id": "user-3",
+    "UserName": "layla.hassan@company.com",
+    "FirstName": "Layla",
+    "LastName": "Hassan",
+    "Address": "789 Owner Road, Giza, Egypt",
+    "DateOfBirth": "1987-01-01T00:00:00Z",
+    "Image": "images/DefaultUserImage.png",
+    "IsActive": true,
+    "IsDeleted": false,
+    "CreatedAt": "2025-04-13T12:00:00Z",
+    "Role": "Owner"
+  },
+  {
+    "Id": "user-4",
+    "UserName": "karim.mohamed@company.com",
+    "FirstName": "Karim",
+    "LastName": "Mohamed",
+    "Address": "321 Owner Street, Mansoura, Egypt",
+    "DateOfBirth": "1988-01-01T00:00:00Z",
+    "Image": "images/DefaultUserImage.png",
+    "IsActive": true,
+    "IsDeleted": false,
+    "CreatedAt": "2025-04-13T12:00:00Z",
+    "Role": "Owner"
+  },
+  {
+    "Id": "user-5",
+    "UserName": "sarah.tamer@company.com",
+    "FirstName": "Sarah",
+    "LastName": "Tamer",
+    "Address": "654 Owner Lane, Tanta, Egypt",
+    "DateOfBirth": "1989-01-01T00:00:00Z",
+    "Image": "images/DefaultUserImage.png",
+    "IsActive": true,
+    "IsDeleted": false,
+    "CreatedAt": "2025-04-13T12:00:00Z",
+    "Role": "Owner"
+  },
+
+  // 3 Deliveries
+  {
+    "Id": "user-6",
+    "UserName": "hassan.ahmed@company.com",
+    "FirstName": "Hassan",
+    "LastName": "Ahmed",
+    "Address": "123 Delivery Street, Cairo, Egypt",
+    "DateOfBirth": "1990-01-01T00:00:00Z",
+    "Image": "images/DefaultUserImage.png",
+    "IsActive": true,
+    "IsDeleted": false,
+    "CreatedAt": "2025-04-13T12:00:00Z",
+    "Role": "Delivery"
+  },
+  {
+    "Id": "user-7",
+    "UserName": "dina.khaled@company.com",
+    "FirstName": "Dina",
+    "LastName": "Khaled",
+    "Address": "456 Delivery Avenue, Alexandria, Egypt",
+    "DateOfBirth": "1991-01-01T00:00:00Z",
+    "Image": "images/DefaultUserImage.png",
+    "IsActive": true,
+    "IsDeleted": false,
+    "CreatedAt": "2025-04-13T12:00:00Z",
+    "Role": "Delivery"
+  },
+  {
+    "Id": "user-8",
+    "UserName": "nour.mohamed@company.com",
+    "FirstName": "Nour",
+    "LastName": "Mohamed",
+    "Address": "789 Delivery Road, Giza, Egypt",
+    "DateOfBirth": "1992-01-01T00:00:00Z",
+    "Image": "images/DefaultUserImage.png",
+    "IsActive": true,
+    "IsDeleted": false,
+    "CreatedAt": "2025-04-13T12:00:00Z",
+    "Role": "Delivery"
+  },
+
+  // Remaining Customers
+  {
+    "Id": "user-9",
+    "UserName": "omda.mohamed@company.com",
+    "FirstName": "Omda",
+    "LastName": "Mohamed",
+    "Address": "123 Customer Street, Cairo, Egypt",
+    "DateOfBirth": "1995-01-01T00:00:00Z",
+    "Image": "images/DefaultUserImage.png",
+    "IsActive": true,
+    "IsDeleted": false,
+    "CreatedAt": "2025-04-13T12:00:00Z",
+    "Role": "Customer"
+  },
+  {
+    "Id": "user-10",
+    "UserName": "mona.fahmy@company.com",
+    "FirstName": "Mona",
+    "LastName": "Fahmy",
+    "Address": "456 Customer Avenue, Alexandria, Egypt",
+    "DateOfBirth": "1996-01-01T00:00:00Z",
+    "Image": "images/DefaultUserImage.png",
+    "IsActive": true,
+    "IsDeleted": false,
+    "CreatedAt": "2025-04-13T12:00:00Z",
+    "Role": "Customer"
+  },
+  {
+    "Id": "user-11",
+    "UserName": "yasmine.salem@company.com",
+    "FirstName": "Yasmine",
+    "LastName": "Salem",
+    "Address": "789 Customer Road, Giza, Egypt",
+    "DateOfBirth": "1997-01-01T00:00:00Z",
+    "Image": "images/DefaultUserImage.png",
+    "IsActive": true,
+    "IsDeleted": false,
+    "CreatedAt": "2025-04-13T12:00:00Z",
+    "Role": "Customer"
+  }
+]

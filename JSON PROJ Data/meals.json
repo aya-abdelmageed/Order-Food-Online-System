@@ -1,0 +1,74 @@
+{
+  "Meals": [
+    {
+      "Name": "Pancakes",
+      "Image": "images/pancakes.png",
+      "Price": 15.50,
+      "Description": "Delicious homemade pancakes with syrup and butter",
+      "CategoryId": 1
+    },
+    {
+      "Name": "Omelette",
+      "Image": "images/omelette.png",
+      "Price": 12.00,
+      "Description": "Egg omelette with veggies and cheese",
+      "CategoryId": 1
+    },
+    {
+      "Name": "Grilled Chicken Sandwich",
+      "Image": "images/grilled_chicken_sandwich.png",
+      "Price": 20.00,
+      "Description": "Grilled chicken sandwich with lettuce, tomato, and mayo",
+      "CategoryId": 2
+    },
+    {
+      "Name": "Spaghetti Bolognese",
+      "Image": "images/spaghetti_bolognese.png",
+      "Price": 25.00,
+      "Description": "Classic spaghetti with rich Bolognese sauce",
+      "CategoryId": 2
+    },
+    {
+      "Name": "Beef Steak",
+      "Image": "images/beef_steak.png",
+      "Price": 40.00,
+      "Description": "Juicy beef steak cooked to perfection",
+      "CategoryId": 3
+    },
+    {
+      "Name": "Grilled Fish",
+      "Image": "images/grilled_fish.png",
+      "Price": 35.00,
+      "Description": "Grilled fish served with vegetables and sauce",
+      "CategoryId": 3
+    },
+    {
+      "Name": "Chocolate Cake",
+      "Image": "images/chocolate_cake.png",
+      "Price": 10.00,
+      "Description": "Rich chocolate cake topped with chocolate ganache",
+      "CategoryId": 4
+    },
+    {
+      "Name": "Fruit Tart",
+      "Image": "images/fruit_tart.png",
+      "Price": 12.50,
+      "Description": "Fresh fruit tart with a sweet pastry crust",
+      "CategoryId": 4
+    },
+    {
+      "Name": "Mango Smoothie",
+      "Image": "images/mango_smoothie.png",
+      "Price": 8.00,
+      "Description": "Refreshing mango smoothie with yogurt",
+      "CategoryId": 5
+    },
+    {
+      "Name": "Lemonade",
+      "Image": "images/lemonade.png",
+      "Price": 6.50,
+      "Description": "Freshly squeezed lemonade with mint",
+      "CategoryId": 5
+    }
+  ]
+}

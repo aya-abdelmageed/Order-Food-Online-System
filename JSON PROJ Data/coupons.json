@@ -1,0 +1,16 @@
+{
+  "Coupons": [
+    {
+      "AmountPercentage": 10,
+      "Code": "WELCOME10",
+      "ExpireDate": "2025-06-30T00:00:00",
+      "AdminId": "user-1"
+    },
+    {
+      "AmountPercentage": 20,
+      "Code": "SUMMER20",
+      "ExpireDate": "2025-07-31T00:00:00",
+      "AdminId": "user-1"
+    }
+  ]
+}

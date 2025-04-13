@@ -1,0 +1,54 @@
+{
+  "Categories": [
+    {
+      "Name": "Breakfast",
+      "Restaurants": [
+        "The Breakfast Place"
+      ],
+      "Meals": [
+        "Pancakes",
+        "Omelette"
+      ]
+    },
+    {
+      "Name": "Lunch",
+      "Restaurants": [
+        "Lunch Delight"
+      ],
+      "Meals": [
+        "Grilled Chicken Sandwich",
+        "Spaghetti Bolognese"
+      ]
+    },
+    {
+      "Name": "Dinner",
+      "Restaurants": [
+        "Dinner King"
+      ],
+      "Meals": [
+        "Beef Steak",
+        "Grilled Fish"
+      ]
+    },
+    {
+      "Name": "Sweets",
+      "Restaurants": [
+        "Sweet Treats"
+      ],
+      "Meals": [
+        "Chocolate Cake",
+        "Fruit Tart"
+      ]
+    },
+    {
+      "Name": "Drinks",
+      "Restaurants": [
+        "Drinks Bar"
+      ],
+      "Meals": [
+        "Mango Smoothie",
+        "Lemonade"
+      ]
+    }
+  ]
+}

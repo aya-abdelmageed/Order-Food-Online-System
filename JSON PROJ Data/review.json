@@ -1,0 +1,25 @@
+{
+  "Reviews": [
+    {
+      "ReviewDate": "2025-04-13T10:15:00",
+      "Rate": 5,
+      "Comment": "Excellent breakfast and service!",
+      "CustomerId": "user-11",
+      "RestaurantId": 1
+    },
+    {
+      "ReviewDate": "2025-04-12T14:30:00",
+      "Rate": 4,
+      "Comment": "Tasty lunch but a bit late.",
+      "CustomerId": "user-10",
+      "RestaurantId": 2
+    },
+    {
+      "ReviewDate": "2025-04-11T20:00:00",
+      "Rate": 3,
+      "Comment": "Dinner was okay, needs improvement.",
+      "CustomerId": "user-9",
+      "RestaurantId": 3
+    } 
+  ]
+}
