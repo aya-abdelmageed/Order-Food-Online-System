@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace OrderFood.BLL.Interfaces
 {
-    enum OrderBy
+    public enum OrderBy
     {
         Ascending,
         Descending

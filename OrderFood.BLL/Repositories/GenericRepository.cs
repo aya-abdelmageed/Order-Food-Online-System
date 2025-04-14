@@ -24,27 +24,67 @@ namespace OrderFood.BLL.Repositories
         => _dbContext.Set<T>().AddAsync(entity);
 
         public void Delete(T entity)
-        => _dbContext.Set<T>().Remove(entity);
+        {
+            //=> _dbContext.Set<T>().Remove(entity);
+
+            entity.IsDelete = true;
+            _dbContext.Set<T>().Update(entity);
+        }
 
         public void Update(T entity)
         => _dbContext.Set<T>().Update(entity);
 
-        public async Task<IEnumerable<T>> GetAllAsync()
-        {
-            var data = await _dbContext.Set<T>().ToListAsync();
-            if(data == null)
-               return new List<T>();
-            return data;
-        }
-        //Expression<Func<T, bool>> criteria
-        public async Task<T> GetByIdAsync(int id  )
-        {
-            var data = await _dbContext.Set<T>().FindAsync(id).AsTask();
-            //var query=_dbContext.Set<T>().Where(criteria).Include(x => Object).Include(x=>x.Categories).ThenInclude(c=>c.Meals).FirstOrDefault();
-            if(data == null)
-                return new();
 
-            return data;
+        public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>>? criteria = null,
+                                                        Func<IQueryable<T>, IQueryable<T>>? includes = null,
+                                                        Expression<Func<T, object>>? orderBy = null,
+                                                        OrderBy orderType = OrderBy.Ascending)
+        {
+            //    _dbContext.Set<T>()
+            //   .Where(r=>r.name == "C")
+            //   .Include(R=>R.Owner)
+            //   .Include(R=>R.Categories)!
+            //   .ThenInclude(Cat=>cat.Meals);
+            //   .OrderBy || OrderByDescending (r=>r.location)
+
+
+            IQueryable<T> data = _dbContext.Set<T>().Where(e => e.IsDelete == false);
+
+            if (criteria != null)
+                data = data.Where(criteria);
+
+            if(includes != null)
+                data = includes(data);
+
+            if (orderBy != null && orderType == OrderBy.Ascending)
+                data = data.OrderBy(orderBy);
+
+            else if (orderBy != null && orderType == OrderBy.Descending)
+                data = data.OrderByDescending(orderBy);
+
+
+            return await data.ToListAsync();
+        }
+        
+        public async Task<T> GetOneAsync(Expression<Func<T, bool>> criteria, Func<IQueryable<T>, IQueryable<T>>? includes = null)
+        {
+            //var query =
+
+            //     _dbContext.Set<T>()
+            //    .Where(criteria)
+            //    .Include(includes[0])
+            //    .Include(includes[1])!
+            //    .ThenInclude();
+            //.FirstOrDefault();
+
+            IQueryable<T> query = _dbContext.Set<T>().Where(e => e.IsDelete == false).Where(criteria);
+
+            if (includes != null)
+                query = includes(query);
+            
+            var data = await query.FirstOrDefaultAsync();
+
+            return data == null ? new() : data;
         }
 
 
