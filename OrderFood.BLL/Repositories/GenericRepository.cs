@@ -54,7 +54,7 @@ namespace OrderFood.BLL.Repositories
                 data = data.Where(criteria);
 
             if(includes != null)
-                data = includes(data);
+                data =includes(data);
 
             if (orderBy != null && orderType == OrderBy.Ascending)
                 data = data.OrderBy(orderBy);

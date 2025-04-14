@@ -167,4 +167,5 @@ namespace OrderFood.PL.Areas.Resturant
     //        return _context.Restaurants.Any(e => e.Id == id);
     //    }
     //}
+
 }
