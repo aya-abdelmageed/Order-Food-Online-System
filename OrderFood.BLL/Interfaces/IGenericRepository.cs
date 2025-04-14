@@ -16,8 +16,8 @@ namespace OrderFood.BLL.Interfaces
         Task<T> GetByIdAsync(int id);
         Task<IEnumerable<T>> GetAllAsync();
 
-        // Expression<Func<T, bool>> criteria, int? skip, int? take,
-        // Expression<Func<T, object>> orderBy = null, OrderBy orderByDirection, string[] includes = null
+        //Expression<Func<T, bool>> criteria, int? skip, int? take,
+        //Expression<Func<T, object>> orderBy = null, OrderBy orderByDirection, string[] includes = null
 
 
     }

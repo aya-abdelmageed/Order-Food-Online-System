@@ -5,6 +5,7 @@ using OrderFood.DAL.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -35,16 +36,17 @@ namespace OrderFood.BLL.Repositories
                return new List<T>();
             return data;
         }
-
-        public async Task<T> GetByIdAsync(int id)
+        //Expression<Func<T, bool>> criteria
+        public async Task<T> GetByIdAsync(int id  )
         {
             var data = await _dbContext.Set<T>().FindAsync(id).AsTask();
-
+            //var query=_dbContext.Set<T>().Where(criteria).Include(x => Object).Include(x=>x.Categories).ThenInclude(c=>c.Meals).FirstOrDefault();
             if(data == null)
                 return new();
 
             return data;
         }
+
 
     }
 }
