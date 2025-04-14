@@ -1,0 +1,37 @@
+[
+  {
+    "FirstName": "David",
+    "LastName": "Foodie",
+    "Email": "david@customer.com",
+    "Address": "222 Oak Avenue",
+    "DateOfBirth": "1992-08-17"
+  },
+  {
+    "FirstName": "Lisa",
+    "LastName": "Diner",
+    "Email": "lisa@customer.com",
+    "Address": "333 Pine Road",
+    "DateOfBirth": "1988-12-05"
+  },
+  {
+    "FirstName": "James",
+    "LastName": "Patron",
+    "Email": "james@delivery.com",
+    "Address": "444 Elm Street",
+    "DateOfBirth": "1985-03-22"
+  },
+  {
+    "FirstName": "Alex",
+    "LastName": "Welson",
+    "Email": "alex@delivery.com",
+    "Address": "555 Speedway",
+    "DateOfBirth": "1991-06-14"
+  },
+  {
+    "FirstName": "Taylor",
+    "LastName": "Courier",
+    "Email": "taylor@delivery.com",
+    "Address": "666 Express Lane",
+    "DateOfBirth": "1993-09-08"
+  }
+]
