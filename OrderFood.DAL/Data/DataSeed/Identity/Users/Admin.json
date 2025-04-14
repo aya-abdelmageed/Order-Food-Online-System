@@ -1,0 +1,54 @@
+[
+    {
+        "Email": "ahmed.elsayed@company.com",
+        "FirstName": "Ahmed",
+        "LastName": "Elsayed",
+        "Address": "123 Admin Street, Cairo, Egypt",
+        "DateOfBirth": "1985-01-01T00:00:00Z"
+    },
+    {
+        "Email": "mohamed.ali@company.com",
+        "FirstName": "Mohamed",
+        "LastName": "Ali",
+        "Address": "456 Owner Avenue, Alexandria, Egypt",
+        "DateOfBirth": "1986-01-01T00:00:00Z"        
+    },
+    {
+        "Email": "admin@admin.com",
+        "FirstName": "Admin",
+        "LastName": "System",
+        "Address": "123 Admin St",
+        "DateOfBirth": "1990-01-01"
+    },
+    {
+        "Email": "layla.hassan@company.com",
+        "FirstName": "Layla",
+        "LastName": "Hassan",
+        "Address": "789 Owner Road, Giza, Egypt",
+        "DateOfBirth": "1987-01-01T00:00:00Z"
+        
+    },
+    {
+        "Email": "karim.mohamed@company.com",
+        "FirstName": "Karim",
+        "LastName": "Mohamed",
+        "Address": "321 Owner Street, Mansoura, Egypt",
+        "DateOfBirth": "1988-01-01T00:00:00Z"
+        
+    },
+    {
+        "Email": "sarah.tamer@company.com",
+        "FirstName": "Sarah",
+        "LastName": "Tamer",
+        "Address": "654 Owner Lane, Tanta, Egypt",
+        "DateOfBirth": "1989-01-01T00:00:00Z"
+        
+    },
+    {
+        "Email": "hassan.ahmed@company.com",
+        "FirstName": "Hassan",
+        "LastName": "Ahmed",
+        "Address": "123 Delivery Street, Cairo, Egypt",
+        "DateOfBirth": "1990-01-01T00:00:00Z"        
+    }
+]

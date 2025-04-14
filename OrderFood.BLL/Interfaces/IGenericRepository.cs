@@ -13,11 +13,20 @@ namespace OrderFood.BLL.Interfaces
         void AddAsync(T entity);
         void Delete(T entity);
         void Update(T entity);
-        Task<T> GetByIdAsync(int id);
-        Task<IEnumerable<T>> GetAllAsync();
+        Task<T> GetOneAsync(Expression<Func<T, bool>> criteria, Func<IQueryable<T>, IQueryable<T>>? includes = null);
+        
+        
+        Task<IEnumerable<T>> GetAllAsync(
+            Expression<Func<T, bool>>? criteria =null, 
+            Func<IQueryable<T>, IQueryable<T>>? includes = null, 
+            Expression<Func<T, object>>? orderBy = null,
+            OrderBy orderType = OrderBy.Ascending
+            );
 
-        // Expression<Func<T, bool>> criteria, int? skip, int? take,
-        // Expression<Func<T, object>> orderBy = null, OrderBy orderByDirection, string[] includes = null
+        //Expression<Func<T, bool>> criteria,
+        //int? skip, int? take,
+        //Expression<Func<T, object>> orderBy = null,
+        //OrderBy orderByDirection, string[] includes = null
 
 
     }
