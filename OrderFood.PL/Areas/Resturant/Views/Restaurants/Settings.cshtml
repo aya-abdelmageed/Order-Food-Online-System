@@ -1,4 +1,4 @@
-﻿@model OrderFood.DAL.Entities.Models.Restaurant
+﻿@model OrderFood.PL.Models.RestaurantSettingsViewModel
 
 @{ 
      ViewData["Title"] = "Settings"; 
@@ -9,18 +9,72 @@
     <h4>Restaurant</h4>
     <hr />
 
-    <div class="container row border border-2 p-2 h-75 w-100 ">
+    <div class="container row border border-2 p-2 h-auto w-100 ">
         <nav>
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Restuarant</button>
-                <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Account</button>
-                <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Contact</button>
+                <button class="nav-link @(Model.ActiveTab == "restaurant" ? "active" : "")"
+                        id="nav-restaurant-tab" 
+                        data-bs-toggle="tab" 
+                        data-bs-target="#nav-restaurant" 
+                        type="button" 
+                        role="tab" 
+                        aria-controls="nav-restaurant" 
+                        aria-selected="@(Model.ActiveTab == "restaurant")">
+                    Restuarant
+                </button>
+                <button class="nav-link @(Model.ActiveTab == "account" ? "active" : "")"
+                        id="nav-account-tab" 
+                        data-bs-toggle="tab" 
+                        data-bs-target="#nav-account" 
+                        type="button" role="tab" 
+                        aria-controls="nav-account" 
+                        aria-selected="@(Model.ActiveTab == "account")">
+                    Account
+                </button>
+                @* <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Contact</button> *@
             </div>
         </nav>
         <div class="tab-content" id="nav-tabContent">
-            <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">...</div>
-            <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">...</div>
-            <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">...</div>
+            <div class="tab-pane fade @(Model.ActiveTab == "restaurant" ? "show active" : "")"
+                 id="nav-restaurant" 
+                 role="tabpanel" 
+                 aria-labelledby="nav-restaurant-tab">
+                @Html.Partial("UpdateRestaurantInfo", Model.Restaurant)
+            </div>
+            <div class="tab-pane fade @(Model.ActiveTab == "account" ? "show active" : "")" 
+                 id="nav-account" 
+                 role="tabpanel" 
+                 aria-labelledby="nav-account-tab">
+                @Html.Partial("UpdateOwnerAccount", Model.Owner)
+            </div>
+            @* <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">...</div> *@
         </div>
     </div>
 </div>
+
+@section Scripts{
+    <script>
+        document.addEventListener('DOMContentLoaded', () =>{
+            document.querySelectorAll('[data-bs-toggle="tab"]')
+            .forEach(tab =>
+            {
+                tab.addEventListener('click', () =>
+                {
+                    const tabId = this.getAttribute('id').replace('-tab','');
+                    sessionStorage.setItem('activeTab', tabId);
+                });
+            });
+        
+
+            const activeTab = sessionStorage.getItem('activeTab');
+            if(activeTab)
+            {
+                const activeTabElement = document.getElementById(`${activeTab}-tab`);
+                if(activeTabElement)
+                {
+                    new bootstrap.Tab(activeTabElement).show();
+                }
+            }
+        });
+    </script>
+}

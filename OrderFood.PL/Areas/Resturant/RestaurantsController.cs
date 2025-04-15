@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using OrderFood.BLL.Interfaces;
 using OrderFood.DAL.Context;
 using OrderFood.DAL.Entities.Models;
 using OrderFood.DAL.Entities.User;
+using OrderFood.PL.Models;
 
 namespace OrderFood.PL.Areas.Resturant
 {
@@ -17,10 +19,12 @@ namespace OrderFood.PL.Areas.Resturant
     public class RestaurantsController : Controller
     {
         private readonly IUnitOfWork unitOfWork;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public RestaurantsController(IUnitOfWork unitOfWork)
+        public RestaurantsController(IUnitOfWork unitOfWork, UserManager<ApplicationUser> userManager)
         {
             this.unitOfWork = unitOfWork;
+            this._userManager = userManager;
         }
         [HttpGet]
         public async Task<IActionResult> Settings()
@@ -29,38 +33,68 @@ namespace OrderFood.PL.Areas.Resturant
                     criteria: c => c.Id == 2,
                     includes: c => c.Include(c => c.Owner)
                     );
-                
-                return (View(restuarant));
+                var model = new RestaurantSettingsViewModel
+                {
+                    Restaurant = restuarant,
+                    Owner = restuarant.Owner
+                };
+                return (View(model));
             }
 
         [HttpPost]
         //update restaurant info
         public async Task<IActionResult> UpdateRestaurantInfo(Restaurant restaurant)
         {
+            if(restaurant == null)
+            {
+                return NotFound();
+            }
             if (ModelState.IsValid)
             {
                 unitOfWork.GetRepository<Restaurant>().Update(restaurant);
                 await unitOfWork.SaveChangesAsync();
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Settings");
             }
-            return View(restaurant);
+            else
+            {
+                return View();
+
+            }
+
         }
 
         //update owner account
 
-        //[HttpGet]
-        //public IActionResult UpdateAccount()
-        //{
-        //    // Get the current user's ID
-        //    var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        //    if (userId == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    // Retrieve the user from the database using the user ID
-        //    var user =
-        //    return View();
-        //}
+        [HttpPost]
+        public async Task<IActionResult> UpdateOwnerAccount(ApplicationUser user)
+        {
+            if(!ModelState.IsValid)
+            {
+                return View(user);
+            }
+           ApplicationUser userToEdit = _userManager.FindByIdAsync(user.Id).Result;
+
+            if (userToEdit == null)
+            {
+                return NotFound();
+            }
+            userToEdit.FirstName= user.FirstName;
+            userToEdit.LastName = user.LastName;
+            userToEdit.Address = user.Address;
+            userToEdit.DateOfBirth = user.DateOfBirth;
+            userToEdit.Image = user.Image;
+            userToEdit.Email = user.Email;
+            userToEdit.UserName = user.UserName;
+            var result = await _userManager.UpdateAsync(userToEdit);
+            if (result.Succeeded)
+            {
+                return RedirectToAction("Settings");
+            }
+            else
+            {
+                return View();
+            }
+        }
     }
 
         //    // GET: Resturant/Restaurants
