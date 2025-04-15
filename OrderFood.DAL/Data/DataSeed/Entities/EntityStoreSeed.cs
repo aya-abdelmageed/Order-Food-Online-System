@@ -1,64 +1,88 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using OrderFood.DAL.Context;
+using OrderFood.DAL.Entities;
+using OrderFood.DAL.Entities.Models;
+using OrderFood.DAL.Entities.User;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace OrderFood.DAL.Data.DataSeed.Entities
 {
     public static class EntityStoreSeed
     {
-        //public static async Task SeedAsync(HealthCareContext dbContext, UserManager<AppUser> userManager)
-        //{
-        //    var ServicePath = "../HealthCare.Repository/Data/DataSeed/Locations.json";
+        public static async Task SeedAsync(FoodDbContext dbContext)
+        {
+            var staticPath = "../OrderFood.DAL/Data/DataSeed/Entities";
 
-        //    await TransferData<Services>(ServicePath, dbContext);
+            var RestaurantPath = $"{staticPath}/Restaurant.json";
+            await TransferData<Restaurant>(RestaurantPath, dbContext);
 
-        //    var HWIdPath = "../HealthCare.Repository/Data/DataSeed/HardwareId.json";
+            var ReviewPath = $"{staticPath}/Review.json";
+            await TransferData<Review>(ReviewPath, dbContext);
 
-        //    await TransferData<Hardware>(HWIdPath, dbContext);
+            var CategoryPath = $"{staticPath}/Category.json";
+            await TransferData<Category>(CategoryPath, dbContext);
 
-        //    if (userManager.Users.Any())
-        //    {
-        //        var HistoryPath = "../HealthCare.Repository/Data/DataSeed/History.json";
+            // Add SQL Query for CategoryRestaurant
+            AddSqlQuery(dbContext);
 
-        //        await TransferData<History>(HistoryPath, dbContext);
-        //    }
+            var MealsPath = $"{staticPath}/Meals.json";
+            await TransferData<Meal>(MealsPath, dbContext);
 
-        //}
 
-        //private static async Task TransferData<T>(string DataPath, HealthCareContext dbContext) where T : AppEntity
-        //{
-        //    if (!dbContext.Set<T>().Any())
-        //    {
-        //        var ItemsData = File.ReadAllText(DataPath);
-        //        var Items = JsonSerializer.Deserialize<List<T>>(ItemsData);
-        //        if (Items?.Count > 0)
-        //        {
-        //            if (typeof(T) == typeof(History))
-        //            {
-        //                var history = Items as List<History>;
-        //                foreach (var Item in history!)
-        //                {
-        //                    string DoctorId = dbContext.Set<Patient>().Where(p => p.Id == Item.HistoryPatientId).Select(p => p.PatientDoctorId).FirstOrDefault()!;
-        //                    Item.HistoryDoctorId = DoctorId;
-        //                    await dbContext.Set<History>().AddAsync(Item);
-        //                }
-        //            }
-        //            else
-        //            {
-        //                foreach (var Item in Items)
-        //                {
-        //                    await dbContext.Set<T>().AddAsync(Item);
-        //                }
-        //            }
+            var CouponsPath = $"{staticPath}/Coupons.json";
+            await TransferData<Coupon>(CouponsPath, dbContext);
 
-        //            await dbContext.SaveChangesAsync();
-        //        }
-        //    }
-        //}
+            var OrderPath = $"{staticPath}/Order.json";
+            await TransferData<Order>(OrderPath, dbContext);
 
+            var OrderMealsPath = $"{staticPath}/OrderMeals.json";
+            await TransferData<OrderMeals>(OrderMealsPath, dbContext);
+
+        }
+
+        private static async Task TransferData<T>(string DataPath, FoodDbContext dbContext) where T : BaseEntity
+        {
+            if (!dbContext.Set<T>().Any())
+            {
+                var ItemsData = File.ReadAllText(DataPath);
+                var Items = JsonSerializer.Deserialize<List<T>>(ItemsData);
+                if (Items?.Count > 0)
+                {
+                    foreach (var Item in Items)
+                    {
+                        await dbContext.Set<T>().AddAsync(Item);
+                    }
+                    var result = await dbContext.SaveChangesAsync();
+                }
+            }
+        }
+
+
+        private static void AddSqlQuery(FoodDbContext dbContext)
+        {
+
+            var hasData = dbContext.Set<Category>()
+                            .SelectMany(c => c.Restaurants)
+                            .Any();
+
+            if (!hasData)
+            {
+                dbContext.Database.ExecuteSqlRaw(@"INSERT INTO CategoryRestaurant (RestaurantsId, CategoriesId)
+                                                VALUES
+                                                (1, 1), (1, 2), (1, 3), (1, 4), (1, 5), 
+                                                (2, 1), (2, 2), (2, 3), (2, 4), (2, 5), 
+                                                (3, 1), (3, 2), (3, 3), (3, 4), (3, 5), 
+                                                (4, 1), (4, 2), (4, 3), (4, 4), (4, 5), 
+                                                (5, 1), (5, 2), (5, 3), (5, 4), (5, 5);");
+            }
+
+        }
     }
 }

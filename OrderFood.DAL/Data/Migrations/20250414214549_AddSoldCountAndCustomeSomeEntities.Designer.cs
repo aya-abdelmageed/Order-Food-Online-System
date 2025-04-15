@@ -3,17 +3,20 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OrderFood.DAL.Context;
 
 #nullable disable
 
-namespace OrderFood.Pl.Migrations
+namespace OrderFood.DAL.Data.Migrations
 {
     [DbContext(typeof(FoodDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250414214549_AddSoldCountAndCustomeSomeEntities")]
+    partial class AddSoldCountAndCustomeSomeEntities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,7 +37,7 @@ namespace OrderFood.Pl.Migrations
 
                     b.HasIndex("RestaurantsId");
 
-                    b.ToTable("CategoryRestaurant", (string)null);
+                    b.ToTable("CategoryRestaurant");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -191,7 +194,7 @@ namespace OrderFood.Pl.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("OrderFood.DAL.Entities.Models.Coupon", b =>
@@ -223,7 +226,7 @@ namespace OrderFood.Pl.Migrations
 
                     b.HasIndex("AdminId");
 
-                    b.ToTable("Coupons", (string)null);
+                    b.ToTable("Coupons");
                 });
 
             modelBuilder.Entity("OrderFood.DAL.Entities.Models.Meal", b =>
@@ -266,7 +269,7 @@ namespace OrderFood.Pl.Migrations
                         .IsUnique()
                         .HasDatabaseName("IX_Meal_Name");
 
-                    b.ToTable("Meals", (string)null);
+                    b.ToTable("Meals");
                 });
 
             modelBuilder.Entity("OrderFood.DAL.Entities.Models.Order", b =>
@@ -330,7 +333,7 @@ namespace OrderFood.Pl.Migrations
 
                     b.HasIndex("DriverId");
 
-                    b.ToTable("Orders", (string)null);
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("OrderFood.DAL.Entities.Models.OrderMeals", b =>
@@ -348,7 +351,7 @@ namespace OrderFood.Pl.Migrations
 
                     b.HasIndex("MealId");
 
-                    b.ToTable("MealOrders", (string)null);
+                    b.ToTable("MealOrders");
                 });
 
             modelBuilder.Entity("OrderFood.DAL.Entities.Models.Restaurant", b =>
@@ -396,7 +399,7 @@ namespace OrderFood.Pl.Migrations
 
                     b.HasIndex("OwnerId");
 
-                    b.ToTable("Restaurants", (string)null);
+                    b.ToTable("Restaurants");
                 });
 
             modelBuilder.Entity("OrderFood.DAL.Entities.Models.Review", b =>
@@ -432,7 +435,7 @@ namespace OrderFood.Pl.Migrations
 
                     b.HasIndex("RestaurantId");
 
-                    b.ToTable("Reviews", (string)null);
+                    b.ToTable("Reviews");
                 });
 
             modelBuilder.Entity("OrderFood.DAL.Entities.User.ApplicationUser", b =>

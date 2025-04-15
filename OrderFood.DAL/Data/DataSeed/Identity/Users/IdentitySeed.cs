@@ -41,7 +41,10 @@ namespace OrderFood.DAL.Data.DataSeed.Identity.Users
         {
             foreach (var user in users)
             {
-                user.UserName = user.Email.Split('@')[0];
+                if(user.Email != null)
+                    user.UserName = user.Email.Split('@')[0];
+                else
+                    user.UserName = "User" + Guid.NewGuid().ToString().Substring(0, 5);
                 var createUserResult = await userManager.CreateAsync(user, "P@$$w0rd");
                 if (createUserResult.Succeeded)
                     await userManager.AddToRoleAsync(user, Role);

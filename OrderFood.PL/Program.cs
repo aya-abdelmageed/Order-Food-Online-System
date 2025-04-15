@@ -4,9 +4,11 @@ using Microsoft.Extensions.Logging;
 using OrderFood.BLL.Interfaces;
 using OrderFood.BLL.Repositories;
 using OrderFood.DAL.Context;
+using OrderFood.DAL.Data.DataSeed.Entities;
 using OrderFood.DAL.Data.DataSeed.Identity;
 using OrderFood.DAL.Data.DataSeed.Identity.Users;
 using OrderFood.DAL.Entities.User;
+using System;
 using System.Threading.Tasks;
 
 namespace OrderFood.PL;
@@ -47,9 +49,13 @@ public class Program
 
             var roleManager = service.GetRequiredService<RoleManager<IdentityRole>>();
 
+            var dbContext = service.GetRequiredService<FoodDbContext>();
+
             await RoleSeed.RolesSeedAsync(roleManager);
 
             await IdentitySeed.SeedUserAsync(userManager);
+
+            await EntityStoreSeed.SeedAsync(dbContext);
 
         }
         catch (Exception ex)

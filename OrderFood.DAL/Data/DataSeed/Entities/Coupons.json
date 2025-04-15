@@ -1,0 +1,14 @@
+[
+  {
+    "AmountPercentage": 10,
+    "Code": "WELCOME10",
+    "ExpireDate": "2025-06-30T00:00:00",
+    "AdminId": "09023552-e4a4-4720-b85f-0dd97a4697be"
+  },
+  {
+    "AmountPercentage": 20,
+    "Code": "SUMMER20",
+    "ExpireDate": "2025-07-31T00:00:00",
+    "AdminId": "27ef5730-789f-4e7c-8358-f9ccbca0181b"
+  }
+]

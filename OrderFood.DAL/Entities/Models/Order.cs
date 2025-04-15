@@ -12,6 +12,8 @@ namespace OrderFood.DAL.Entities.Models
     {
         public string ShippingAddress { get; set; }
         public decimal SubTotal { get; set; }
+        public decimal Lat { get; set; }
+        public decimal Long { get; set; }
         public DateTime CreatedOrder { get; set; } = DateTime.Now;
         public OrderStatus OrderStatus { get; set; } = OrderStatus.Pending;
 
