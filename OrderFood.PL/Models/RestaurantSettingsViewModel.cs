@@ -5,7 +5,7 @@ namespace OrderFood.PL.Models
 {
     public class RestaurantSettingsViewModel
     {
-        public string ActiveTab { get; set; } = "restaurant";
+        //public File LogoFile { get; set; }
         public Restaurant Restaurant { get; set; }
         public ApplicationUser Owner { get; set; }
     }

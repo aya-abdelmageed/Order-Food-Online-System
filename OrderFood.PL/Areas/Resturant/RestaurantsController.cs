@@ -28,24 +28,19 @@ namespace OrderFood.PL.Areas.Resturant
         }
         [HttpGet]
         public async Task<IActionResult> Settings()
-            {
-                var restuarant = await unitOfWork.GetRepository<Restaurant>().GetOneAsync(
-                    criteria: c => c.Id == 2,
-                    includes: c => c.Include(c => c.Owner)
-                    );
-                var model = new RestaurantSettingsViewModel
-                {
-                    Restaurant = restuarant,
-                    Owner = restuarant.Owner
-                };
-                return (View(model));
-            }
+        {
+            var restuarant = await unitOfWork.GetRepository<Restaurant>().GetOneAsync(
+                criteria: c => c.Id == 2
+                );
+
+            return (View(restuarant));
+        }
 
         [HttpPost]
         //update restaurant info
-        public async Task<IActionResult> UpdateRestaurantInfo(Restaurant restaurant)
+        public async Task<IActionResult> Settings(Restaurant restaurant)
         {
-            if(restaurant == null)
+            if (restaurant == null)
             {
                 return NotFound();
             }
@@ -63,38 +58,7 @@ namespace OrderFood.PL.Areas.Resturant
 
         }
 
-        //update owner account
-
-        [HttpPost]
-        public async Task<IActionResult> UpdateOwnerAccount(ApplicationUser user)
-        {
-            if(!ModelState.IsValid)
-            {
-                return View(user);
-            }
-           ApplicationUser userToEdit = _userManager.FindByIdAsync(user.Id).Result;
-
-            if (userToEdit == null)
-            {
-                return NotFound();
-            }
-            userToEdit.FirstName= user.FirstName;
-            userToEdit.LastName = user.LastName;
-            userToEdit.Address = user.Address;
-            userToEdit.DateOfBirth = user.DateOfBirth;
-            userToEdit.Image = user.Image;
-            userToEdit.Email = user.Email;
-            userToEdit.UserName = user.UserName;
-            var result = await _userManager.UpdateAsync(userToEdit);
-            if (result.Succeeded)
-            {
-                return RedirectToAction("Settings");
-            }
-            else
-            {
-                return View();
-            }
-        }
+    
     }
 
         //    // GET: Resturant/Restaurants
