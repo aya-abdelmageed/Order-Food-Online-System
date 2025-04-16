@@ -8,7 +8,7 @@
   },
   {
     "CustomerId": "306e5a79-171d-49c5-96c3-3e63953555a7",
-    "RestaurantId": 2,
+    "RestaurantId": 4,
     "ReviewDate": "2025-04-13T19:30:00",
     "Rate": 3,
     "Comment": "Good burgers but the order was missing the sauce I requested."
@@ -57,14 +57,14 @@
   },
   {
     "CustomerId": "9bfcccd8-a013-4828-9a6d-91cde4d17af2",
-    "RestaurantId": 2,
+    "RestaurantId": 3,
     "ReviewDate": "2025-04-11",
     "Rate": 4,
     "Comment": "Tasty burgers!"
   },
   {
     "CustomerId": "a91aa43f-4d7d-4649-9a44-67cbd667119f",
-    "RestaurantId": 1,
+    "RestaurantId": 3,
     "ReviewDate": "2025-04-12",
     "Rate": 5,
     "Comment": "Best Pizza ever!"
@@ -78,28 +78,28 @@
   },
   {
     "CustomerId": "a91aa43f-4d7d-4649-9a44-67cbd667119f",
-    "RestaurantId": 1,
+    "RestaurantId": 5,
     "ReviewDate": "2025-04-10T12:30:00",
     "Rate": 5,
     "Comment": "The best pizza in town! Delivery was fast and the food arrived hot."
   },
   {
     "CustomerId": "c867b078-09aa-48a5-a128-191333be3ccc",
-    "RestaurantId": 1,
+    "RestaurantId": 4,
     "ReviewDate": "2025-04-11T14:15:00",
     "Rate": 4,
     "Comment": "Great flavor but the crust was slightly overcooked."
   },
   {
     "CustomerId": "c867b078-09aa-48a5-a128-191333be3ccc",
-    "RestaurantId": 2,
+    "RestaurantId": 4,
     "ReviewDate": "2025-04-12T18:45:00",
     "Rate": 5,
     "Comment": "Juicy burgers with perfect fries. Will definitely order again!"
   },
   {
     "CustomerId": "c867b078-09aa-48a5-a128-191333be3ccc",
-    "RestaurantId": 3,
+    "RestaurantId": 5,
     "ReviewDate": "2025-04-17T19:15:00",
     "Rate": 5,
     "Comment": "Amazing presentation and quality. Worth every penny!"

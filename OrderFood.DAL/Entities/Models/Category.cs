@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,7 +11,11 @@ namespace OrderFood.DAL.Entities.Models
     {
         public string Name { get; set; }
 
-        public ICollection<Restaurant>? Restaurants { get; set; } = new HashSet<Restaurant>();
+        // Navigation Property For Restaurant
+        [ForeignKey("RestaurantId")]
+        public Restaurant? Restaurant { get; set; }
+        public int RestaurantId { get; set; }
+
         public ICollection<Meal>? Meals { get; set; } = new HashSet<Meal>();
 
     }

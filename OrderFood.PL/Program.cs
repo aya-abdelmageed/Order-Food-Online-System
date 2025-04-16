@@ -45,6 +45,10 @@ public class Program
 
         try
         {
+            var DbContext = service.GetRequiredService<FoodDbContext>();
+
+            await DbContext.Database.MigrateAsync();
+
             var userManager = service.GetRequiredService<UserManager<ApplicationUser>>();
 
             var roleManager = service.GetRequiredService<RoleManager<IdentityRole>>();
