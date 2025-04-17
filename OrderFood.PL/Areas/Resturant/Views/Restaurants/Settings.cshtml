@@ -1,4 +1,5 @@
-﻿@model OrderFood.DAL.Entities.Models.Restaurant
+﻿@model OrderFood.PL.Models.UploadViewModel;
+
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 @{ 
@@ -8,49 +9,50 @@
 
 <div class="container vh-100 vw-100 justify-content-center">
     <div class="d-grid row justify-content-center align-text-center text-opacity-75 bg-warning bg-opacity-25">
-        <h3>@Model.Name</h3>
+        <h3>@Model.Restaurant.Name</h3>
     </div>
     <div class="container d-grid border border-5 border-warning border-opacity-25 mt-4 mb-5 p-3 h-auto w-100 shadow" >
-        <form asp-action="Settings" method="post"> 
-            <input asp-for="Id" type="hidden" />
-            <input asp-for="OwnerId" type="hidden" />
+        <form asp-action="Settings" enctype="multipart/form-data" method="post"> 
+            <input asp-for="@Model.Restaurant.Id" type="hidden" />
+        <input asp-for="@Model.Restaurant.OwnerId" type="hidden" />
 
 
             <div class="row mb-3">
                 <div class="d-flex flex-row gap-2 align-items-end">
-                    <img  src="@Model.Logo" alt="@Model.Name" class="me-5" width="200px" height="200px" />
+                    <img  src="@Model.Restaurant.Logo" alt="@Model.Restaurant.Name" class="me-5" width="200px" height="200px" >
                     <div class="form-outline w-50">
-                        <label asp-for="Logo" class="form-label">Logo</label>
-                        <input type="file" asp-for="Logo" class="form-control" />
+                    <label asp-for="@Model.Restaurant.Logo" class="form-label">Logo</label>
+                    <input type="hidden" asp-for="@Model.Restaurant.Logo" />
+                        <input type="file" name="ImageFile" asp-for="@Model.ImageFile" class="form-control" />
                     </div>
                     <button type="button" class="btn btn-light">Remove</button>
                 </div>
             </div>
             <div class="row mb-3">
                 <div class="col-md-6 form-group ">
-                    <label asp-for="Name" class="form-label">Name</label>
-                    <input asp-for="Name" class="form-control" />
+                <label asp-for="@Model.Restaurant.Name" class="form-label">Name</label>
+                <input asp-for="@Model.Restaurant.Name" class="form-control" />
                     
                     @* <span asp-validation-for="Name" class="text-danger"></span>              *@
                 </div>
                 <div class="col-md-6 form-group">
                     <!-- HotLine -->
-                    <label asp-for="HotLine" class="form-label">HotLine</label>
-                    <input asp-for="HotLine" class="form-control" />
+                <label asp-for="@Model.Restaurant.HotLine" class="form-label">HotLine</label>
+                <input asp-for="@Model.Restaurant.HotLine" class="form-control" />
                     @* <span asp-validation-for="HotLine" class="text-danger"></span>  *@
                 </div>
             </div>
             <div class="row mb-3">
                 <div class="col-md-6 form-group">
-                   <label asp-for="Address" class="form-label">Address</label>
-                   <textarea asp-for="Address" class="form-control" rows="3"></textarea>
+                <label asp-for="@Model.Restaurant.Address" class="form-label">Address</label>
+                <textarea asp-for="@Model.Restaurant.Address" class="form-control" rows="3"></textarea>
 
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">Your Location</label>
                     <div class="form-control" rows="3">
-                        <input asp-for="Long" type="hidden" />
-                        <input asp-for="Lat" type="hidden" />
+                    <input asp-for="@Model.Restaurant.Long" type="hidden" />
+                    <input asp-for="@Model.Restaurant.Lat" type="hidden" />
                         @* <iframe    *@
                         @*      src="https: //maps.googleapis.com/maps/api/staticmap?center =Jaipur&zoom =10&size =300x100&key =YOUR_API_KEY" *@
                         @*      >  *@
@@ -66,127 +68,4 @@
        
         </div>
     </div>
-   
 
-@* <div class="container mt-4"> *@
-@*     <h2>Account</h2> *@
-
-@*     <form asp-action="Settings" method="post" enctype="multipart/form-data"> *@
-@*         <div class="row mb-3"> *@
-@*             <div class="col-md-2"> *@
-@*                 <div> *@
-@*                     <img src="@Model.Logo" alt="Profile Picture" class="img-thumbnail" /> *@
-@*                     <input asp-for="ProfileImage" type="file" class="form-control mt-2" /> *@
-@*                     <button type="button" class="btn btn-danger mt-1">Remove</button> *@
-@*                 </div> *@
-@*             </div> *@
-@*         </div> *@
-
-@*         <div class="row mb-3"> *@
-@*             <div class="col-md-6"> *@
-@*                 <label asp-for="Username" class="form-label"></label> *@
-@*                 <input asp-for="Username" class="form-control" /> *@
-@*             </div> *@
-@*             <div class="col-md-6"> *@
-@*                 <label asp-for="Phone" class="form-label"></label> *@
-@*                 <input asp-for="Phone" class="form-control" /> *@
-@*             </div> *@
-@*         </div> *@
-
-@*         <div class="row mb-3"> *@
-@*             <div class="col-md-6"> *@
-@*                 <label asp-for="Email" class="form-label"></label> *@
-@*                 <input asp-for="Email" class="form-control" /> *@
-@*             </div> *@
-@*             <div class="col-md-6"> *@
-@*                 <label asp-for="Password" class="form-label"></label> *@
-@*                 <input asp-for="Password" type="password" class="form-control" /> *@
-@*             </div> *@
-@*         </div> *@
-
-@*         <div class="row mb-3"> *@
-@*             <div class="col-md-6"> *@
-@*                 <label class="form-label">Your Location</label> *@
-@*                 <div> *@
-@*                     <img src="https://maps.googleapis.com/maps/api/staticmap?center=Jaipur&zoom=10&size=300x100&key=YOUR_API_KEY" alt="Map" class="img-fluid" /> *@
-@*                 </div> *@
-@*             </div> *@
-@*             <div class="col-md-6"> *@
-@*                 <label asp-for="Address" class="form-label"></label> *@
-@*                 <textarea asp-for="Address" class="form-control" rows="3"></textarea> *@
-@*             </div> *@
-@*         </div> *@
-
-@*         <button type="submit" class="btn btn-warning text-white">Save Setting</button> *@
-@*     </form> *@
-@* </div> *@
-
-@*     <div class="container row border border-2 p-2 h-auto w-100 "> *@
-@*         <nav> *@
-@*             <div class="nav nav-tabs" id="nav-tab" role="tablist"> *@
-@*                 <button class="nav-link @(Model.ActiveTab == "restaurant" ? "active" : "")" *@
-@*                         id="nav-restaurant-tab"  *@
-@*                         data-bs-toggle="tab"  *@
-@*                         data-bs-target="#nav-restaurant"  *@
-@*                         type="button"  *@
-@*                         role="tab"  *@
-@*                         aria-controls="nav-restaurant"  *@
-@*                         aria-selected="@(Model.ActiveTab == "restaurant")"> *@
-@*                     Restuarant *@
-@*                 </button> *@
-@*                 <button class="nav-link @(Model.ActiveTab == "account" ? "active" : "")" *@
-@*                         id="nav-account-tab"  *@
-@*                         data-bs-toggle="tab"  *@
-@*                         data-bs-target="#nav-account"  *@
-@*                         type="button" role="tab"  *@
-@*                         aria-controls="nav-account"  *@
-@*                         aria-selected="@(Model.ActiveTab == "account")"> *@
-@*                     Account *@
-@*                 </button> *@
-@*                 <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Contact</button> *@
-@*             </div> *@
-@*         </nav> *@
-@*         <div class="tab-content" id="nav-tabContent"> *@
-@*             <div class="tab-pane fade @(Model.ActiveTab == "restaurant" ? "show active" : "")" *@
-@*                  id="nav-restaurant"  *@
-@*                  role="tabpanel"  *@
-@*                  aria-labelledby="nav-restaurant-tab"> *@
-@*                 @Html.Partial("UpdateRestaurantInfo", Model.Restaurant) *@
-@*             </div> *@
-@*             <div class="tab-pane fade @(Model.ActiveTab == "account" ? "show active" : "")"  *@
-@*                  id="nav-account"  *@
-@*                  role="tabpanel"  *@
-@*                  aria-labelledby="nav-account-tab"> *@
-@*                 @Html.Partial("UpdateOwnerAccount", Model.Owner) *@
-@*             </div> *@
-@*             <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">...</div> *@
-@*         </div> *@
-@*     </div> *@
-@* </div> *@
-
-@* @section Scripts{ *@
-@*     <script> *@
-@*         document.addEventListener('DOMContentLoaded', () =>{ *@
-@*             document.querySelectorAll('[data-bs-toggle="tab"]') *@
-@*             .forEach(tab => *@
-@*             { *@
-@*                 tab.addEventListener('click', () => *@
-@*                 { *@
-@*                     const tabId = this.getAttribute('id').replace('-tab',''); *@
-@*                     sessionStorage.setItem('activeTab', tabId); *@
-@*                 }); *@
-@*             }); *@
-        
-
-@*             const activeTab = sessionStorage.getItem('activeTab'); *@
-@*             if(activeTab) *@
-@*             { *@
-@*                 const activeTabElement = document.getElementById(`${activeTab}-tab`); *@
-@*                 if(activeTabElement) *@
-@*                 { *@
-@*                     new bootstrap.Tab(activeTabElement).show(); *@
-@*                 } *@
-@*             } *@
-@*         }); *@
-@*     </script> *@
-@* } *@
