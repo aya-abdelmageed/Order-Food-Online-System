@@ -2,103 +2,124 @@
   {
     "Name": "The Breakfast Place",
     "Address": "123 Cairo Road, Cairo, Egypt",
+    "Description": "Wake up to the aroma of freshly brewed coffee and sizzling eggs at The Breakfast Place — your morning haven in the heart of Cairo. Whether you're in the mood for classic pancakes, fluffy omelets, or a hearty Egyptian Foul and Falafel platter, we've got you covered. Cozy atmosphere, friendly faces, and the perfect morning bite await you every day from sunrise till noon.",
     "HotLine": "0123456789",
-    "Logo": "images/breakfast_logo.png",
+    "Logo": "https://static.vecteezy.com/system/resources/previews/014/664/003/non_2x/cafe-and-resto-logo-vector.jpg",
     "Long": 31.2357,
     "Lat": 30.0444,
     "OwnerId": "232924f5-81e1-49ae-a7ec-1aa48d4f086c",
     "Categories": [
       {
-        "Name": "Breakfast"
+        "Name": "Breakfast",
+        "Image": "images/Restaurant/Breakfast.png"
       }
     ]
   },
   {
     "Name": "Delight",
     "Address": "456 Alexandria Road, Alexandria, Egypt",
+    "Description": "Break up your day with an unforgettable lunch experience at Lunch Delight. Located in the heart of Alexandria, we serve a diverse menu inspired by Mediterranean and Middle Eastern cuisine. From grilled chicken wraps and gourmet burgers to fresh salads and pasta dishes, each plate is crafted with passion. Perfect for casual meetups, business lunches, or a quick flavorful escape from your routine.",
     "HotLine": "0129876543",
-    "Logo": "images/lunch_logo.png",
+    "Logo": "https://static.vecteezy.com/system/resources/previews/010/411/845/non_2x/restaurant-logo-design-template-free-vector.jpg",
     "Long": 29.9765,
     "Lat": 31.2156,
     "OwnerId": "3365e4ed-f8e1-49dc-8342-b3dc85426213",
     "Categories": [
       {
-        "Name": "Lunch"
+        "Name": "Lunch",
+        "Image": "images/Restaurant/Lunch.png"
       },
       {
-        "Name": "Dinner"
+        "Name": "Dinner",
+        "Image": "images/Restaurant/Dinner.png"
       }
     ]
   },
   {
     "Name": "Midnight Bites",
     "Address": "789 Giza Road, Giza, Egypt",
+    "Description": "As the sun sets behind the pyramids, Dinner King rises to offer you a majestic dining experience fit for royalty. Enjoy candle-lit tables, ambient music, and a fine selection of dishes ranging from tender steaks to gourmet seafood and signature pastas. Whether it's a romantic evening or a family dinner, let us treat you like royalty with impeccable service and world-class flavors.",
     "HotLine": "0123344556",
-    "Logo": "images/dinner_logo.png",
+    "Logo": "https://graphicsfamily.com/wp-content/uploads/edd/2023/02/Restaurant-Logo-Design-2-1180x664.jpg",
     "Long": 31.2135,
     "Lat": 30.0256,
     "OwnerId": "669ce1bf-fd1b-49e7-acd8-405513c7598a",
     "Categories": [
       {
-        "Name": "Lunch"
+        "Name": "Lunch",
+        "Image": "images/Restaurant/Lunch.png"
       },
       {
-        "Name": "Dinner"
+        "Name": "Dinner",
+        "Image": "images/Restaurant/Dinner.png"
       },
       {
-        "Name": "Sweets"
+        "Name": "Sweets",
+        "Image": "images/Restaurant/Sweets.png"
       },
       {
-        "Name": "Drinks"
+        "Name": "Drinks",
+        "Image": "images/Restaurant/Drinks.png"
       }
     ]
   },
   {
     "Name": "Slice Society",
     "Address": "321 Dessert Avenue, Cairo, Egypt",
+    "Description": "Step into a world of sugar and delight at Sweet Treats — Cairo's favorite dessert haven. From rich chocolate lava cakes to fruity tarts, creamy cheesecakes, and our famous Kunafa creations, every bite is a little piece of heaven. Whether you're celebrating something special or just craving something sweet, our cozy dessert lounge is the perfect place to indulge your senses.",
     "HotLine": "0121212121",
-    "Logo": "images/sweets_logo.png",
+    "Logo": "https://img.freepik.com/premium-vector/modern-restaurant-logo-design-template_872774-98.jpg",
     "Long": 31.2357,
     "Lat": 30.0444,
     "OwnerId": "808f6636-8ed3-4df8-99e1-f06aef1f65de",
     "Categories": [
       {
-        "Name": "Breakfast"
+        "Name": "Breakfast",
+        "Image": "images/Restaurant/Breakfast.png"
       },
       {
-        "Name": "Lunch"
+        "Name": "Lunch",
+        "Image": "images/Restaurant/Lunch.png"
       },
       {
-        "Name": "Dinner"
+        "Name": "Dinner",
+        "Image": "images/Restaurant/Dinner.png"
       },
       {
-        "Name": "Sweets"
+        "Name": "Sweets",
+        "Image": "images/Restaurant/Sweets.png"
       }
     ]
   },
   {
-    "Name": "Spice Route",
+    "Name": "Master Chef",
     "Address": "654 Beverage Lane, Giza, Egypt",
+    "Description": "Quench your thirst in style at Drinks Bar — Giza's ultimate beverage destination. Our handcrafted juices, smoothies, iced coffees, Mocktails, and detox drinks are made with the freshest ingredients to give you the boost you need. Whether you're chilling after a long day, hanging out with friends, or looking for something refreshing on the go, we've got the perfect drink waiting for you.",
     "HotLine": "0123450000",
-    "Logo": "images/drinks_logo.png",
+    "Logo": "https://marketplace.canva.com/EAFpeiTrl4c/2/0/1600w/canva-abstract-chef-cooking-restaurant-free-logo-a1RYzvS1EFo.jpg",
     "Long": 31.2357,
     "Lat": 30.0444,
     "OwnerId": "bb43517b-4224-4936-906f-2b416159469b",
     "Categories": [
       {
-        "Name": "Breakfast"
+        "Name": "Breakfast",
+        "Image": "images/Restaurant/Breakfast.png"
       },
       {
-        "Name": "Lunch"
+        "Name": "Lunch",
+        "Image": "images/Restaurant/Lunch.png"
       },
       {
-        "Name": "Dinner"
+        "Name": "Dinner",
+        "Image": "images/Restaurant/Dinner.png"
       },
       {
-        "Name": "Sweets"
+        "Name": "Sweets",
+        "Image": "images/Restaurant/Sweets.png"
       },
       {
-        "Name": "Drinks"
+        "Name": "Drinks",
+        "Image": "images/Restaurant/Drinks.png"
       }
     ]
   }

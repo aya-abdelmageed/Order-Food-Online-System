@@ -11,7 +11,8 @@ namespace OrderFood.DAL.Entities.Models
     public class Restaurant : BaseEntity
     {
         public string Name { get; set; }
-        public string Address { get; set; } 
+        public string Address { get; set; }
+        public string Description { get; set; }
         public string HotLine { get; set; }
         public string Logo { get; set; }
         public double? Long { get; set; }
@@ -24,8 +25,5 @@ namespace OrderFood.DAL.Entities.Models
 
         // Navigation Properties For Categories
         public ICollection<Category>? Categories { get; set; } = new HashSet<Category>();
-
-        // Navigation Properties For OrderMeals
-        public ICollection<OrderMeals>? OrderMeals { get; set; } = new HashSet<OrderMeals>();
     }
 }

@@ -31,6 +31,11 @@ namespace OrderFood.DAL.Entities.Models
         public PaymentMethod PaymentMethod { get; set; }
         public DateTime? PayDate { get; set; }
 
+        // Navigation Property For Restaurant
+        [ForeignKey("RestaurantId")]
+        public Restaurant? Restaurant { get; set; }
+        public int RestaurantId { get; set; }
+
         // Navigation Properties For Driver
         [ForeignKey("DriverId")]
         public ApplicationUser? Driver { get; set; }
@@ -59,6 +64,8 @@ namespace OrderFood.DAL.Entities.Models
     public enum OrderStatus
     {
         Pending,
+        Preparing,
+        Prepared,
         Shipping,
         Completed,
         Cancelled

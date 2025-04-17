@@ -16,9 +16,12 @@ namespace OrderFood.DAL.Entities.Models
 
         public int SoldCount { get; set; } = 0;
 
-        // Navigation Properties For Category
+        // Navigation Property For Category
         [ForeignKey("CategoryId")]
-        public Category Category { get; set; }
+        public Category? Category { get; set; }
         public int CategoryId { get; set; }
+
+        // Navigation Property For OrderMeals
+        public ICollection<OrderMeals>? OrderMeals { get; set; } = new HashSet<OrderMeals>();
     }
 }

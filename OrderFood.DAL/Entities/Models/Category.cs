@@ -16,6 +16,8 @@ namespace OrderFood.DAL.Entities.Models
         public Restaurant? Restaurant { get; set; }
         public int RestaurantId { get; set; }
 
+        public string Image { get; set; }
+
         public ICollection<Meal>? Meals { get; set; } = new HashSet<Meal>();
 
     }
