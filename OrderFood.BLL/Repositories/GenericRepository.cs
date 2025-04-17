@@ -48,7 +48,7 @@ namespace OrderFood.BLL.Repositories
             //   .OrderBy || OrderByDescending (r=>r.location)
 
 
-            IQueryable<T> data = _dbContext.Set<T>().Where(e => e.IsDelete == false);
+            IQueryable<T> data = _dbContext.Set<T>();
 
             if (criteria != null)
                 data = data.Where(criteria);
@@ -77,7 +77,7 @@ namespace OrderFood.BLL.Repositories
             //    .ThenInclude();
             //.FirstOrDefault();
 
-            IQueryable<T> query = _dbContext.Set<T>().Where(e => e.IsDelete == false).Where(criteria);
+            IQueryable<T> query = _dbContext.Set<T>().Where(criteria);
 
             if (includes != null)
                 query = includes(query);

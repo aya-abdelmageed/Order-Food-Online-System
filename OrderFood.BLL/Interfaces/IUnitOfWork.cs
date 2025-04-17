@@ -10,6 +10,6 @@ namespace OrderFood.BLL.Interfaces
     public interface IUnitOfWork : IAsyncDisposable
     {
         IGenericRepository<T> GetRepository<T>() where T : BaseEntity, new();
-        Task SaveChangesAsync();
+        Task<int> SaveChangesAsync();
     }
 }

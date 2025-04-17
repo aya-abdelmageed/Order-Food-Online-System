@@ -34,7 +34,7 @@ namespace OrderFood.BLL.Repositories
         public ValueTask DisposeAsync()
             => _dbContext.DisposeAsync();
 
-        public async Task SaveChangesAsync()
+        public async Task<int> SaveChangesAsync()
          => await _dbContext.SaveChangesAsync();
     }
 }
