@@ -61,19 +61,26 @@ removeButtons.forEach(button => {
     });
 });
 
+
+
 let lastScrollTop = 0;
-const navbar = document.getElementById("header-demo");
+const navbar = document.querySelector('.navbar');
 
-window.addEventListener("scroll", function () {
-    const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+window.addEventListener('scroll', function () {
+    let scrollTop = window.scrollY || document.documentElement.scrollTop;
 
-    if (currentScroll > lastScrollTop && currentScroll > 100) {
-        // Scroll down
-        navbar.style.top = "-100px";
+    if (scrollTop > lastScrollTop) {
+        // Scrolling down - hide navbar
+        navbar.style.top = "-100px"; // Adjust height as needed
     } else {
-        // Scroll up
+        // Scrolling up - show navbar
         navbar.style.top = "0";
     }
-
-    lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+    lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; // For Mobile or negative scrolling
 });
+
+if (scrollTop > 10) {
+    navbar.classList.add('shadow');
+} else {
+    navbar.classList.remove('shadow');
+}

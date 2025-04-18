@@ -90,9 +90,14 @@ public class Program
         app.UseAuthorization();
 
         app.MapStaticAssets();
+        app.MapAreaControllerRoute(
+            name: "Identity",
+            areaName:"Identity",
+            pattern: "Identity/{controller=Home}/{action=OnboardingPage}/{id?}")
+            .WithStaticAssets();
         app.MapControllerRoute(
             name: "default",
-            pattern: "{controller=Home}/{action=Index}/{id?}")
+            pattern: "{controller=Home}/{action=OnboardingPage}/{id?}")
             .WithStaticAssets();
         app.MapRazorPages()
            .WithStaticAssets();
