@@ -62,7 +62,6 @@ public class Program
             await EntityStoreSeed.SeedAsync(dbContext);
 
         }
-//--
         catch (Exception ex)
         {
 
