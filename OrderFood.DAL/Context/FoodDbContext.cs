@@ -22,6 +22,14 @@ namespace OrderFood.DAL.Context
             builder.Entity<OrderMeals>()
                 .HasKey(om => new { om.OrderId, om.MealId });
 
+
+            // drop Id and IsDeleted column from OrderMeals
+            builder.Entity<OrderMeals>()
+                .Ignore(om => om.Id);
+            
+            builder.Entity<OrderMeals>()
+                .Ignore(om => om.IsDelete);
+
             // create NonClustered Index on Restaurant Name
             builder.Entity<Restaurant>()
                 .HasIndex(r => r.Name)
@@ -44,5 +52,6 @@ namespace OrderFood.DAL.Context
         public DbSet<Order> Orders { get; set; }
         public DbSet<Coupon> Coupons { get; set; }
         public DbSet<Review> Reviews { get; set; }
+
     }
 }

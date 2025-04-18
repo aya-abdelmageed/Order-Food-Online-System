@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OrderFood.DAL.Entities.Models
 {
-    public class OrderMeals
+    public class OrderMeals : BaseEntity
     {
         [ForeignKey("OrderId")]
         public Order? Order { get; set; }
@@ -17,6 +17,13 @@ namespace OrderFood.DAL.Entities.Models
         public Meal? Meal { get; set; }
         public int MealId { get; set; }
 
+        // Navigation Properties For Restaurant
+        [ForeignKey("RestaurantId")]
+        public Restaurant? Restaurant { get; set; }
+        public int RestaurantId { get; set; }
+
+
         public int Quantity { get; set; } = 1;
+
     }
 }

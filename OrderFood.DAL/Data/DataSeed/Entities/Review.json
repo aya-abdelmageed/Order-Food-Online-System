@@ -1,0 +1,107 @@
+[
+  {
+    "ReviewDate": "2025-04-13T10:15:00",
+    "Rate": 5,
+    "Comment": "Excellent breakfast and service!",
+    "CustomerId": "306e5a79-171d-49c5-96c3-3e63953555a7",
+    "RestaurantId": 1
+  },
+  {
+    "CustomerId": "306e5a79-171d-49c5-96c3-3e63953555a7",
+    "RestaurantId": 4,
+    "ReviewDate": "2025-04-13T19:30:00",
+    "Rate": 3,
+    "Comment": "Good burgers but the order was missing the sauce I requested."
+  },
+  {
+    "CustomerId": "306e5a79-171d-49c5-96c3-3e63953555a7",
+    "RestaurantId": 3,
+    "ReviewDate": "2025-04-15T20:00:00",
+    "Rate": 2,
+    "Comment": "Order arrived late and the fish didn't taste fresh."
+  },
+  {
+    "ReviewDate": "2025-04-12T14:30:00",
+    "Rate": 4,
+    "Comment": "Tasty lunch but a bit late.",
+    "CustomerId": "306e5a79-171d-49c5-96c3-3e63953555a7",
+    "RestaurantId": 2
+  },
+  {
+    "ReviewDate": "2025-04-11T20:00:00",
+    "Rate": 3,
+    "Comment": "Dinner was okay, needs improvement.",
+    "CustomerId": "92cd486d-ec55-430c-8af1-7c749b26d110",
+    "RestaurantId": 3
+  },
+  {
+    "CustomerId": "92cd486d-ec55-430c-8af1-7c749b26d110",
+    "RestaurantId": 3,
+    "ReviewDate": "2025-04-14T13:20:00",
+    "Rate": 5,
+    "Comment": "Fresh and delicious sushi. The California rolls were perfect!"
+  },
+  {
+    "CustomerId": "92cd486d-ec55-430c-8af1-7c749b26d110",
+    "RestaurantId": 1,
+    "ReviewDate": "2025-04-16T12:45:00",
+    "Rate": 4,
+    "Comment": "Excellent pepperoni pizza, though a bit greasy."
+  },
+  {
+    "ReviewDate": "2025-04-10",
+    "Rate": 5,
+    "Comment": "Great food!",
+    "CustomerId": "9bfcccd8-a013-4828-9a6d-91cde4d17af2",
+    "RestaurantId": 3
+  },
+  {
+    "CustomerId": "9bfcccd8-a013-4828-9a6d-91cde4d17af2",
+    "RestaurantId": 3,
+    "ReviewDate": "2025-04-11",
+    "Rate": 4,
+    "Comment": "Tasty burgers!"
+  },
+  {
+    "CustomerId": "a91aa43f-4d7d-4649-9a44-67cbd667119f",
+    "RestaurantId": 3,
+    "ReviewDate": "2025-04-12",
+    "Rate": 5,
+    "Comment": "Best Pizza ever!"
+  },
+  {
+    "CustomerId": "a91aa43f-4d7d-4649-9a44-67cbd667119f",
+    "RestaurantId": 2,
+    "ReviewDate": "2025-04-13",
+    "Rate": 3,
+    "Comment": "Could be better"
+  },
+  {
+    "CustomerId": "a91aa43f-4d7d-4649-9a44-67cbd667119f",
+    "RestaurantId": 5,
+    "ReviewDate": "2025-04-10T12:30:00",
+    "Rate": 5,
+    "Comment": "The best pizza in town! Delivery was fast and the food arrived hot."
+  },
+  {
+    "CustomerId": "c867b078-09aa-48a5-a128-191333be3ccc",
+    "RestaurantId": 4,
+    "ReviewDate": "2025-04-11T14:15:00",
+    "Rate": 4,
+    "Comment": "Great flavor but the crust was slightly overcooked."
+  },
+  {
+    "CustomerId": "c867b078-09aa-48a5-a128-191333be3ccc",
+    "RestaurantId": 4,
+    "ReviewDate": "2025-04-12T18:45:00",
+    "Rate": 5,
+    "Comment": "Juicy burgers with perfect fries. Will definitely order again!"
+  },
+  {
+    "CustomerId": "c867b078-09aa-48a5-a128-191333be3ccc",
+    "RestaurantId": 5,
+    "ReviewDate": "2025-04-17T19:15:00",
+    "Rate": 5,
+    "Comment": "Amazing presentation and quality. Worth every penny!"
+  }
+]

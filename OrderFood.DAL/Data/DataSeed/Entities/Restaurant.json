@@ -1,0 +1,105 @@
+[
+  {
+    "Name": "The Breakfast Place",
+    "Address": "123 Cairo Road, Cairo, Egypt",
+    "HotLine": "0123456789",
+    "Logo": "images/breakfast_logo.png",
+    "Long": 31.2357,
+    "Lat": 30.0444,
+    "OwnerId": "232924f5-81e1-49ae-a7ec-1aa48d4f086c",
+    "Categories": [
+      {
+        "Name": "Breakfast"
+      }
+    ]
+  },
+  {
+    "Name": "Delight",
+    "Address": "456 Alexandria Road, Alexandria, Egypt",
+    "HotLine": "0129876543",
+    "Logo": "images/lunch_logo.png",
+    "Long": 29.9765,
+    "Lat": 31.2156,
+    "OwnerId": "3365e4ed-f8e1-49dc-8342-b3dc85426213",
+    "Categories": [
+      {
+        "Name": "Lunch"
+      },
+      {
+        "Name": "Dinner"
+      }
+    ]
+  },
+  {
+    "Name": "Midnight Bites",
+    "Address": "789 Giza Road, Giza, Egypt",
+    "HotLine": "0123344556",
+    "Logo": "images/dinner_logo.png",
+    "Long": 31.2135,
+    "Lat": 30.0256,
+    "OwnerId": "669ce1bf-fd1b-49e7-acd8-405513c7598a",
+    "Categories": [
+      {
+        "Name": "Lunch"
+      },
+      {
+        "Name": "Dinner"
+      },
+      {
+        "Name": "Sweets"
+      },
+      {
+        "Name": "Drinks"
+      }
+    ]
+  },
+  {
+    "Name": "Slice Society",
+    "Address": "321 Dessert Avenue, Cairo, Egypt",
+    "HotLine": "0121212121",
+    "Logo": "images/sweets_logo.png",
+    "Long": 31.2357,
+    "Lat": 30.0444,
+    "OwnerId": "808f6636-8ed3-4df8-99e1-f06aef1f65de",
+    "Categories": [
+      {
+        "Name": "Breakfast"
+      },
+      {
+        "Name": "Lunch"
+      },
+      {
+        "Name": "Dinner"
+      },
+      {
+        "Name": "Sweets"
+      }
+    ]
+  },
+  {
+    "Name": "Spice Route",
+    "Address": "654 Beverage Lane, Giza, Egypt",
+    "HotLine": "0123450000",
+    "Logo": "images/drinks_logo.png",
+    "Long": 31.2357,
+    "Lat": 30.0444,
+    "OwnerId": "bb43517b-4224-4936-906f-2b416159469b",
+    "Categories": [
+      {
+        "Name": "Breakfast"
+      },
+      {
+        "Name": "Lunch"
+      },
+      {
+        "Name": "Dinner"
+      },
+      {
+        "Name": "Sweets"
+      },
+      {
+        "Name": "Drinks"
+      }
+    ]
+  }
+]

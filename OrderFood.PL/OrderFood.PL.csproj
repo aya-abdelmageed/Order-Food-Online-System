@@ -25,4 +25,8 @@
     <ProjectReference Include="..\OrderFood.Service\OrderFood.Service.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Areas\Customer\Data\" />
+  </ItemGroup>
+
 </Project>

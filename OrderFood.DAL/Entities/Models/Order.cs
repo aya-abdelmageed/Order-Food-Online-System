@@ -1,4 +1,4 @@
-﻿using OrderFood.DAL.Entities.User;
+﻿    using OrderFood.DAL.Entities.User;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -12,12 +12,21 @@ namespace OrderFood.DAL.Entities.Models
     {
         public string ShippingAddress { get; set; }
         public decimal SubTotal { get; set; }
+
+        public decimal getTotal()
+        {
+            return SubTotal - (SubTotal * (Coupon?.AmountPercentage ?? 0) / 100) + 5;
+            // 5 is the delivery fee
+        }
+
+        public decimal Lat { get; set; }
+        public decimal Long { get; set; }
         public DateTime CreatedOrder { get; set; } = DateTime.Now;
         public OrderStatus OrderStatus { get; set; } = OrderStatus.Pending;
 
 
         // Payment
-        public string PaymentId { get; set; }
+        public string PaymentId { get; set; } = Guid.NewGuid().ToString();
         public string? TransactionId { get; set; } // stripe transaction id
         public PaymentMethod PaymentMethod { get; set; }
         public DateTime? PayDate { get; set; }

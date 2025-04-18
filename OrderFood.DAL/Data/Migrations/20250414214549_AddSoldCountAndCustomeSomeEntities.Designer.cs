@@ -3,17 +3,20 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OrderFood.DAL.Context;
 
 #nullable disable
 
-namespace OrderFood.Pl.Migrations
+namespace OrderFood.DAL.Data.Migrations
 {
     [DbContext(typeof(FoodDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250414214549_AddSoldCountAndCustomeSomeEntities")]
+    partial class AddSoldCountAndCustomeSomeEntities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +24,21 @@ namespace OrderFood.Pl.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("CategoryRestaurant", b =>
+                {
+                    b.Property<int>("CategoriesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RestaurantsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CategoriesId", "RestaurantsId");
+
+                    b.HasIndex("RestaurantsId");
+
+                    b.ToTable("CategoryRestaurant");
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -174,12 +192,7 @@ namespace OrderFood.Pl.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("RestaurantId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("RestaurantId");
 
                     b.ToTable("Categories");
                 });
@@ -334,14 +347,9 @@ namespace OrderFood.Pl.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<int>("RestaurantId")
-                        .HasColumnType("int");
-
                     b.HasKey("OrderId", "MealId");
 
                     b.HasIndex("MealId");
-
-                    b.HasIndex("RestaurantId");
 
                     b.ToTable("MealOrders");
                 });
@@ -520,6 +528,21 @@ namespace OrderFood.Pl.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("CategoryRestaurant", b =>
+                {
+                    b.HasOne("OrderFood.DAL.Entities.Models.Category", null)
+                        .WithMany()
+                        .HasForeignKey("CategoriesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("OrderFood.DAL.Entities.Models.Restaurant", null)
+                        .WithMany()
+                        .HasForeignKey("RestaurantsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -569,17 +592,6 @@ namespace OrderFood.Pl.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("OrderFood.DAL.Entities.Models.Category", b =>
-                {
-                    b.HasOne("OrderFood.DAL.Entities.Models.Restaurant", "Restaurant")
-                        .WithMany("Categories")
-                        .HasForeignKey("RestaurantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Restaurant");
                 });
 
             modelBuilder.Entity("OrderFood.DAL.Entities.Models.Coupon", b =>
@@ -641,17 +653,9 @@ namespace OrderFood.Pl.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("OrderFood.DAL.Entities.Models.Restaurant", "Restaurant")
-                        .WithMany("OrderMeals")
-                        .HasForeignKey("RestaurantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Meal");
 
                     b.Navigation("Order");
-
-                    b.Navigation("Restaurant");
                 });
 
             modelBuilder.Entity("OrderFood.DAL.Entities.Models.Restaurant", b =>
@@ -696,13 +700,6 @@ namespace OrderFood.Pl.Migrations
 
             modelBuilder.Entity("OrderFood.DAL.Entities.Models.Order", b =>
                 {
-                    b.Navigation("OrderMeals");
-                });
-
-            modelBuilder.Entity("OrderFood.DAL.Entities.Models.Restaurant", b =>
-                {
-                    b.Navigation("Categories");
-
                     b.Navigation("OrderMeals");
                 });
 #pragma warning restore 612, 618

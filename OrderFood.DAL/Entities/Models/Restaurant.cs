@@ -24,5 +24,8 @@ namespace OrderFood.DAL.Entities.Models
 
         // Navigation Properties For Categories
         public ICollection<Category>? Categories { get; set; } = new HashSet<Category>();
+
+        // Navigation Properties For OrderMeals
+        public ICollection<OrderMeals>? OrderMeals { get; set; } = new HashSet<OrderMeals>();
     }
 }
