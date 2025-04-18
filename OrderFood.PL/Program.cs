@@ -95,9 +95,14 @@ public class Program
    pattern: "{controller=Restaurants}/{action=GetMenu}/{id=4}");
 
         app.MapStaticAssets();
+        app.MapAreaControllerRoute(
+            name: "Identity",
+            areaName:"Identity",
+            pattern: "Identity/{controller=Home}/{action=OnboardingPage}/{id?}")
+            .WithStaticAssets();
         app.MapControllerRoute(
             name: "default",
-            pattern: "{controller=Home}/{action=Index}/{id?}")
+            pattern: "{controller=Home}/{action=OnboardingPage}/{id?}")
             .WithStaticAssets();
         app.MapRazorPages()
            .WithStaticAssets();

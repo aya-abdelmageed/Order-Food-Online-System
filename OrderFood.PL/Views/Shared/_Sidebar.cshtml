@@ -1,0 +1,66 @@
+﻿<section class="sidebar">
+    <div class="nav-header">
+        <p class="logo">FoodMart</p>
+        <i class="bx bx-menu btn-menu"></i>
+    </div>
+    <ul class="nav-links">
+
+        <li>
+            <a href="#">
+                <i class="bx bx-home-alt-2"></i>
+                <span class="title">Home</span>
+            </a>
+            <span class="tooltip">Home</span>
+        </li>
+        <li>
+            <a href="#">
+                <i class="bx bx-phone-call"></i>
+                <span class="title">Calls</span>
+            </a>
+            <span class="tooltip">Calls</span>
+        </li>
+        <li>
+            <a href="#">
+                <i class="bx bx-bookmark"></i>
+                <span class="title">Bookmarks</span>
+            </a>
+            <span class="tooltip">Bookmarks</span>
+        </li>
+        <li>
+            <a href="#">
+                <i class="bx bx-wallet-alt"></i>
+                <span class="title">Wallet</span>
+            </a>
+            <span class="tooltip">Wallet</span>
+        </li>
+        <li>
+            <a href="#">
+                <i class="bx bxs-devices"></i>
+                <span class="title">Devices</span>
+            </a>
+            <span class="tooltip">Devices</span>
+        </li>
+        <li>
+            <a href="#">
+                <i class="bx bx-cog"></i>
+                <span class="title">Setting</span>
+            </a>
+            <span class="tooltip">Setting</span>
+        </li>
+    </ul>
+
+
+
+
+</section>
+
+
+
+@* this is the codition for sidebar button based on roles for s *@
+
+@* @if (User.Identity.IsAuthenticated && User.IsInRole("Admin")) *@
+@* { *@
+@*     @Html.Partial("_Sidebar") *@
+@* } *@
+
+ 

@@ -6,6 +6,8 @@ using OrderFood.DAL.Entities.User;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -40,7 +42,22 @@ namespace OrderFood.DAL.Context
             builder.Entity<Meal>()
                 .HasIndex(m => m.Name)
                 .IsUnique()
-                .HasDatabaseName("IX_Meal_Name");
+            .HasDatabaseName("IX_Meal_Name");
+
+
+            foreach (var entityType in builder.Model.GetEntityTypes())
+            {
+                // Only apply this rule to entities that have IsDeleted
+                if (typeof(BaseEntity).IsAssignableFrom(entityType.ClrType))
+                {
+                    var parameter = Expression.Parameter(entityType.ClrType, "e");               // e =>
+                    var isDeletedProperty = Expression.Property(parameter, nameof(BaseEntity.IsDelete));         // e.IsDeleted
+                    var notDeleted = Expression.Not(isDeletedProperty);                          // !e.IsDeleted
+                    var lambda = Expression.Lambda(notDeleted, parameter);                       // e => !e.IsDeleted
+
+                    builder.Entity(entityType.ClrType).HasQueryFilter(lambda);              // Apply the filter
+                }
+            }
 
             base.OnModelCreating(builder);
         }

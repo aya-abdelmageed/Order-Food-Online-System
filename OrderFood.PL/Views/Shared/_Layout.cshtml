@@ -1,370 +1,59 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - OrderFood.PL</title>
-    <script type="importmap"></script>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://unpkg.com/bs-brain@2.0.4/components/navbars/navbar-3/assets/css/navbar-3.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
-    @* <link rel="stylesheet" href="~/OrderFood.PL.styles.css" asp-append-version="true" /> *@
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" /> 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    @* --This is global Layout css For Layout-- *@
+    <link rel="stylesheet" href="~/css/globalLayout/globalLayout.css" />
+
+    @* ---Bootstrap File---- *@
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    @*-- This layout for Navbar-- *@
+    <link rel="stylesheet" href="https://unpkg.com/bs-brain@2.0.4/components/navbars/navbar-3/assets/css/navbar-3.css">
+    @* --The Global Site Css --*@
+    <link href="~/css/site.css" rel="stylesheet" />
+    @* --Render The special Styles and Script Sections for Each Rendered Page-- *@
+    @RenderSection("Styles", false)
+	
 </head>
 <body>
-    <section class="ALL-HomePage">
-        <section class="sidebar">
-            <div class="nav-header">
-                <p class="logo">FoodMart</p>
-                <i class="bx bx-menu btn-menu"></i>
-            </div>
-            <ul class="nav-links">
+    <section class="ALL-HomePage ">
 
-                <li>
-                    <a href="#">
-                        <i class="bx bx-home-alt-2"></i>
-                        <span class="title">Home</span>
-                    </a>
-                    <span class="tooltip">Home</span>
-                </li>
-                <li>
-                    <a href="#">
-                        <i class="bx bx-phone-call"></i>
-                        <span class="title">Calls</span>
-                    </a>
-                    <span class="tooltip">Calls</span>
-                </li>
-                <li>
-                    <a href="#">
-                        <i class="bx bx-bookmark"></i>
-                        <span class="title">Bookmarks</span>
-                    </a>
-                    <span class="tooltip">Bookmarks</span>
-                </li>
-                <li>
-                    <a href="#">
-                        <i class="bx bx-wallet-alt"></i>
-                        <span class="title">Wallet</span>
-                    </a>
-                    <span class="tooltip">Wallet</span>
-                </li>
-                <li>
-                    <a href="#">
-                        <i class="bx bxs-devices"></i>
-                        <span class="title">Devices</span>
-                    </a>
-                    <span class="tooltip">Devices</span>
-                </li>
-                <li>
-                    <a href="#">
-                        <i class="bx bx-cog"></i>
-                        <span class="title">Setting</span>
-                    </a>
-                    <span class="tooltip">Setting</span>
-                </li>
-            </ul>
-
-            <div class="theme-wrapper">
-                <i class="bx bxs-moon theme-icon"></i>
-                <p>Dark Theme</p>
-                <div class="theme-btn">
-                    <span class="theme-ball"></span>
-                </div>
-            </div>
-
-
-        </section>
-        <section class="home">
+        <section class="home flex">
             <div class="">
                 <!-- Header -->
-                <header id="header-demo">
-                    <!-- bg-body-tertiary -->
-                    <nav class="navbar  navbar-expand-md bg-success  bsb-navbar-3 ">
-                        <div class="container">
-                            <a class="navbar-brand" href="#!">
-                                <img src="~/images/logo (1).png" class="img-fluid rounded" alt="BootstrapBrain Logo" width="150"
-                                     height="80">
-                            </a>
-                            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#bsbNavbar" aria-controls="bsbNavbar" aria-label="Toggle Navigation">
-                                <i class="bi bi-three-dots"></i>
-                            </button>
-                            <div class="collapse navbar-collapse" id="bsbNavbar">
-                                <ul class="navbar-nav bsb-dropdown-menu-responsive ms-auto align-items-center">
+                <partial name="_Navbar" />
+                <!-- end header -->
+                <!--  Asidebar -->
+                  @if (User.Identity.IsAuthenticated)  
+                  {  
+                     <partial name="_Sidebar" /> 
+                  }
 
-                                    <li class="nav-item dropdown cart-dropdown position-relative">
-                                        <a class="nav-link dropdown-toggle" href="#">
-                                            <span class="position-relative ">
-                                                <i class="bi bi-cart fs-5 text-black"></i>
-                                                <span class=" position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger ">2</span>
-                                            </span>
-                                        </a>
-
-                                        <div class="dropdown-menu dropdown-menu-right end-0">
-                                            <h6 class="dropdown-header text-center mb-2">Your Cart (2 items)</h6>
-
-                                            <!-- Cart Item -->
-                                            <div class="mini-cart-item d-flex border-bottom pb-3 mb-3">
-                                                <img src="~/images/burger.jpg" alt="Product">
-                                                <div class="flex-grow-1">
-                                                    <div class="d-flex justify-content-between align-items-start">
-                                                        <span class="product-title">Burger  Ranch</span>
-                                                        <a href="#"><i class="bi bi-x text-danger"></i></a>
-                                                    </div>
-                                                    <div class="d-flex justify-content-between align-items-center">
-                                                        <div class="quantity-control">
-                                                            <button class="btn btn-outline-secondary btn-sm"
-                                                                    onclick="changeQty(this, -1)">
-                                                                −
-                                                            </button>
-                                                            <input type="text" value="1"
-                                                                   class="form-control form-control-sm qty-input">
-                                                            <button class="btn btn-outline-secondary btn-sm"
-                                                                    onclick="changeQty(this, 1)">
-                                                                +
-                                                            </button>
-                                                        </div>
-                                                        <span>$99</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <!-- Another item -->
-                                            <div class="mini-cart-item d-flex border-bottom pb-3 mb-3">
-                                                <img src="~/images/burger.jpg" alt="Product">
-                                                <div class="flex-grow-1">
-                                                    <div class="d-flex justify-content-between align-items-start">
-                                                        <span class="product-title">Burger Ranch</span>
-                                                        <a href="#"><i class="bi bi-x text-danger"></i></a>
-                                                    </div>
-                                                    <div class="d-flex justify-content-between align-items-center">
-                                                        <div class="quantity-control">
-                                                            <button class="btn btn-outline-secondary btn-sm"
-                                                                    onclick="changeQty(this, -1)">
-                                                                −
-                                                            </button>
-                                                            <input type="text" value="1"
-                                                                   class="form-control form-control-sm qty-input">
-                                                            <button class="btn btn-outline-secondary btn-sm"
-                                                                    onclick="changeQty(this, 1)">
-                                                                +
-                                                            </button>
-                                                        </div>
-                                                        <span>$99</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <!-- Total -->
-                                            <div class="d-flex justify-content-between cart-total mb-3">
-                                                <span>Subtotal:</span><span>$198</span>
-                                            </div>
-
-                                            <!-- Buttons -->
-                                            <div class="d-grid gap-2">
-                                                <a href="#" class="btn btn-danger">View Cart</a>
-                                                <a href="#" class="btn btn-outline-secondary">Checkout</a>
-                                            </div>
-                                        </div>
-                                    </li>
-
-
-                                    <li class="nav-item dropdown">
-                                        <a class="nav-link dropdown-toggle bsb-dropdown-toggle-caret-disable" href="#"
-                                           role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <span class="position-relative pt-1">
-                                                <i class="bi bi-heart text-black"></i>
-                                                <span class="p-1 bg-danger border border-light rounded-circle position-absolute top-0 start-100 translate-middle">
-                                                    <span class="visually-hidden">New Wishlist Items</span>
-                                                </span>
-                                            </span>
-                                        </a>
-                                        <ul class="dropdown-menu dropdown-menu-md-end bsb-dropdown-animation bsb-fadeIn">
-                                            <li>
-                                                <h6 class="dropdown-header fs-7 text-center">Your Wishlist (3 items)</h6>
-                                            </li>
-                                            <li>
-                                                <hr class="dropdown-divider">
-                                            </li>
-                                            <!-- Wishlist Item 1 -->
-                                            <li class="wishlist-item">
-                                                <a class="dropdown-item d-flex align-items-center" href="#!">
-                                                    <img src="~/images/pizza.avif" alt="Product 1"
-                                                         class="img-fluid rounded-2 me-2" style="width: 40px;">
-                                                    <span class="fs-7">PIZZA</span>
-                                                    <button class="btn btn-link ms-auto text-danger remove-item"
-                                                            aria-label="Remove">
-                                                        <i class="bi bi-trash"></i>
-                                                    </button>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <hr class="dropdown-divider">
-                                            </li>
-                                            <!-- Wishlist Item 2 -->
-                                            <li class="wishlist-item">
-                                                <a class="dropdown-item d-flex align-items-center" href="#!">
-                                                    <img src="~/images/pizza.avif" alt="Product 2"
-                                                         class="img-fluid rounded-2 me-2" style="width: 40px;">
-                                                    <span class="fs-7">PIZZA</span>
-                                                    <button class="btn btn-link ms-auto text-danger remove-item"
-                                                            aria-label="Remove">
-                                                        <i class="bi bi-trash"></i>
-                                                    </button>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <hr class="dropdown-divider">
-                                            </li>
-                                            <!-- Wishlist Item 3 -->
-                                            <li class="wishlist-item">
-                                                <a class="dropdown-item d-flex align-items-center" href="#!">
-                                                    <img src="~/images/pizza.avif" alt="Product 3"
-                                                         class="img-fluid rounded-2 me-2" style="width: 40px;">
-                                                    <span class="fs-7">PIZZA</span>
-                                                    <button class="btn btn-link ms-auto text-danger remove-item"
-                                                            aria-label="Remove">
-                                                        <i class="bi bi-trash"></i>
-                                                    </button>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <hr class="dropdown-divider">
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item fs-7 text-center" href="#">
-                                                    See All Wishlist
-                                                    Items
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li class="nav-item dropdown">
-                                        <a class="nav-link dropdown-toggle bsb-dropdown-toggle-caret-disable" href="#"
-                                           role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <img src="~/images/photo-1633332755192-727a05c4013d.jpg" width="35" height="35"
-                                                 class="img-fluid rounded-circle" alt="Luke Reeves">
-                                        </a>
-                                        <ul class="dropdown-menu dropdown-menu-md-end bsb-dropdown-animation bsb-fadeIn">
-                                            <li>
-                                                <h6 class="dropdown-header fs-7 text-center">Welcome, Luke Reeves</h6>
-                                            </li>
-                                            <li>
-                                                <hr class="dropdown-divider">
-                                            </li>
-                                            <li>
-                                                <a href="#" class="dropdown-item" aria-current="true">
-                                                    <div class="row g-0 align-items-center">
-                                                        <div class="col-3">
-                                                            <img src="./assets/img/profile/profile-img-1.jpg" width="55"
-                                                                 height="55" class="img-fluid rounded-circle"
-                                                                 alt="Luke Reeves">
-                                                        </div>
-                                                        <div class="col-9">
-                                                            <div class="ps-3">
-                                                                <div class="text-secondary mt-1 fs-7">Premium Account</div>
-                                                                <div class="text-secondary mt-1 fs-7">email@domain.com</div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <hr class="dropdown-divider">
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item" href="#!">
-                                                    <span>
-                                                        <i class="bi bi-person-fill me-2"></i>
-                                                        <span class="fs-7">View Profile</span>
-                                                    </span>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item" href="#!">
-                                                    <span>
-                                                        <i class="bi bi-bell-fill me-2"></i>
-                                                        <span class="fs-7">Notifications</span>
-                                                    </span>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <hr class="dropdown-divider">
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item" href="#!">
-                                                    <span>
-                                                        <i class="bi bi-gear-fill me-2"></i>
-                                                        <span class="fs-7">Settings & Privacy</span>
-                                                    </span>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item" href="#!">
-                                                    <span>
-                                                        <i class="bi bi-question-circle-fill me-2"></i>
-                                                        <span class="fs-7">Help Center</span>
-                                                    </span>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <hr class="dropdown-divider">
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item text-center" href="#!">
-                                                    <span>
-                                                        <span class="fs-7">Log Out</span>
-                                                    </span>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </nav>
-                </header>
-
+                <!-- end sidebar -->
                 <!-- Main -->
-                <div id="main-demo">
-                    <section class="my-3 my-md-4">
-                        <div class="container">
-                            <div class="container">
-                                <main role="main" class="pb-3">
-                                    @RenderBody()
-                                </main>
-                            </div>
-                        </div>
-                    </section>
+                <section id="main-demo" class="" style="">
 
-                </div>
+                    @RenderBody()
+                </section>
+                <!--end Main -->
+                <!-- footer -->
+                <partial name="_Footer" />
 
-                @* <footer class="footer bg-body-tertiary position-fixed bottom-0 w-100"> *@
+                <!-- end footer -->
 
-                @*         <div class="row"> *@
-                @*             <div class="col"> *@
-                @*                 <div class="py-3 text-center"> *@
-                @*                     Built by <a href="https://bootstrapbrain.com/" class="link-secondary text-decoration-none">BootstrapBrain</a> with <span class="text-primary">&#9829;</span> *@
-                @*                 </div> *@
-                @*             </div> *@
-                @*         </div> *@
-                @*     </div> *@
-                @* </footer> *@
             </div>
         </section>
     </section>
 
 
-
-
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    
+    
+    <script src="~/lib/jquery/dist/jquery.min.js"></script> 
+     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script> 
+    <script src="~/js/globalLayout/globalLayout.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
-
-
-
