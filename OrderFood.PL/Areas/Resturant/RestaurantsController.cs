@@ -30,7 +30,7 @@ namespace OrderFood.PL.Areas.Resturant
         public async Task<IActionResult> Settings()
         {
             var restuarant = await unitOfWork.GetRepository<Restaurant>().GetOneAsync(
-                criteria: c => c.Id == 2
+                criteria: c => c.Id == 5
                 );
             var model = new UploadViewModel
             {

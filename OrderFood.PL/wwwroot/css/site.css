@@ -261,14 +261,14 @@
     transition: var(--transition);
 }
 
-.home p {
+/*.home p {
     font-size: 20px;
     font-weight: 500;
     color: var(--color-black);
     display: inline-block;
     margin: 20px;
     white-space: nowrap;
-}
+}*/
 
 
 .cart-dropdown:hover .dropdown-menu {
