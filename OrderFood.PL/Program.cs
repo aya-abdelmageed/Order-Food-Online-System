@@ -89,6 +89,11 @@ public class Program
 
         app.UseAuthorization();
 
+        app.MapAreaControllerRoute(
+   name: "area",
+   areaName: "Resturant",
+   pattern: "{controller=Restaurants}/{action=GetMenu}/{id=4}");
+
         app.MapStaticAssets();
         app.MapControllerRoute(
             name: "default",
