@@ -88,13 +88,17 @@ public class Program
         app.UseRouting();
 
         app.UseAuthorization();
+        app.MapStaticAssets();
 
         app.MapAreaControllerRoute(
             name: "area",
             areaName: "Resturant",
             pattern: "{controller=Restaurants}/{action=GetMenu}/{id=4}");
+        app.MapControllerRoute(
+            name: "Areas",
+            pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
-        app.MapStaticAssets();
+        
         app.MapAreaControllerRoute(
             name: "Identity",
             areaName:"Identity",
