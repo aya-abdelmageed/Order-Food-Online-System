@@ -8,7 +8,7 @@
 
 
 <style>
-
+    /* panel style */
     .panel {
     background-size: cover;
     background-position: center;
@@ -44,9 +44,6 @@
 
     /* card styles */
      
-
-     
-
     :root {
         --gradient: linear-gradient(to left top, darkolivegreen 10%,olive 90%) !important;
     }
@@ -132,13 +129,16 @@
         @foreach(var item in Model)
         {
             <div class="panel" style="background-image: url('@item.Image') ">
-                <a class="text-bg-light text-info"  asp-action="Index" asp-route-name="@item.CategoryName"><h3>@item.CategoryName <span class="bi bi-search"></span></h3></a>
+                <a class="text-bg-light text-info"
+                asp-action="Index" 
+                asp-route-name="@item.CategoryName"><h3>@item.CategoryName <span class="bi bi-search"></span></h3></a>
             </div>
         }
     </div>
     <div class="d-flex justify-content-end m-3">
         <a class="btn"
- asp-action="Index" asp-route-name=""><h3>Clear <span class="bi bi-search"></span></h3></a>
+            asp-action="Index" 
+            asp-route-name=""><h3>Clear <span class="bi bi-search"></span></h3></a>
     </div>
 
 </div>
