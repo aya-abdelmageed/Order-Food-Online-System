@@ -1,0 +1,148 @@
+﻿@model IEnumerable<OrderFood.DAL.Entities.Models.Order>
+@{
+    ViewData["Title"] = "OrdersListDetails";
+    var counter = 0;
+}
+
+<style>
+    .accordion-button:not(.collapsed) {
+        background-color: #ffcc80 !important; /* orange-like color when expanded */
+        color: #000;
+        border: 1px solid #ff9800 !important; /* orange-like color */
+    }
+
+    .accordion-button:focus {
+        box-shadow: none;
+    }
+
+    .accordion-item {
+        border: 1px solid #dee2e6;
+        border-radius: 0.375rem;
+    }
+
+    .accordion-body img {
+        height: 100px;
+        object-fit: cover;
+        border-radius: 5px;
+    }
+
+    .card {
+        border: 1px solid #ddd;
+        border-radius: 0.5rem;
+     
+    }
+
+    .card-title {
+        font-size: 1rem;
+        font-weight: 600;
+    }
+
+    .accordion-button {
+        padding: 1rem 1.25rem;
+    }
+
+    .status-Completed { 
+         background-color: lightgreen;
+         border: 1px solid green;
+         width: auto; 
+         border-radius: 7px;
+     }
+
+     .status-Cancelled { 
+         background-color: lightpink;
+         border: 1px solid red;
+         width: auto;
+         border-radius: 7px;
+     }
+
+     .status-Shipping {
+         background-color: palegoldenrod;
+         border: 1px solid orange;
+         width: auto;
+         border-radius: 7px;
+     }
+
+     .status-Pending {
+         background-color:mistyrose;
+         border: 1px solid lightcoral;
+         width:auto;
+      
+         border-radius: 7px; 
+     } 
+
+     .status-Preparing {
+         border: 1px solid blueviolet;
+      
+         background-color: lightpink;
+         width: auto;
+         border-radius: 7px;
+     }
+</style>
+
+<div class="container py-4">
+    <h2 class="mb-4">Order History</h2>
+
+    <div class="accordion" id="ordersAccordion">
+        @foreach (var o in Model)
+        {
+            <div class="accordion-item shadow mb-3">
+                <h2 class="accordion-header" id="heading-@counter">
+                    <button class="accordion-button collapsed d-flex justify-content-between" type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#collapse-@counter"
+                            aria-expanded="false"
+                            aria-controls="collapse-@counter">
+                        <div class="container-fluid">
+                            <div class="row w-100 text-muted">
+                                <div class="col-md-2"><strong>Order #@counter</strong></div>
+                                <div class="col-md-2 status-@o.OrderStatus">@o.OrderStatus</div>
+                                <div class="col-md-2">@o.CreatedOrder.ToShortDateString()</div>
+                                <div class="col-md-3">@o.ShippingAddress</div>
+                                <div class="col-md-2">@o.PaymentMethod</div>
+                                <div class="col-md-1 text-danger">$@o.SubTotal</div>
+                            </div>
+                        </div>
+                    </button>
+                </h2>
+
+                <div id="collapse-@counter" class="accordion-collapse collapse"
+                     aria-labelledby="heading-@counter"
+                     data-bs-parent="#ordersAccordion">
+                    <div class="accordion-body bg-light">
+                        <h5 class="mb-3">Order Menu</h5>
+                        <div class="col-md-4">
+                            @foreach (var item in o.OrderMeals)
+                            {
+                                <div class="mb-3">
+                                    <div class="card h-100 p-2 w-50">
+                                        <img src="@item.Meal.Image" class="card-img-top" alt="Meal Image" />
+                                        <div class="card-body p-2 d-flex flex-row">
+                                            <h4 class="card-title">
+                                                @item.Meal.Name
+                                                <br/>
+                                                <span class="text-muted"><span>X</span>@item.Quantity</span>
+                                            </h4>
+                                            <p class="text-success text-end mb-0"><span>+</span>$@(item.Quantity * item.Meal.Price)</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            
+                        </div>
+                        <div class="text-end mt-3">
+                            <h5 class="align-text-top fw-medium"><small class="text-muted">Payment Day: </small>@o.PayDate</h5>
+                            <h4 class="text-danger fw-bold"><small class="text-muted">Total:  </small>$@o.getTotal()</h4>
+                        </div>
+                        <div class="text-center mt-3">
+                            <h5 class="fw-medium text-warning"><small class="text-muted">Payment Method: </small>@o.PaymentMethod</h5>
+                            <h4 class="status-@o.OrderStatus"><small class="text-muted">Order Status:  </small>@o.OrderStatus</h4>
+                        </div>
+
+                        
+                    </div>
+                </div>
+            </div>
+            counter++;
+        }
+    </div>
+</div>

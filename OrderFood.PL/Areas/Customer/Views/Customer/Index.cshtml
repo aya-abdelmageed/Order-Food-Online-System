@@ -1,5 +1,6 @@
 ﻿@* @model OrderFood.PL.Areas.Customer.Models.CategoryViewModel; *@
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@inject IConfiguration Configuration;
 @{
     ViewData["Title"] = "Index";
     var restaurant = ViewData["Restaurants"] as List<OrderFood.DAL.Entities.Models.Restaurant>; ;
@@ -128,7 +129,7 @@
     <div class="container vw-100 d-flex">
         @foreach (var item in Model)
         {
-            <div class="panel" style="background-image: url('@item.Image') ">
+            <div class="panel" style="background-image: url('@Configuration["BaseURL"]@item.Image') ">
                 <a class="text-bg-light text-info"
                    asp-action="Index"
                    asp-route-name="@item.CategoryName"><h3>@item.CategoryName <span class="bi bi-search"></span></h3></a>

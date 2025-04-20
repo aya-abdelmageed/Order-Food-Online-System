@@ -35,25 +35,57 @@
             padding: 0.4rem 0.8rem;
         }
 
-        badge-color-completed {
+        .badge-color-completed {
             background-color: green;
         }
 
-        badge-color-cancelled {
+        .badge-color-cancelled {
             background-color: red;
         }
 
-        badge-color-shipping {
+        .badge-color-shipping {
             background-color: orange
         }
 
-        badge-color-pending {
+        .badge-color-pending {
             background-color: lightcoral;
         }
 
-        badge-color-preparing {
+        .badge-color-preparing {
             background-color: blueviolet;
         }
+
+        .menu-card {
+            height:100%;
+            background-color: floralwhite ;
+            border: 2px solid peru;
+            color: #212529;
+            border-radius: 7px;
+            display: flex;
+            justify-content: space-between;
+            flex-direction: column;
+            
+        }
+
+        .accordion-button{
+            background-color:royalblue;
+            color:whitesmoke;
+            border: 1px solid navy;
+            font-size: 0.85rem;
+            border-radius: 1rem;
+            padding: 0.4rem 0.8rem;
+        }
+        .accordion-button:not(.collapsed) {
+            background-color: #d1e7dd;
+        }
+
+            .menu-card img {
+                width: 100%;
+                height: 180px;
+                object-fit: cover;
+            }
+
+
     </style>
 </head>
 <body class="bg-light">
@@ -64,64 +96,91 @@
             <table class="table align-middle bg-white shadow rounded">
                 <thead class="table-light">
                     <tr>
-                        <th><input type="checkbox"></th> <!-- Select All -->
-                        <th>Menu</th>
+                        @* <th><input type="checkbox"></th> <!-- Select All --> *@
                         <th>Date</th>
                         <th>Address</th>
                         <th>Total</th>
                         <th>Status</th>
                         <th>Action</th>
+                        @* <th>Menu</th> *@
                     </tr>
                 </thead>
                 <tbody>
+                    @*<div class="accordion accordion-flush" id="accordionFlushExample">
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+        Accordion Item #1
+      </button>
+    </h2>
+    <div id="flush-collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+      <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the first item's accordion body.</div>
+    </div>
+  </div> *@
                     <!-- Order Row Start -->
+                  <div class="accordion accordion-flush" id="accordionFlushExample">
                     @foreach (var i in Model)
                     {
-                        foreach (var m in i.OrderMeals)
-                        {
 
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <tr class="order-row">
 
-                            <tr class="order-row">
-                                <td><input type="checkbox" asp-for="@m.MealId"></td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <img src="@m.Meal.Image" alt="Fish Burger" class="rounded me-3" width="50">
-                                        <div>
-                                            <div class="fw-bold">@m.Meal.Name</div>
-                                            <small class="text-muted">@m.Quantity</small>
-                                        </div>
+                                        @* <td><input type="checkbox" asp-for="@m.MealId"></td> *@
+                                        <td>@i.CreatedOrder</td>
+                                        <td><i class="bi bi-geo-alt text-warning me-1"> @i.Customer.Address</i> </td>
+                                        <td class="text-danger fw-bold">$ 5.59</td>
+                                        <td>
+                                            @if (i.OrderStatus.ToString() == "Completed")
+                                            {
+                                                <span class="badge badge-color-completed status-badge">Completed</span>
+                                            }
+                                            @if (i.OrderStatus.ToString() == "Cancelled")
+                                            {
+                                                <span class="badge badge-color-cancelled status-badge">Cancelled</span>
+                                            }
+                                            @if (i.OrderStatus.ToString() == "Shipping")
+                                            {
+                                                <span class="badge badge-color-shipping status-badge">Shipping</span>
+                                            }
+                                            @if (i.OrderStatus.ToString() == "Preparing")
+                                            {
+                                                <span class="badge badge-color-preparing status-badge">Preparing</span>
+                                            }
+                                            @if (i.OrderStatus.ToString() == "Pending")
+                                            {
+                                                <span class="badge badge-color-pending status-badge">Pending</span>
+                                            }
+                                        </td>
+                                        <td>
+
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                                Menu
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </h2>
+                                <div id="flush-collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                                    <div class="accordion-body row">
+                                        @foreach (var m in i.OrderMeals)
+                                        {
+                                            <div class="col-4 m-2">
+                                                <div class="menu-card ">
+                                                    <img src="@m.Meal.Image"class="rounded"/>
+                                                    <div class="card-body">
+                                                    @* <input type="hidden" asp-for="@m.MealId"> *@
+                                                        <div class="fw-bold">@m.Meal.Name</div>
+                                                        <small class="text-muted"><span>Quantity: </span>@m.Quantity</small>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
                                     </div>
-                                </td>
-                                <td>@i.CreatedOrder</td>
-                                <td><i class="bi bi-geo-alt text-warning me-1"> @i.Customer.Address</i> </td>
-                                <td class="text-danger fw-bold">$ 5.59</td>
-                                <td>
-                                    @if (i.OrderStatus.ToString() == "Completed")
-                                    {
-                                        <span class="badge bg-success status-badge">Completed</span>
-                                    }
-                                    @if (i.OrderStatus.ToString() == "Cancelled")
-                                    {
-                                        <span class="badge bg-danger status-badge">Cancelled</span>
-                                    }
-                                    @if (i.OrderStatus.ToString() == "Shipping")
-                                    {
-                                        <span class="badge bg-danger status-badge">Shipping</span>
-
-                                    }
-                                    @if (i.OrderStatus.ToString() == "Preparing")
-                                    {
-                                        <span class="badge bg-success status-badge">Preparing</span>
-                                    }
-                                    @if (i.OrderStatus.ToString() == "Pending")
-                                    {
-                                        <span class="badge bg-danger status-badge">Pending</span>
-                                    }
-
-                                </td>
-                                <td><button class="btn btn-outline-warning btn-sm">Order Again</button></td>
-                            </tr>
-                        }
+                                </div>
+                            </div>
+                        
+                        
                     }
                     <!-- Add more rows similarly -->
                 </tbody>

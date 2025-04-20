@@ -51,7 +51,21 @@ namespace OrderFood.PL.Areas.Customer.Controllers
         [HttpGet]
         public async Task<IActionResult> OrderHistory()
         {
-            var order = await UnitOfWork.GetRepository<Order>().GetAllAsync(query => !query.IsDelete && query.CustomerId == "306e5a79-171d-49c5-96c3-3e63953555a7",o => o
+            var order = await UnitOfWork.GetRepository<Order>().GetAllAsync(query => query.CustomerId == "306e5a79-171d-49c5-96c3-3e63953555a7",o => o
+                .Include(c => c.Customer)
+                .Include(i => i.OrderMeals)
+                .ThenInclude(x => x.Meal)
+                );
+            return View(order);
+        }
+
+
+        //The Customer Order List & Details History Action
+        [HttpGet]
+        public async Task<IActionResult> OrdersListDetails()
+        {
+            var order = await UnitOfWork.GetRepository<Order>().GetAllAsync(query => query.CustomerId == "306e5a79-171d-49c5-96c3-3e63953555a7", o => o
+                .Include(c => c.Customer)
                 .Include(i => i.OrderMeals)
                 .ThenInclude(x => x.Meal)
                 );
