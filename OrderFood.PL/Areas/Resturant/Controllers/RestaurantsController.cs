@@ -316,16 +316,23 @@ namespace OrderFood.PL.Areas.Resturant.Controllers
             var restuarant = await _context.GetRepository<Restaurant>().GetOneAsync(
                 criteria: c => c.Id == 5
                 );
-            var model = new UploadViewModel
+            var model = new UpdateRestaurantViewModel
             {
-                Restaurant = restuarant
+                Restaurant = restuarant,
+                Name = restuarant.Name,
+                Address = restuarant.Address,
+                Description = restuarant.Description,
+                HotLine = restuarant.HotLine,
+                Long = restuarant.Long,
+                Lat = restuarant.Lat,
+                ImageFile = null // Initialize to null
             };
             return (View(model));
         }
 
         [HttpPost]
         //update restaurant info including uploade files for logo
-        public async Task<IActionResult> Settings(UploadViewModel model)
+        public async Task<IActionResult> Settings(UpdateRestaurantViewModel model)
         {
             if (model == null)
             {
@@ -358,6 +365,7 @@ namespace OrderFood.PL.Areas.Resturant.Controllers
             {
                 _context.GetRepository<Restaurant>().Update(model.Restaurant);
                 await _context.SaveChangesAsync();
+                
                 return RedirectToAction("Settings");
             }
             else
