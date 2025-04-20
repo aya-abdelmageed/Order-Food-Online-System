@@ -14,18 +14,21 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using OrderFood.DAL.Entities.User;
 
 namespace OrderFood.PL.Areas.Identity.Pages.Account
 {
     public class LoginModel : PageModel
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(SignInManager<ApplicationUser> signInManager, ILogger<LoginModel> logger ,UserManager<ApplicationUser> userManager)
         {
             _signInManager = signInManager;
             _logger = logger;
+            this._userManager = userManager;
         }
 
         /// <summary>
@@ -115,6 +118,25 @@ namespace OrderFood.PL.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
+                    var user = await _userManager.GetUserAsync(User);
+                    var roles = await _userManager.GetRolesAsync(user);
+
+                    //Different Redirect Views based on it roles
+                    //if (roles[0]=="Customer") {
+                    //    return LocalRedirect(returnUrl);
+                    //}
+                    //if (roles[0] == "Admin")
+                    //{
+                    //    return LocalRedirect(returnUrl);
+                    //}
+                    //if (roles[0] == "Delivery")
+                    //{
+                    //    return LocalRedirect(returnUrl);
+                    //}
+                    //if (roles[0] == "Owner")
+                    //{
+                    //    return LocalRedirect(returnUrl);
+                    //}
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)

@@ -31,6 +31,14 @@ public class Program
 
         builder.Services.AddControllersWithViews();
 
+        //--Google Authintication
+
+        builder.Services.AddAuthentication()
+            .AddGoogle(options =>
+            {
+               options.ClientId = "99950342398-k1lib9ust9o852cfnoirnf4f6t3u7nkb.apps.googleusercontent.com";
+               options.ClientSecret = "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";
+            });
         // Add Unit Of Work To The Container
         builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
         var app = builder.Build();
@@ -88,11 +96,6 @@ public class Program
         app.UseRouting();
 
         app.UseAuthorization();
-
-        app.MapAreaControllerRoute(
-   name: "area",
-   areaName: "Resturant",
-   pattern: "{controller=Restaurants}/{action=GetMenu}/{id=4}");
 
         app.MapStaticAssets();
         app.MapAreaControllerRoute(
