@@ -9,6 +9,7 @@ using OrderFood.DAL.Data.DataSeed.Identity;
 using OrderFood.DAL.Data.DataSeed.Identity.Users;
 using OrderFood.DAL.Entities.User;
 using OrderFood.PL.Helper;
+using StackExchange.Redis;
 using System;
 using System.Threading.Tasks;
 
@@ -34,6 +35,20 @@ public class Program
 
         // Add Unit Of Work To The Container
         builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+        builder.Services.AddScoped<IBasketRepository, BasketRepository>();
+
+        builder.Services.AddScoped<IConnectionMultiplexer>(sp =>
+        {
+            return ConnectionMultiplexer.Connect(new ConfigurationOptions
+             {
+                 EndPoints = { { "redis-10154.crce176.me-central-1-1.ec2.redns.redis-cloud.com", 10154 } },
+                 User = "default",
+                 Password = "NQYpHcpMhgm7mLBwnu3DZo4u8b9keOsC"
+             });
+        });
+
+
 
         // Add AutoMapper Service
         builder.Services.AddAutoMapper(typeof(MappingProfiles));
@@ -96,15 +111,14 @@ public class Program
 
         app.UseAuthorization();
 
-        app.MapAreaControllerRoute(
-            name: "area",
-            areaName: "Resturant",
-            pattern: "{controller=Restaurants}/{action=GetMenu}/{id=4}");
+        app.MapControllerRoute(
+            name: "areas",
+            pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
         app.MapStaticAssets();
         app.MapAreaControllerRoute(
             name: "Identity",
-            areaName:"Identity",
+            areaName: "Identity",
             pattern: "Identity/{controller=Home}/{action=OnboardingPage}/{id?}")
             .WithStaticAssets();
         app.MapControllerRoute(

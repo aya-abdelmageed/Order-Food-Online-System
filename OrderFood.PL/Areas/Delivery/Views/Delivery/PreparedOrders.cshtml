@@ -1,0 +1,115 @@
+﻿@using OrderFood.PL.Areas.Delivery.ViewModel
+@using System.Text.Json
+@model ICollection<DeliveryOrderDetailsVM>
+
+@{
+    ViewData["Title"] = "PreparedOrders";
+}
+
+@section Styles {
+<link rel="stylesheet" href="~/css/Delivery/style.css" />
+<link rel="stylesheet" href="~/css/Delivery/vendor.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+
+}
+
+<section class="p-5 overflow-hidden">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+
+                <div class="section-header d-flex flex-wrap justify-content-between mb-5">
+                    <h2 class="section-title header-design p-3">Waiting To Deliver</h2>
+                    <div class="d-flex align-items-center">
+                        <div class="swiper-buttons">
+                            <button class="swiper-prev category-carousel-prev btn btn-yellow">❮</button>
+                            <button class="swiper-next category-carousel-next btn btn-yellow">❯</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="category-carousel swiper">
+                    <div class="swiper-wrapper" style="height: 310px;">
+                        @foreach (var item in Model)
+                        {
+                            <a id="@item.Id"
+                               class="nav-link category-item swiper-slide order-card"
+                               onclick='GetOrderDetails(@Html.Raw(JsonSerializer.Serialize(item)))'>
+
+                                <div class="d-flex align-items-center gap-3 p-2 bg-light rounded shadow-sm">
+                                    <img src="~/images/Icons/add-cart.png" alt="N/A" width="50" height="50" class="flex-shrink-0" style="object-fit: contain;">
+                                    <h6 class="mb-0 text-dark">@item.Restaurant.Name</h6>
+                                    <h6 class="mb-0 text-dark">@item.Restaurant.Address</h6>
+                                </div>
+
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+     
+
+
+
+
+        @* <div class="container py-5">
+            <div class=" row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+
+                @foreach (var item in Model)
+                {
+                    <a id="@item.Id" class="nav-link category-item swiper-slide order-card">
+                        <div>
+                            <img src="~/images/Icons/add-cart.png" alt="" width="50px" height="50px">
+                        </div>
+                        <h3 class="category-title">@item.Id</h3>
+                        <h5 class="category-title">Restaurant Name</h5>
+                        <h5 class="category-title">Restaurant Location</h5>
+                    </a>
+                }
+            </div>
+        </div> *@
+
+
+
+
+    </div>
+
+    <!-- =============================================== Partial View ============================================ -->
+    <div id="orderDetailsContainer""> 
+
+     </div> 
+
+
+
+</section>
+
+
+
+
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+    <script src="~/js/Delivery/jquery-1.11.0.min.js"></script>
+    <script> 
+          function GetOrderDetails(order) { 
+
+             fetch('/delivery/delivery/GetOrderDetails', { 
+                 method: 'POST', 
+                 headers: { 'Content-Type': 'application/json' }, 
+                 body: JSON.stringify(order) 
+             }) 
+             .then(res => res.text())
+             .then(html => { 
+                 document.getElementById("orderDetailsContainer").innerHTML = html; 
+             }); 
+         } 
+     </script>
+    <script src="~/js/delivery/script.js"></script>
+
+}

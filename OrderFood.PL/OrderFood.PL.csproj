@@ -30,6 +30,8 @@
 
   <ItemGroup>
     <Folder Include="Areas\Identity\Data\" />
+    <Folder Include="wwwroot\css\Delivery\" />
+    <Folder Include="wwwroot\js\Delivery\" />
   </ItemGroup>
 
 </Project>
