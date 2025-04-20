@@ -110,6 +110,7 @@ public class Program
         app.UseRouting();
 
         app.UseAuthorization();
+        app.MapStaticAssets();
 
         app.MapControllerRoute(
             name: "areas",
