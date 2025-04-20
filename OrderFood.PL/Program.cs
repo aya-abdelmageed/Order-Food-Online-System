@@ -8,6 +8,7 @@ using OrderFood.DAL.Data.DataSeed.Entities;
 using OrderFood.DAL.Data.DataSeed.Identity;
 using OrderFood.DAL.Data.DataSeed.Identity.Users;
 using OrderFood.DAL.Entities.User;
+using OrderFood.PL.Helper;
 using System;
 using System.Threading.Tasks;
 
@@ -41,6 +42,12 @@ public class Program
             });
         // Add Unit Of Work To The Container
         builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+        // Add AutoMapper Service
+        builder.Services.AddAutoMapper(typeof(MappingProfiles));
+
+
+
         var app = builder.Build();
 
         // Seed Data For Database
@@ -96,6 +103,11 @@ public class Program
         app.UseRouting();
 
         app.UseAuthorization();
+
+        app.MapAreaControllerRoute(
+   name: "area",
+   areaName: "Resturant",
+   pattern: "{controller=Restaurants}/{action=GetMenu}/{id=4}");
 
         app.MapStaticAssets();
         app.MapAreaControllerRoute(
