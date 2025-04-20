@@ -1,0 +1,196 @@
+﻿@model IEnumerable<OrderFood.DAL.Entities.Models.Order>
+
+@{
+    var counter = 0;
+}
+
+
+<style>
+    .accordion-button:not(.collapsed) {
+    background-color: #ffcc80 !important; /* orange-like color when expanded */
+    color: #000;
+    border: 1px solid #ff9800 !important; /* orange-like color */
+    }
+
+    .accordion-button:focus {
+    box-shadow: none;
+    }
+
+    .accordion-item {
+    border: 1px solid #dee2e6;
+    border-radius: 0.375rem;
+    }
+
+    .accordion-body img {
+    height: 100px;
+    object-fit: cover;
+    border-radius: 5px;
+    }
+
+    .card {
+    border: 1px solid #ddd;
+    border-radius: 0.5rem;
+    }
+
+    .card-title {
+    font-size: 1rem;
+    font-weight: 600;
+    }
+
+    .accordion-button {
+    padding: 1rem 1.25rem;
+    }
+
+    .status-Completed {
+    background-color: lightgreen;
+    border: 1px solid green;
+    width: auto;
+    border-radius: 7px;
+    }
+
+    .status-Cancelled {
+    background-color: lightpink;
+    border: 1px solid red;
+    width: auto;
+    border-radius: 7px;
+    }
+
+    .status-Shipping {
+    background-color: palegoldenrod;
+    border: 1px solid orange;
+    width: auto;
+    border-radius: 7px;
+    }
+
+    .status-Pending {
+    background-color: mistyrose;
+    border: 1px solid lightcoral;
+    width: auto;
+    border-radius: 7px;
+    }
+
+    .status-Preparing {
+    border: 1px solid blueviolet;
+    background-color: lightpink;
+    width: auto;
+    border-radius: 7px;
+    }
+
+    .font-w600 {
+        font-weight: 600;
+    }
+    .order-menu img{
+    width: 3.313rem;
+    height: 3.313rem;
+    object-fit: contain;
+    border: 1px solid var(--primary);
+    border-radius: 0.625rem;
+    }
+    .space{
+    margin: 0 0.938rem;
+    }
+</style>
+
+<div class="accordion" id="ordersAccordion">
+    @foreach (var ord in Model)
+    {
+        <div class="accordion-item shadow mb-3">
+            <h2 class="accordion-header" id="heading-@counter">
+                <button class="accordion-button collapsed d-flex justify-content-between" type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#collapse-@counter"
+                aria-expanded="false"
+                aria-controls="collapse-@counter">
+
+                    <div class="d-flex justify-content-between w-100 ">
+                        <div class="col-md-2"><strong>Order #@counter</strong></div>
+                        <div class="col-md-2 fw-medium">@ord.OrderStatus</div>
+                        <div class="col-md-2 fw-medium">@ord.CreatedOrder.ToShortDateString()</div>
+                        <div class="col-md-3 fw-medium">@ord.ShippingAddress</div>
+                        <div class="col-md-2 fw-medium">@ord.PaymentMethod</div>
+                        <div class="col-md-1 fw-medium text-danger">$@ord.SubTotal</div>
+                    </div>
+
+                </button>
+            </h2>
+
+            <div id="collapse-@counter" class="accordion-collapse collapse accordion-body"
+            aria-labelledby="heading-@counter"
+            data-bs-parent="#ordersAccordion">
+                <div class="row bg-light">
+                    <div class="col-xl-3 col-xxl-6 col-sm-6 my-4 border-right">
+                        <div class="order-menu space">
+                            <h4 class="">Order Menu</h4>
+                            @foreach (var item in ord.OrderMeals)
+                            {
+                                <div class="d-flex align-items-center justify-content-xl-center justify-content-lg-start  mb-2">
+                                    <img class="me-2" src="@item.Meal.Image" alt="@item.Meal.Name">
+                                    <div>
+                                        <h6 class="font-w600 text-nowrap mb-0">@item.Meal.Name</h6>
+                                        <p class="mb-0 text-muted">x @item.Quantity</p>
+                                    </div>
+                                    <h6 class="text-primary mb-0 ps-3 ms-auto">+$@(item.Quantity * item.Meal.Price)</h6>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-xxl-6 col-sm-6 my-4 border-right align-content-center">
+                        <div class="order-menu space">
+                            <div class="text-opacity-50 mb-4">
+                                <h5 class="text-muted">Restaurant </h5>
+                                <h4>
+                                   @ord.Restaurant.Name
+                                </h4>
+                            </div>
+                            
+                        </div>      
+                    </div>
+                    <div class="col-xl-3 col-xxl-6 col-sm-6 my-4 border-right">
+                        <div class="space">
+                            <div class="d-flex align-items-center justify-content-between mb-1">
+                                <p class="mb-0">Status</p>
+                                <p class="mb-0">Date</p>
+                            </div>
+                            <div class="d-flex align-items-center justify-content-between mb-4">
+                                <h4>@ord.OrderStatus</h4>
+                                <h6>@ord.CreatedOrder</h6>
+                            </div>
+                            <div class="d-flex align-items-center justify-content-between mb-1">
+                                <p class="mb-0">Bills</p>
+                                <p class="mb-0">Date Paid</p>
+                            </div>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <h4>Order #@counter</h4>
+                                <h6>@ord.PayDate</h6>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3 col-xxl-6 col-sm-6 my-4 border-right">
+                        <div class="space">
+                            <div class="d-flex align-items-center justify-content-between mb-1">
+                                <p class="mb-0">Payment Method</p>
+                            </div>
+                            <div class="d-flex align-items-center justify-content-between mb-4">
+                                <h4 class="text-primary">@ord.PaymentMethod</h4>
+                            </div>
+                            <div class="d-flex align-items-center justify-content-between mb-1">
+                                <p class="mb-0">Coupon</p>
+                            </div>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <h4 class="text-warning">@ord.Coupon.Code</h4>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3 col-xxl-6 col-sm-6 mt-4 ms-sm-0 ms-3 text-end">
+                        <p class="fs-18 font-w500">Total</p>
+                        <h4 class="cate-title text-success">@ord.getTotal()</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        counter++;
+    }
+
+</div>

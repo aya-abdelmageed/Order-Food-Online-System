@@ -7,41 +7,142 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@section Styles{
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.css" 
+    integrity="sha512-UTNP5BXLIptsaj5WdKFrkFov94lDx+eBvbKyoe1YAfjeRPC+gT5kyZ10kOHCfNZqEui1sxmqvodNUx3KbuYI/A==" 
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-<style>
+    <style>
+        body {
+            font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        }
+
+        p {
+            color: #b3b3b3;
+            font-weight: 300;
+        }
+
+        h1, h2, h3, h4, h5, h6,
+        .h1, .h2, .h3, .h4, .h5, .h6 {
+            font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        }
+
+        a {
+            -webkit-transition: .3s all ease;
+            -o-transition: .3s all ease;
+            transition: .3s all ease;
+        }
+
+            a, a:hover {
+                text-decoration: none !important;
+            }
+
+        /* .content { */
+        /*     padding: 7rem 0; */
+        /* } */
+
+        h2 {
+            font-size: 20px;
+        }
+
+        .bg-left-half {
+            position: relative;
+        }
+
+            .bg-left-half:before {
+                position: absolute;
+                width: 50%;
+                height: 100%;
+                z-index: -1;
+                content: "";
+                left: 0;
+                top: 0;
+                background-color: #f8f9fa;
+            }
+
+        .media-29101 img {
+            margin-bottom: 20px;
+        }
+
+        .media-29101 h3 {
+            font-size: 18px;
+            font-weight: 900 !important;
+        }
+
+            .media-29101 h3 a {
+                color: #6c757d;
+            }
+
+        .owl-2-style .owl-nav {
+            display: none;
+        }
+
+        .owl-2-style .owl-dots {
+            text-align: center;
+            position: relative;
+            bottom: -30px;
+        }
+
+            .owl-2-style .owl-dots .owl-dot {
+                display: inline-block;
+            }
+
+                .owl-2-style .owl-dots .owl-dot span {
+                    display: inline-block;
+                    width: 15px;
+                    height: 3px;
+                    border-radius: 0px;
+                    background: #cccccc;
+                    -webkit-transition: 0.3s all cubic-bezier(0.32, 0.71, 0.53, 0.53);
+                    -o-transition: 0.3s all cubic-bezier(0.32, 0.71, 0.53, 0.53);
+                    transition: 0.3s all cubic-bezier(0.32, 0.71, 0.53, 0.53);
+                    margin: 3px;
+                }
+
+                .owl-2-style .owl-dots .owl-dot.active span {
+                    background: #007bff;
+                }
+
+                .owl-2-style .owl-dots .owl-dot:active, .owl-2-style .owl-dots .owl-dot:focus {
+                    outline: none;
+                }
+
+    </style>
+
+    <style>
         /* panel style */
         .panel {
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
-        height: 25vh;
-        border-radius: 40px;
-        color: #fff;
-        cursor: pointer;
-        flex: 2.5;
-        margin: 10px;
-        position: relative;
-        -webkit-transition: all 700ms ease-in;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            /* box-shadow: 0 0 20px rgba(0, 0, 0, 0.8); */
+            height: 25vh;
+            border-radius: 40px;
+            color: #fff;
+            cursor: pointer;
+            flex: 2.5;
+            margin: 10px;
+            position: relative;
+            -webkit-transition: all 700ms ease-in;
         }
 
-        .panel h3 {
-        font-size: 24px;
-        position: absolute;
-        bottom: 20px;
-        left: 5px;
-        margin: 0;
-        opacity: 0;
-        }
+            .panel h3 {
+                font-size: 24px;
+                position: absolute;
+                bottom: 20px;
+                left: 5px;
+                margin: 0;
+                opacity: 0;
+            }
 
-        .panel.active {
-        flex: 5;
-        }
+            .panel.active {
+                flex: 5;
+            }
 
-        .panel.active h3 {
-        opacity: 1;
-        transition: opacity 0.3s ease-in 0.4s;
-        }
+                .panel.active h3 {
+                    opacity: 1;
+                    transition: opacity 0.3s ease-in 0.4s;
+                }
 
         /* card styles */
 
@@ -53,8 +154,6 @@
         .card {
             transition: transform 0.3s, box-shadow 0.3s;
             min-height: 100%;
-            background-color:mintcream;
-            border: 2px solid green;
             color: #212529;
             margin-bottom: 2rem;
         }
@@ -65,102 +164,192 @@
                 box-shadow: 0 20px 30px rgba(0, 0, 0, 0.2);
             }
 
-        .card-text{
+        .card-text {
             color: #212529;
             font-size: 1rem;
             line-height: 1.5;
             margin-bottom: 0.75rem;
             word-wrap: break-word;
             overflow-wrap: break-word;
-           --webkit-white-space: wrap;
+            --webkit-white-space: wrap;
         }
 
         .btn {
-            border: 3px solid;
-            border-image-slice: 1;
-            background: var(--gradient) !important;
-            -webkit-background-clip: text !important;
-            -webkit-text-fill-color: transparent !important;
-            border-image-source: var(--gradient) !important;
-            text-decoration: none;
-            transition: all .4s ease;
+            /* border: 3px solid; */
+            /* border-image-slice: 1; */
+            /* background: var(--gradient) !important; */
+            /* -webkit-background-clip: text !important; */
+            /* -webkit-text-fill-color: transparent !important; */
+            /* border-image-source: var(--gradient) !important; */
+            /* text-decoration: none; */
+            /* transition: all .4s ease; */
+            padding: 2px;
+            width: auto;
         }
 
-            .btn:hover, .btn:focus {
-                background: var(--gradient) !important;
-                -webkit-background-clip: none !important;
-                -webkit-text-fill-color: #fff !important;
-                border: 5px solid #fff !important;
-                border-radius: 20px !important;
-                box-shadow: #222 1px 0 10px;
-                text-decoration: underline;
-            }
+        /* .btn:hover, .btn:focus { */
+        /*     background: var(--gradient) !important; */
+        /*     -webkit-background-clip: none !important; */
+        /*     -webkit-text-fill-color: #fff !important; */
+        /*     border: 5px solid #fff !important; */
+        /*     border-radius: 20px !important; */
+        /*     box-shadow: #222 1px 0 10px; */
+        /*     text-decoration: underline; */
+        /* } */
 
         .card-img-top {
-
-               width: 100%;
-               height: 200px;
-               object-fit: cover;
-           }
-           .flex-column{
-               display: flex
-    ;
-        flex-direction: column;
-        justify-content: space-between;
-           }
-           .text{
-                          font-size: 0.8rem;
-               color: #555;
-               text-align: left;
-               white-space: normal;
-               overflow: hidden;
-            white-space:break-spaces !important;
-
-           }
-
-
-</style>
-<div>
-    <div class="mt-5 ms-5 ">
-        <h3 class="text-bg-light ">Discover Our Categories</h3>
-        <hr class="border border-2 border-dark fw-bold">
-    </div>
-
-    <div class="container vw-100 d-flex">
-        @foreach (var item in Model)
-        {
-            <div class="panel" style="background-image: url('@Configuration["BaseURL"]@item.Image') ">
-                <a class="text-bg-light text-info"
-                   asp-action="Index"
-                   asp-route-name="@item.CategoryName"><h3>@item.CategoryName <span class="bi bi-search"></span></h3></a>
-            </div>
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
         }
+
+        .flex-column {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .text {
+            font-size: 0.8rem;
+            color: #555;
+            text-align: left;
+            white-space: normal;
+            overflow: hidden;
+            white-space: break-spaces !important;
+        }
+
+
+
+
+        .category-card {
+            display: flex;
+            flex-flow: column wrap;
+            align-items: center;
+            position: relative;
+            box-shadow: 0 2px 8px rgba(87,71,81,0.3);
+            overflow: hidden;
+        }
+    </style>
+    <style>
+        .img-size {
+            max-width: 50%;
+            height: auto;
+        }
+
+        .category-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-gap: 16px;
+            padding: 30px 15px;
+        }
+
+        .category-card {
+            display: flex;
+            flex-flow: column wrap;
+            align-items: center;
+            position: relative;
+            box-shadow: 0 2px 8px rgba(87, 71, 81, 0.3);
+            overflow: hidden;
+        }
+
+            .category-card:nth-child(1) span {
+                font-size: 48px;
+            }
+
+        .category-card__image {
+            transition: transform 0.35s ease-in-out;
+        }
+
+        .category-card:hover .category-card__image {
+            transform: scale(1.05);
+        }
+
+        .category-card__link {
+            display: flex;
+            flex-flow: column wrap;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            text-decoration: none;
+            background-color: rgba(0, 0, 0, 0.2);
+            transition: all 0.4s ease-in-out;
+        }
+
+            .category-card__link span {
+                font-size: 28px;
+                font-weight: 700;
+                line-height: 1;
+                color: #fff;
+                text-align: center;
+                text-transform: uppercase;
+                text-shadow: 0 1px 2px #000;
+            }
+
+            .category-card__link b {
+                display: block;
+                margin-top: 15px;
+                font-size: 16px;
+                color: #a7d659;
+            }
+
+            .category-card__link:hover {
+                background-color: rgba(0, 0, 0, 0.4);
+            }
+    </style>
+}
+
+<div> 
+    <div class="mt-4">
+         <h3 class="text-bg-light text-center">Discover Our Categories</h3> 
+         <hr class="border border-2 border-dark fw-bold"> 
+     </div> 
+
+    <div class="content">
+        <div class="site-section bg-left-half mb-5">
+            <div class="container owl-2-style">
+                <div class=" owl-carousel owl-2">
+
+                    @foreach (var item in Model)
+                    {
+                            <div class="category-card">
+                            <img class="category-card__image img-size" src="@Configuration["BaseURL"]@item.Image">
+                            <a class=" text-dark"
+                               asp-action="Index"
+                               asp-route-name="@item.CategoryName"><h4>@item.CategoryName <small class="bi bi-search"></small></h4></a>
+
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
     </div>
     <div class="d-flex justify-content-end m-3">
-        <a class="btn"
+        <a class="btn border border-1 bg-light"
            asp-action="Index"
-           asp-route-name=""><h3>Clear <span class="bi bi-search"></span></h3></a>
+           asp-route-name=""><h3>Clear <small class="bi bi-search"></small></h3></a>
     </div>
 
 </div>
-<div class="m-3 p-3">
-
-    <h3 class="text-bg-light">
-        Our Restaurants
-    </h3>
-    <hr class="border border-2 border-dark fw-bold">
-
-
-    <div class="container mt-4 ms-5">
+ 
+<div >
+    <div class="d-flex flex-column">
+        <h3 class="text-bg-light text-center ">Discover Our Restaurants</h3>
+        <hr class="border border-2 border-dark fw-bold">
+    
+        <div class="container mt-4">
         <div class="row">
             @foreach (var i in restaurant)
             {
-                <div class="col-md-4 mb-3">
+                <div class="col-6 col-md-4 col-xl-3 mb-3 d-flex justify-content-center">
                     <div class="card" style="width: 18rem;">
                         <img src="@i.Logo" class="card-img-top" alt="@i.Name">
                         <div class="card-body flex-column d-flex flex-column">
-                            <h5 class="card-title text-dark">@i.Name</h5>
-                            <h6 class="card-subtitle mb-2 text-muted">@i.Address</h6>
+                            <h5 class="card-title text-dark fs-6 fw-bold   ">@i.Name</h5>
+                            <h6 class="card-subtitle mb-2 fs-6 text-muted">@i.Address</h6>
                             @* <p  style="text">Some quick example text to build on the card title and make up the bulk of the card's content.</p> *@
                             <div class="d-flex">
 
@@ -171,11 +360,54 @@
                 </div>
             }
         </div>
-
-
     </div>
-    @section Scripts {
-        <script>
+    </div>
+</div>
+    
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js" 
+        integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw==" crossorigin="anonymous" 
+        referrerpolicy="no-referrer"></script>
+
+    <script>
+        $(function() {
+
+            if ( $('.owl-2').length > 0 ) {
+                $('.owl-2').owlCarousel({
+                    center: false,
+                    items: 1,
+                    loop: true,
+                    stagePadding: 0,
+                    margin: 20,
+                    smartSpeed: 1000,
+                    autoplay: true,
+                    nav: true,
+                    dots: false,
+                    pauseOnHover: true,
+                    responsive:{
+                        200:{
+                            margin: 20,
+                            nav: true,
+                          items: 2
+                        },
+                        600:{
+                            margin: 20,
+                            stagePadding: 0,
+                            nav: true,
+                          items: 3
+                        }, 1000:{
+                            margin: 20,
+                            stagePadding: 0,
+                            nav: true,
+                          items:5
+                        }
+                    }
+                });
+            }
+
+        })
+    </script>
+    <script>
             const panels = document.querySelectorAll('.panel');
             panels.forEach(panel => {
                 panel.addEventListener('mouseover', () => {
@@ -194,5 +426,5 @@
                     panel.classList.remove('active');
                 });
             }
-        </script>
-    }
+    </script>
+}
