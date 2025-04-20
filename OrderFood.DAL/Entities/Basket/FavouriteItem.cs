@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace OrderFood.DAL.Entities.Basket
 {
-    public class BasketItem
+    public class FavouriteItem
     {
         public string Name { get; set; }
         public string Image { get; set; }

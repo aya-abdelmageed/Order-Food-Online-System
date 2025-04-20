@@ -6,16 +6,17 @@ using System.Threading.Tasks;
 
 namespace OrderFood.DAL.Entities.Basket
 {
-    public class CustomerBasket : BaseBasket
+    public class CustomerFavourite : BaseBasket
     {
-        public CustomerBasket()
+        public CustomerFavourite()
         {
             
         }
-        public CustomerBasket(string id)
+        public CustomerFavourite(string id)
         {
             Id = id;
         }
-        public List<BasketItem> basketItems { get; set; } = new List<BasketItem>();
+
+        public List<FavouriteItem> FavouriteItems { get; set; } = new List<FavouriteItem>();
     }
 }
