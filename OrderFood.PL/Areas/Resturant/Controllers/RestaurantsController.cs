@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +10,7 @@ using OrderFood.BLL.Interfaces;
 using OrderFood.BLL.Repositories;
 using OrderFood.DAL.Context;
 using OrderFood.DAL.Entities.Models;
+using OrderFood.DAL.Entities.User;
 using OrderFood.PL.Areas.Resturant.ViewModel;
 
 namespace OrderFood.PL.Areas.Resturant.Controllers
@@ -17,10 +19,12 @@ namespace OrderFood.PL.Areas.Resturant.Controllers
     public class RestaurantsController : Controller
     {
         private readonly IUnitOfWork _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public RestaurantsController(IUnitOfWork context)
+        public RestaurantsController(IUnitOfWork context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
         //----------------------------------------------------------------
         // GET: Resturant/Restaurants
@@ -321,8 +325,9 @@ namespace OrderFood.PL.Areas.Resturant.Controllers
         //Get the Restaurant info to Edit
         public async Task<IActionResult> Settings()
         {
+            var user = await _userManager.GetUserAsync(User);
             var restuarant = await _context.GetRepository<Restaurant>().GetOneAsync(
-                criteria: c => c.Id == 5
+                criteria: c => c.OwnerId == user.Id
                 );
             var model = new UpdateRestaurantViewModel
             {
