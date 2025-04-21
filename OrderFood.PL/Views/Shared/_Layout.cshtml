@@ -17,12 +17,12 @@
     @*-- This layout for Navbar-- *@
     <link rel="stylesheet" href="https://unpkg.com/bs-brain@2.0.4/components/navbars/navbar-3/assets/css/navbar-3.css"> 
 
-    @* --The Global Site Css --*@
-    <link href="~/css/site.css" rel="stylesheet" />
     @* --Render The special Styles and Script Sections for Each Rendered Page-- *@
     @RenderSection("Styles", false)
     
 
+    @* --The Global Site Css --*@
+    <link href="~/css/site.css" rel="stylesheet" />
 </head>
 <body>
     <section class="ALL-HomePage ">
@@ -40,8 +40,8 @@
 
                 <!-- end sidebar -->
                 <!-- Main -->
-                <section id="main-demo" class="" style="">
-                    <div class="">
+                <section id="main-demo" class="" >
+                    <div class="" style="min-height:100vh;">
                         @RenderBody()
 
                     </div>

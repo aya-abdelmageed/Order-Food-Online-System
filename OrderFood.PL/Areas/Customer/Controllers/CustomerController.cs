@@ -21,7 +21,7 @@ namespace OrderFood.PL.Areas.Customer.Controllers
         // GET: CustomerController
 
         //the customer main page
-        public async Task<ActionResult> Index(string? name)
+        public async Task<ActionResult> CustomerHomeAllResturant(string? name)
         {
             //get the categories data to view
             var categories = await UnitOfWork.GetRepository<Category>().GetAllAsync(includes: m => m.Include(t => t.Meals));
@@ -82,6 +82,31 @@ namespace OrderFood.PL.Areas.Customer.Controllers
             }
             
             return PartialView("_OrderslistPartial", query);
+        }
+
+
+
+
+
+        //----------------------Cusotmer Cart------------------------------
+
+
+        public async Task<IActionResult> userCart() {
+
+            return View();
+        }
+
+
+        public async Task<IActionResult> userWishlist()
+        {
+
+            return View();
+        }
+
+        public async Task<IActionResult> userCheckout()
+        {
+
+            return View();
         }
 
     }
