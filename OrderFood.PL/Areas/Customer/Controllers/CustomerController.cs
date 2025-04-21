@@ -65,7 +65,7 @@ namespace OrderFood.PL.Areas.Customer.Controllers
         public async Task<IActionResult> OrderFilter(string? searchTerm, string? selectedStatus)
         {
             var query = await UnitOfWork.GetRepository<Order>()
-                .GetAllAsync(query => query.CustomerId == "306e5a79-171d-49c5-96c3-3e63953555a7", 
+                .GetAllAsync(query => query.CustomerId == "306e5a79-171d-49c5-96c3-3e63953555a7",
                 o => o.Include(c => c.Customer)
                 .Include(r => r.Restaurant)
                 .Include(p => p.Coupon)
@@ -76,13 +76,22 @@ namespace OrderFood.PL.Areas.Customer.Controllers
             {
                 query = query.Where(r => r.Restaurant.Name.ToLower().Contains(searchTerm.ToLower()));
             }
-            if (!string.IsNullOrEmpty(selectedStatus ))
+            if (!string.IsNullOrEmpty(selectedStatus))
             {
                 query = query.Where(r => r.OrderStatus.ToString() == selectedStatus);
             }
-            
+
             return PartialView("_OrderslistPartial", query);
         }
 
+
+        //view meal details
+
+        public async Task<IActionResult> MealDetails(int id)
+        {
+            var meal =await UnitOfWork.GetRepository<Meal>().GetOneAsync(m => m.Id == id);
+            
+            return View(meal);
+        }
     }
 }
