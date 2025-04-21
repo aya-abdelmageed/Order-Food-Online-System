@@ -10,6 +10,8 @@ namespace OrderFood.PL.Helper
         public MappingProfiles()
         {
             CreateMap<Restaurant, RestaurantVM>();
+
+
             CreateMap<Order, DeliveryOrderDetailsVM>()
                 .ForMember(des => des.AmountPercentageCoupon,
                             opt => opt.MapFrom(src => src.Coupon != null ? src.Coupon.AmountPercentage : 0))

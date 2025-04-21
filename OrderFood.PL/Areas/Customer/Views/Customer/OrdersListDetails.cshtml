@@ -1,0 +1,89 @@
+﻿@model IEnumerable<OrderFood.DAL.Entities.Models.Order>
+@{
+    ViewData["Title"] = "OrdersListDetails";
+}
+
+
+<style>
+    *{
+        font-size: 0.875rem;
+    }
+    .card{
+        display: flex;
+        direction: column;
+        word-wrap: break-word;
+        margin-bottom: 1.875rem;
+        border-radius: 0.5rem;
+        border: 1px solid rgba(0,0,0,0.3);
+        background-clip: border-box;
+
+    }
+
+    .card-header{
+        border-color: #DBDBDB;
+        position: relative;
+        background: transparent;
+        padding: 1.5rem 1.875rem 1.25rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+    }
+    .card-body{
+        flex: 1 1 auto;
+        overflow: hidden !important;
+        padding: 0 !important;
+    }
+    .font-w600 {
+        font-weight: 600;
+    }
+    
+
+</style>
+<div class="container py-4">
+    <h2 class="d-flex justify-content-center mb-4">Order History</h2>
+
+    @await Html.PartialAsync("_OrderFilterPartial")
+    
+    <div class="card h-auto ">
+        <div>
+            <div class="card-header flex-wrap d-none d-sm-flex">
+                <div class="font-w600 scol-md-2"><strong>Order #</strong></div>
+                <div class="font-w600 scol-md-2">Status</div>
+                <div class="font-w600 scol-md-2">Date</div>
+                <div class="font-w600 scol-md-3">Shipping Address</div>
+                <div class="font-w600 scol-md-2">Payment Method</div>
+                <div class="font-w600 scol-md-1 text-danger">Total</div>
+                <span class="accordion-header-indicator"></span>
+            </div>
+        </div>
+        <div class="card-body">
+            <div id="orders-list">
+                @await Html.PartialAsync("_OrdersListPartial", Model)
+            </div>
+        </div>
+    </div>
+</div>
+
+@* Ajax Filter Query  *@
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#order-filter-form").on("submit", function (e) {
+                e.preventDefault();
+
+                $.ajax({
+                    url: '@Url.Action("OrderFilter")',
+                    type: 'GET',
+                    data: $(this).serialize(),
+                    success: function (result) {
+                        $("#orders-list").html(result);
+                    }
+                });
+            });
+        });
+    </script>
+}
+

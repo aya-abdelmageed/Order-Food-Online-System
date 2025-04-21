@@ -33,9 +33,9 @@
                 <partial name="_Navbar" />
                 <!-- end header -->
                 <!--  Asidebar -->
-                  @if (User.Identity.IsAuthenticated)  
+                @if (User.Identity is not null && User.Identity.IsAuthenticated)
                   {  
-                     @* <partial name="_Sidebar" />  *@
+                     <partial name="_Sidebar" /> 
                   }
 
                 <!-- end sidebar -->
