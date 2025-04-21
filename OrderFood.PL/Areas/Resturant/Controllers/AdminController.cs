@@ -271,6 +271,8 @@ namespace OrderFood.PL.Areas.Resturant.Controllers
             {
                 UserName = model.UserName,
                 Email = model.Email,
+                FirstName = model.FirstName,
+                LastName = model.LastName
             };
 
             var result = await UserManager.CreateAsync(user, model.Password);
@@ -296,23 +298,6 @@ namespace OrderFood.PL.Areas.Resturant.Controllers
 
             return RedirectToAction("AddRestaurant", "Admin");
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     }

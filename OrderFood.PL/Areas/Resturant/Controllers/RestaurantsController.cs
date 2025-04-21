@@ -311,10 +311,48 @@ namespace OrderFood.PL.Areas.Resturant.Controllers
             return RedirectToAction(nameof(GetAllCat), new { id = mealVM.restaurantId });
         }
         //-------------------------------------------------------------------------------------------
+        //public async Task<IActionResult> SearchMeals(int restaurantId, string? searchTerm, int? categoryId, decimal? maxPrice, int PageNo = 1)
+        //{
+        //    var restaurant = await _context.GetRepository<Restaurant>().GetOneAsync(i => i.Id == restaurantId, query => query.Include(p => p.Categories).ThenInclude(m => m.Meals));
+
+
+        //    if (restaurant == null) return NotFound();
+
+        //    var meals = restaurant.Categories
+        //        .Where(c => !c.IsDelete && (!categoryId.HasValue || c.Id == categoryId.Value))
+        //        .SelectMany(c => c.Meals)
+        //        .Where(m => !m.IsDelete &&
+        //            (string.IsNullOrEmpty(searchTerm) || m.Name.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) || m.Description.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)) &&
+        //            (!maxPrice.HasValue || m.Price <= maxPrice.Value))
+        //        .OrderBy(m => m.Price)
+        //        .ToList();
+
+        //    /* Pagination */
+        //    int NoOfRecordsPerPage = 2;
+        //    int NoOfPages = Convert.ToInt32(Math.Ceiling(
+        //        Convert.ToDouble(meals.Count) / Convert.ToDouble(NoOfRecordsPerPage)));
+
+        //    int NoOfRecordsToSkip = (PageNo - 1) * NoOfRecordsPerPage;
+
+        //    ViewBag.PageNo = PageNo;
+        //    ViewBag.NoOfPages = NoOfPages;
+
+        //    ViewBag.RestaurantId = restaurantId;
+        //    ViewBag.SearchTerm = searchTerm;
+        //    ViewBag.CategoryId = categoryId;
+        //    ViewBag.maxPrice = maxPrice;
+
+        //    meals = meals.Skip(NoOfRecordsToSkip).Take(NoOfRecordsPerPage).ToList();
+
+        //    return PartialView("View", meals);
+        //}
+
         public async Task<IActionResult> SearchMeals(int restaurantId, string? searchTerm, int? categoryId, decimal? maxPrice, int PageNo = 1)
         {
-            var restaurant = await _context.GetRepository<Restaurant>().GetOneAsync(i => i.Id == restaurantId, query => query.Include(p => p.Categories).ThenInclude(m => m.Meals));
-
+            var restaurant = await _context.GetRepository<Restaurant>().GetOneAsync(
+                i => i.Id == restaurantId,
+                query => query.Include(p => p.Categories).ThenInclude(m => m.Meals)
+            );
 
             if (restaurant == null) return NotFound();
 
@@ -327,25 +365,21 @@ namespace OrderFood.PL.Areas.Resturant.Controllers
                 .OrderBy(m => m.Price)
                 .ToList();
 
-            /* Pagination */
             int NoOfRecordsPerPage = 2;
-            int NoOfPages = Convert.ToInt32(Math.Ceiling(
-                Convert.ToDouble(meals.Count) / Convert.ToDouble(NoOfRecordsPerPage)));
-
+            int NoOfPages = (int)Math.Ceiling((double)meals.Count / NoOfRecordsPerPage);
             int NoOfRecordsToSkip = (PageNo - 1) * NoOfRecordsPerPage;
 
             ViewBag.PageNo = PageNo;
             ViewBag.NoOfPages = NoOfPages;
-
             ViewBag.RestaurantId = restaurantId;
             ViewBag.SearchTerm = searchTerm;
             ViewBag.CategoryId = categoryId;
-            ViewBag.maxPrice = maxPrice;
+            ViewBag.MaxPrice = maxPrice;
 
-            meals = meals.Skip(NoOfRecordsToSkip).Take(NoOfRecordsPerPage).ToList();
-
-            return PartialView("View", meals);
+            var pagedMeals = meals.Skip(NoOfRecordsToSkip).Take(NoOfRecordsPerPage).ToList();
+            return PartialView("View", pagedMeals);
         }
+
         //----------------------------------------------------------------------------------------
         //Get restaurant reviews
         public async Task<IActionResult> GetReviews(int restaurantID)

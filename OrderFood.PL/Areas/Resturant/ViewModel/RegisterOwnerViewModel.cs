@@ -4,7 +4,12 @@ namespace OrderFood.PL.Areas.Resturant.ViewModel
 {
     public class RegisterOwnerViewModel
     {
-            [Required]
+        [Required]
+        public string FirstName { get; set; }
+
+        [Required]
+        public string LastName { get; set; }
+        [Required]
             public string UserName { get; set; }
 
             [Required, EmailAddress]

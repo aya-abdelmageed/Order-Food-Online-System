@@ -60,6 +60,13 @@
         .modal-backdrop.show {
             display: none;
         }
+
+        .modal-body {
+            max-height: none;
+            overflow-y: auto;
+        }
+
+ 
     </style>
 </head>
 <body>
@@ -152,9 +159,8 @@
         </div>
     </div>
 
-    <!-- Modal for New Owner -->
     <div class="modal fade" id="newOwnerModal" tabindex="-1" aria-labelledby="newOwnerModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content shadow">
                 <div class="modal-header">
                     <h5 class="modal-title" id="newOwnerModalLabel">Register New Owner</h5>
@@ -162,6 +168,14 @@
                 </div>
                 <div class="modal-body">
                     <form action="@Url.Action("RegisterOwner", "Admin")" method="post">
+                        <div class="mb-3">
+                            <label for="FirstName" class="form-label">First Name</label>
+                            <input type="text" class="form-control" id="FirstName" name="FirstName" required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="LastName" class="form-label">Last Name</label>
+                            <input type="text" class="form-control" id="LastName" name="LastName" required />
+                        </div>
                         <div class="mb-3">
                             <label for="UserName" class="form-label">Username</label>
                             <input type="text" class="form-control" id="UserName" name="UserName" required />
@@ -182,6 +196,7 @@
                             <button type="submit" class="btn btn-primary">Register Owner</button>
                         </div>
                     </form>
+
                 </div>
             </div>
         </div>

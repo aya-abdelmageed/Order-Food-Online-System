@@ -32,7 +32,7 @@
 
                         <div class="text-end">
                             <div class="d-flex align-items-center">
-                                <a  asp-action="GetAllCat" asp-route-id ="@Model.Id" class="btn-link text-decoration-none">View All Categories →</a>
+                                <a asp-action="GetAllCat" asp-route-id="@Model.Id" class="btn-link text-decoration-none">View All Categories →</a>
                                 <div class="swiper-buttons">
                                     <button class="swiper-prev category-carousel-prev btn btn-yellow">❮</button>
                                     <button class="swiper-next category-carousel-next btn btn-yellow">❯</button>
@@ -178,7 +178,6 @@
                 const formData = new FormData(form);
                 const query = new URLSearchParams(formData).toString();
 
-                // If input is empty, reset content
                 if (!query || (!formData.get('maxPrice') && !formData.get('searchTerm') && !formData.get('categoryId'))) {
                     document.getElementById("mealsContent").innerHTML =
                         `<div class="text-muted text-center">Select a category to view its meals.</div>`;
@@ -197,55 +196,27 @@
                         document.getElementById("mealsContent").innerHTML =
                             `<div class="text-danger text-center">${err.message}</div>`;
                     });
-            }, 300); // delay in ms
-
-                   if (deleteMode) {
-            document.querySelectorAll('.delete-category-btn').forEach(btn => {
-                btn.classList.remove('d-none');
-            });
+            }, 300);
         }
 
-        }
-        //----------------
-
-         function loadMeals(restaurantId, searchTerm = "", categoryId = "", maxPrice = "", pageNo = 1) {
-            $.ajax({
-                url: 'Restaurants/SearchMeals',
-                data: {
-                    restaurantId,
-                    searchTerm,
-                    categoryId,
-                    maxPrice,
-                    PageNo: pageNo
-                },
-                success: function (result) {
-                    $('#mealsContent').html(result);
-
-                    // Re-bind delete category button events
-                    bindDeleteButtons();
-                },
-                error: function () {
-                    $('#mealsContent').html('<div class="text-danger text-center">Error loading meals.</div>');
-                }
-            });
-                    if (deleteMode) {
-            document.querySelectorAll('.delete-category-btn').forEach(btn => {
-                btn.classList.remove('d-none');
-            });
-        }
-
-        }
-
-
-                function goToPage(pageNo) {
+        function goToPage(pageNo) {
             const searchTerm = document.getElementById("currentSearchTerm").value;
             const maxPrice = document.getElementById("currentMaxPrice").value;
             const categoryId = document.getElementById("currentCategoryId").value;
 
-            // Use your AJAX function
-            loadMeals(@Model.Id, searchTerm, categoryId, maxPrice, pageNo);
+            fetch(`@Url.Action("SearchMeals", "Restaurants")?restaurantId=@Model.Id&searchTerm=${searchTerm}&categoryId=${categoryId}&maxPrice=${maxPrice}&PageNo=${pageNo}`)
+                .then(res => {
+                    if (!res.ok) throw new Error("Pagination failed");
+                    return res.text();
+                })
+                .then(html => {
+                    document.getElementById("mealsContent").innerHTML = html;
+                })
+                .catch(err => {
+                    document.getElementById("mealsContent").innerHTML =
+                        `<div class="text-danger text-center">${err.message}</div>`;
+                });
         }
-
 
 
     </script>
