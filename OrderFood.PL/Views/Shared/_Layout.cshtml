@@ -15,7 +15,7 @@
     @* ---Bootstrap File---- *@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     @*-- This layout for Navbar-- *@
-    @* <link rel="stylesheet" href="https://unpkg.com/bs-brain@2.0.4/components/navbars/navbar-3/assets/css/navbar-3.css"> *@
+    <link rel="stylesheet" href="https://unpkg.com/bs-brain@2.0.4/components/navbars/navbar-3/assets/css/navbar-3.css"> 
 
     @* --The Global Site Css --*@
     <link href="~/css/site.css" rel="stylesheet" />
@@ -35,14 +35,16 @@
                 <!--  Asidebar -->
                   @if (User.Identity.IsAuthenticated)  
                   {  
-                     <partial name="_Sidebar" /> 
+                     @* <partial name="_Sidebar" />  *@
                   }
 
                 <!-- end sidebar -->
                 <!-- Main -->
                 <section id="main-demo" class="" style="">
+                    <div class="">
+                        @RenderBody()
 
-                    @RenderBody()
+                    </div>
                 </section>
                 <!--end Main -->
                 <!-- footer -->

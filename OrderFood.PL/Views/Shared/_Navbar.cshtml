@@ -198,7 +198,7 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link  bsb-dropdown-toggle-caret-disable" href="#"
                                role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <img src="~/images/user/@userIMage"
+                                <img src="~/images/users/@userIMage"
                                      width="60" height="60"
                                      class="rounded-circle border border-2 border-primary"
                                      style="object-fit: cover; object-position: top center;"
@@ -229,10 +229,11 @@
                                 <li><hr class="dropdown-divider"></li>
 
                                 <li>
-                                    <a class="dropdown-item" asp-area="Identity" asp-controller="Account" asp-action="Manage">
+                                    <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index">
                                         <i class="bi bi-gear-fill me-2"></i>
                                         <span class="fs-7">Settings & Privacy</span>
                                     </a>
+
 
 
                                 </li>
