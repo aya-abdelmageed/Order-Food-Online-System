@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Tracker </title>
+
+    <!-- Font-awesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
+    <style>
+        .order-card {
+            max-width: 470px;
+            margin: 30px auto;
+            border-radius: 15px;
+            padding: 25px;
+            border: 2px solid #ff6f00;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+        }
+
+        .order-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .order-img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .status-completed {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            text-align: center;
+            padding: 12px;
+            border-radius: 10px;
+            margin-top: 25px;
+            font-weight: 500;
+        }
+
+        .card-body>* {
+            margin-bottom: 20px;
+        }
+
+        .divider-line {
+            border-top: 1px solid #ddd;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!----------------------------- customer order details -------------------------- -->
+    <div class="card order-card shadow">
+        <div class="card-body">
+            <h4 class="card-title text-center">Order #1</h4>
+            <p class="text-center text-muted">Nov 11, 2022 , 18:38 PM</p>
+
+            <div>
+                <h5 class="mb-2"><strong>Fast Food Resto</strong></h5>
+                <div class="d-flex align-items-center mb-3">
+                    <span class="text-warning fs-5 me-2">★</span>
+                    <span class="text-muted">5.0 • 1k+ Reviews</span>
+                </div>
+
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="text-muted">Delivery Time</span>
+                    <span class="fw-bold">10 Min</span>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <span class="text-muted">Distance</span>
+                    <span class="fw-bold">2.5 Km</span>
+                </div>
+            </div>
+
+            <div class="divider-line"></div>
+
+            <div>
+                <h6 class="mb-3">Order Menu</h6>
+
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="d-flex align-items-center">
+                        <img src="https://cdn-icons-png.flaticon.com/512/1404/1404945.png" class="order-img me-3"
+                            alt="Pizza">
+                        <span>Pepperoni Pizza ×1</span>
+                    </div>
+                    <span class="text-danger fw-semibold">+$5.59</span>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center">
+                        <img src="https://cdn-icons-png.flaticon.com/512/3075/3075977.png" class="order-img me-3"
+                            alt="Burger">
+                        <span>Fish Burger ×1</span>
+                    </div>
+                    <span class="text-danger fw-semibold">+$5.59</span>
+                </div>
+            </div>
+
+            <div class="divider-line"></div>
+
+            <div class="d-flex justify-content-between fs-5">
+                <strong>Total</strong>
+                <strong class="text-warning">$202.00</strong>
+            </div>
+
+            <div class="status-completed">Completed</div>
+        </div>
+    </div>
+    <!-- -------------------------------Order Tracking--------------------------------- -->
+    <div class="d-flex flex-column overflow-auto
+             h-100  text-dark">
+
+        <div class="container h-50 px-4  
+                py-5 mx-auto">
+            <div class="card bg-light shadow-lg 
+        border border-warning
+                    rounded-lg py-3 px-5
+                    my-5">
+                <div class="row d-flex 
+                        justify-content-between
+                        mx-5 pt-3 my-3 ">
+                    <div class="container 
+                            text-center">
+                        <p class="h3 text-success
+                              mb-3">
+                            <a href="#">
+                                <h2>FoodMart</h2>
+                            </a>
+                        </p>
+
+
+                    </div>
+                    <div class="d-flex">
+                        <p class="h5 text-dark">
+                            <i class="text-primary fa-solid
+                                fa-cart-shopping 
+                                fa-lg mr-1">
+                            </i>
+                            Order ID :
+                            <span class="text-success 
+                                   font-weight-bold">
+                                <i class="text-secondary 
+                                      fa-solid fa-hashtag
+                                      mr-1">
+                                </i>ZMJ82D9
+                            </span>
+                        </p>
+                    </div>
+                    <div class="d-flex flex-column 
+                            text-sm-right h5">
+                        <p class="mb-0 font-weight-bolder 
+                              text-monospace">
+                            Expected Arrival
+                            <span class="badge badge-pill 
+                                     badge-primary border
+                                     border-secondary 
+                                     text-light 
+                                     font-weight-bold 
+                                     px-2 py-2 shadow">
+                                01/05/204
+                            </span>
+                        </p>
+                        <p class="font-weight-bold 
+                              text-monospace 
+                              pt-3 ml-5">
+                            Delivery
+                            <span class="badge badge-pill 
+                                     badge-danger border 
+                                     border-secondary 
+                                     text-light font-weight-bold
+                                     mx-1 px-2 py-2 shadow">
+                                23458039
+                            </span>
+                        </p>
+                    </div>
+                </div>
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="container-fluid 
+                                    p-2 align-items-center">
+                                <div class="d-flex 
+                                        justify-content-around">
+                                    <button class="btn bg-success 
+                                               text-white 
+                                               rounded-circle" data-bs-toggle="tooltip" title="Order Confirmed">
+                                        <i class="fa-solid fa-check"></i>
+                                    </button>
+                                    <span class="bg-success w-50 p-1
+                                             mx-n1 rounded mt-auto
+                                             mb-auto">
+                                    </span>
+                                    <button class="btn bg-success 
+                                               text-white 
+                                               rounded-circle" data-bs-toggle="tooltip" title="Order Shipped">
+                                        <i class="fa-solid fa-check"></i>
+                                    </button>
+                                    <span class="bg-success w-50 
+                                             p-1 mx-n1 rounded
+                                             mt-auto mb-auto">
+                                    </span>
+                                    <button class="btn bg-success 
+                                               text-white 
+                                               rounded-circle" data-bs-toggle="tooltip" title="Out for delivery"
+                                        style="z-index:1">
+                                        <i class="fa-solid fa-check"></i>
+                                    </button>
+                                    <span class="bg-secondary w-50 p-1 
+                                             mx-n1 rounded mt-auto 
+                                             mb-auto">
+                                    </span>
+                                    <button class="btn bg-secondary 
+                                               text-white rounded-circle" data-bs-toggle="tooltip"
+                                        title="Order Delivered">
+                                        <i class="fa-solid fa-check"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row d-inline-flex 
+                        justify-content-around 
+                        my-3 py-4 mx-n2">
+                    <div class="row d-inline-flex 
+                            align-items-center">
+                        <i class="text-primary fa-solid 
+                              fa-clipboard-check 
+                              fa-2xl mx-4 mb-3">
+                        </i>
+                        <p class="text-dark font-weight-bolder 
+                              py-1 px-1 mx-n2">
+                            Order
+                            <br>
+                            Confirmed
+                        </p>
+                    </div>
+                    <div class="row d-inline-flex
+                            align-items-center">
+                        <i class="text-warning fa-solid
+                              fa-solid fa-boxes-packing
+                              fa-2xl mx-4 mb-3">
+                        </i>
+                        <p class="text-dark  
+                              font-weight-bolder
+                              py-1 px-1 mx-n2">
+                            Order
+                            <br>
+                            Shipped
+                        </p>
+                    </div>
+                    <div class="row d-inline-flex 
+                            align-items-center">
+                        <i class="text-info fa-solid 
+                              fa-truck-arrow-right
+                              fa-2xl mx-4 mb-3">
+                        </i>
+                        <p class="text-dark 
+                              font-weight-bolder
+                              py-1 px-1 mx-n2">
+                            Out for
+                            <br>
+                            Delivery
+                        </p>
+                    </div>
+                    <div class="row d-inline-flex 
+                            align-items-center">
+                        <i class="text-success fa-solid
+                              fa-house-chimney 
+                              fa-2xl mx-4 mb-3">
+                        </i>
+                        <p class="text-dark font-weight-bolder
+                              py-1 px-1 mx-n2">
+                            Order
+                            <br>
+                            Delivered
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -316,6 +316,91 @@ namespace OrderFood.PL.Areas.Resturant.Controllers
 
             if (restaurant == null) return NotFound();
 
+        //Get restaurant reviews
+        public async Task<IActionResult> GetReviews(int restaurantID)
+        {
+            var reviews = await _context.GetRepository<Review>()
+                .GetAllAsync(r => r.RestaurantId == 3, i => i.Include(o => o.Restaurant).Include(c => c.Customer));
+            return (View(reviews));
+        }
+
+        [HttpGet]
+        //Get the Restaurant info to Edit
+        public async Task<IActionResult> Settings()
+        {
+            var restuarant = await _context.GetRepository<Restaurant>().GetOneAsync(
+                criteria: c => c.Id == 5
+                );
+            var model = new UpdateRestaurantViewModel
+            {
+                Restaurant = restuarant,
+                Name = restuarant.Name,
+                Address = restuarant.Address,
+                Description = restuarant.Description,
+                HotLine = restuarant.HotLine,
+                Long = restuarant.Long,
+                Lat = restuarant.Lat,
+                ImageFile = null // Initialize to null
+            };
+            return (View(model));
+        }
+
+        [HttpPost]
+        //update restaurant info including uploade files for logo
+        public async Task<IActionResult> Settings(UpdateRestaurantViewModel model)
+        {
+            if (model == null)
+            {
+                return NotFound();
+            }
+
+            //check if the image file is included
+            if (model.ImageFile != null && model.ImageFile.Length > 0)
+            {
+                // Ensure wwwroot/images exists
+                var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/restaurant");
+                Directory.CreateDirectory(uploadsFolder); // Creates it if not exists
+
+                // Unique file name (to prevent collisions)
+                var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(model.ImageFile.FileName);
+                var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                // Save the file
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await model.ImageFile.CopyToAsync(stream);
+                }
+
+                //copy the path of created file into the Logo field to save to database
+                model.Restaurant.Logo = "/images/restaurant/" + uniqueFileName;
+            }
+
+            //check the validation restaurant info that included into the model
+            if (ModelState.IsValid)
+            {
+                _context.GetRepository<Restaurant>().Update(model.Restaurant);
+                await _context.SaveChangesAsync();
+                
+                return RedirectToAction("Settings");
+            }
+            else
+            {
+                return View(model);
+
+            }
+        }
+
+        //***************************************************************************************************************
+        //get all restaurant orders
+        public async Task<IActionResult> GetRestOrders(int id)
+        {
+            var rest = await _context.GetRepository<Restaurant>().GetOneAsync(r => r.Id == id, q => q.Include(o => o.Orders)!.ThenInclude(o => o.OrderMeals)!.ThenInclude(m => m.Meal));
+            if (rest == null)
+                return NotFound();
+            var restOrders = rest.Orders!.ToList();
+
+            return View(restOrders);
+        }
             var meals = restaurant.Categories
                 .Where(c => !c.IsDelete && (!categoryId.HasValue || c.Id == categoryId.Value))
                 .SelectMany(c => c.Meals)

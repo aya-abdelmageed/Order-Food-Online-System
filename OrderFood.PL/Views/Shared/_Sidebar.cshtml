@@ -3,51 +3,172 @@
         <p class="logo">FoodMart</p>
         <i class="bx bx-menu btn-menu"></i>
     </div>
-    <ul class="nav-links">
+    @if (User.IsInRole("Customer"))
+    {
+      <ul class="nav-links">
 
-        <li>
-            <a href="#">
-                <i class="bx bx-home-alt-2"></i>
-                <span class="title">Home</span>
-            </a>
-            <span class="tooltip">Home</span>
-        </li>
-        <li>
-            <a href="#">
-                <i class="bx bx-phone-call"></i>
-                <span class="title">Calls</span>
-            </a>
-            <span class="tooltip">Calls</span>
-        </li>
-        <li>
-            <a href="#">
-                <i class="bx bx-bookmark"></i>
-                <span class="title">Bookmarks</span>
-            </a>
-            <span class="tooltip">Bookmarks</span>
-        </li>
-        <li>
-            <a href="#">
-                <i class="bx bx-wallet-alt"></i>
-                <span class="title">Wallet</span>
-            </a>
-            <span class="tooltip">Wallet</span>
-        </li>
-        <li>
-            <a href="#">
-                <i class="bx bxs-devices"></i>
-                <span class="title">Devices</span>
-            </a>
-            <span class="tooltip">Devices</span>
-        </li>
-        <li>
-            <a href="#">
-                <i class="bx bx-cog"></i>
-                <span class="title">Setting</span>
-            </a>
-            <span class="tooltip">Setting</span>
-        </li>
-    </ul>
+            <li>
+                <a href="#">
+                    <i class="bx bx-home-alt-2"></i>
+                    <span class="title">Home</span>
+                </a>
+                <span class="tooltip">Home</span>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="bi bi-card-list"></i>
+                    <span class="title">Food Order</span>
+                </a>
+                <span class="tooltip">Food Order</span>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="bi bi-clock-history"></i>
+                    <span class="title">Bills</span>
+                </a>
+                <span class="tooltip">Bills</span>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="bi bi-truck"></i>
+                    <span class="title">Order Tracking</span>
+                </a>
+                <span class="tooltip">Order Tracking</span>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="bx bx-cog"></i>
+                    <span class="title">Setting</span>
+                </a>
+                <span class="tooltip">Setting</span>
+            </li>
+
+      </ul>
+
+    }
+
+
+    @if (User.IsInRole("Owner"))
+    {
+        <ul class="nav-links">
+            <li>
+                <a href="#">
+                    <i class="bx bx-home-alt-2"></i>
+                    <span class="title">Home</span>
+                </a>
+                <span class="tooltip">Home</span>
+            </li>
+
+            <li>
+                <a href="#">
+                    <i class="bi bi-person"></i>
+                    <span class="title">Profile</span>
+                </a>
+                <span class="tooltip">Profile</span>
+            </li>
+            
+            <li>
+                <a href="#">
+                    <i class="bi bi-card-list"></i>
+                    <span class="title">Orders</span>
+                </a>
+                <span class="tooltip">Orders</span>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="bi bi-star"></i>
+                    <span class="title">Reviews</span>
+                </a>
+                <span class="tooltip">Reviews</span>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="bi bi-shop"></i>
+                    <span class="title">Resturant Profile</span>
+                </a>
+                <span class="tooltip">Resturant Profile</span>
+            </li>
+
+        </ul>
+
+    }
+
+
+    @if (User.IsInRole("Delivery"))
+    {
+        <ul class="nav-links">
+
+            <li>
+                <a href="#">
+                    <i class="bx bx-home-alt-2"></i>
+                    <span class="title">Home</span>
+                </a>
+                <span class="tooltip">Home</span>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="bi bi-truck"></i>
+                    <span class="title">Orders</span>
+                </a>
+                <span class="tooltip">Orders</span>
+            </li>
+
+            <li>
+                <a href="#">
+                    <i class="bi bi-person-fill"></i>
+                    <span class="title">Profile</span>
+                </a>
+                <span class="tooltip">Profile</span>
+            </li>
+
+        </ul>
+
+    }
+
+    @if (User.IsInRole("Admin"))
+    {
+        <ul class="nav-links">
+            <li>
+                <a href="#">
+                    <i class="bi bi-plus-circle"></i>
+                    <span class="title">Manage Resturants</span>
+                </a>
+                <span class="tooltip">Manage Resturants</span>
+            </li>
+
+            <li>
+                <a href="#">
+                    <i class="bi bi-person"></i>
+                    <span class="title">Customer Info</span>
+                </a>
+                <span class="tooltip">Customer Info</span>
+            </li>
+
+            <li>
+                <a href="#">
+                    <i class="bi bi-percent"></i>
+                    <span class="title">Discounts</span>
+                </a>
+                <span class="tooltip">Discounts</span>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="bi bi-star"></i>
+                    <span class="title">Reviews</span>
+                </a>
+                <span class="tooltip">Reviews</span>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="bi bi-person"></i>
+                    <span class="title">Profile</span>
+                </a>
+                <span class="tooltip">Profile</span>
+            </li>
+
+        </ul>
+
+    }
 
 
 
@@ -56,11 +177,5 @@
 
 
 
-@* this is the codition for sidebar button based on roles for s *@
-
-@* @if (User.Identity.IsAuthenticated && User.IsInRole("Admin")) *@
-@* { *@
-@*     @Html.Partial("_Sidebar") *@
-@* } *@
 
  

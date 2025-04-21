@@ -1,0 +1,373 @@
+﻿@using OrderFood.DAL.Entities.Models
+ @using OrderFood.PL.Areas.Delivery.ViewModel
+@using System.Text.Json
+@model ICollection<DeliveryOrderDetailsVM>
+
+@{
+    ViewData["Title"] = "PreparedOrders";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>FoodMart - Free eCommerce Grocery Store HTML Website Template</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="author" content="">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="~/css/Restaurant/vendor.css">
+    <link rel="stylesheet" type="text/css" href="~/css/Restaurant/style.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Open+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+<style>
+        .header-design {
+            background-color: #ffc107;
+            border-radius: 30px;
+            padding:15px;
+        }
+
+        .order-card {
+            box-shadow: 0px 5px 22px rgba(128, 128, 128, 0.584);
+            /* width: 150px; */
+            /* height: 300px; */
+            min-height:100px !important;
+            height:auto !important;
+            background-color: white;
+        }
+
+            .order-card:hover {
+                /* animation: fadeBg 1s forwards; */
+                background-color: #ffc107d2;
+                cursor:pointer;
+            }
+
+ 
+    </style>
+</head>
+<body>
+    <div class="container ">
+    <section class="py-5 overflow-hidden">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+
+                    <div class="section-header d-flex flex-wrap justify-content-between mb-5">
+                            <h2 class="section-title header-design">Waiting To Deliver</h2>
+
+                        <div class="d-flex align-items-center">
+                            <a href="#" class="btn-link text-decoration-none">Pending Orders →</a>
+                            <div class="swiper-buttons">
+                                <button class="swiper-prev brand-carousel-prev btn btn-yellow">❮</button>
+                                <button class="swiper-next brand-carousel-next btn btn-yellow">❯</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+
+                    <div class="brand-carousel swiper">
+                        <div class="swiper-wrapper">
+                            
+                            @foreach (var item in Model)
+                            {
+                                      @if (item.OrderStatus == OrderStatus.Prepared){ 
+                                    <div class="swiper-slide " onclick='GetOrderDetails(@Html.Raw(JsonSerializer.Serialize(item)))'>
+                                        <div class="card mb-3 p-3 rounded-4 order-card shadow border-0">
+                                        <div class="row g-0">
+                                            <div class="col-md-4">
+                                                <img src="~/images/Icons/add-cart.png" class="img-fluid rounded" alt="Order">
+                                            </div>
+                                            <div class="col-md-8">
+                                                <div class="card-body py-0">
+                                                    <p class="text-muted mb-0">@item.Restaurant.Name </p>
+                                                    <h5 class="card-title">@item.ShippingAddress</h5>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                      }  
+                            }
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- =============================================== Partial View ============================================ -->
+    <div id="orderDetailsContainer">
+        <!-- Order details will be loaded here dynamically -->
+    </div>
+     
+    @* fiiiiiiiiiiinalllllllllllllllllllllllllllllllllll *@
+        <div class="my-4">
+            <div class="card rounded-4 shadow-sm p-4">
+                <div class="accordion accordion-flush" id="accordionFlushExample">
+                    @foreach (var item in Model)
+                    {
+                        if (item.OrderStatus == OrderStatus.Completed)
+                        {
+                            var collapseId = $"collapse-{item.Id}";
+                            var headingId = $"heading-{item.Id}";
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="@headingId">
+                                    <button class="accordion-button collapsed p-0 border-0 bg-transparent" type="button"
+                                            data-bs-toggle="collapse" data-bs-target="#@collapseId"
+                                            aria-expanded="false" aria-controls="@collapseId">
+                                        <div class="w-100 d-flex flex-wrap align-items-center justify-content-between p-3">
+                                            <div>
+                                                <div class="fw-bold">@item.Id</div>
+                                                <small class="text-muted">@item.CreatedOrder</small>
+                                            </div>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <div>
+                                                    <div class="fw-bold">Customer Name</div>
+                                                    <small class="text-muted">@item.Customer.UserName</small>
+                                                </div>
+                                            </div>
+                                            <div class="text-start">
+                                                <small class="text-muted">Total</small><br>
+                                                <span class="fw-bold">$@item.Total</span>
+                                            </div>
+                                            <div class="text-start">
+                                                <small class="text-muted">Restaurant</small><br>
+                                                <span class="fw-bold">@item.Restaurant.Name</span>
+                                            </div>
+                                            <div class="text-start">
+                                                <small class="text-muted">Address</small><br>
+                                                <span class="text-warning"><i class="bi bi-geo-alt-fill me-1"></i></span>
+                                                <span class="fw-bold">@item.ShippingAddress</span>
+                                            </div>
+                                            <div>
+                                                <span class="badge rounded-pill border border-success text-success px-3 py-2">@item.OrderStatus</span>
+                                            </div>
+                                        </div>
+                                        @* onclick='GetOrderHistory(@Html.Raw(JsonSerializer.Serialize(item)))' *@
+                                    </button>
+                                </h2>
+                                <div id="@collapseId" class="accordion-collapse collapse" aria-labelledby="@headingId"
+                                     data-bs-parent="#accordionFlushExample">
+                                    <div class="accordion-body" id="accordion-body-id">
+                                        Additional order details go here...
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+
+</div>
+
+    
+@*////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// *@
+    <script src="~/js/Restaurant/jquery-1.11.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+
+    <script src="~/js/Restaurant/modernizr.js"></script>
+    <script src="~/js/Restaurant/script.js"></script>
+    <script src="~/js/Customer/Plugins.js"></script>
+
+    <script>
+        var swiper = new Swiper('.brand-carousel', {
+            slidesPerView: 3,
+            spaceBetween: 30,
+            loop: true,
+            navigation: {
+                nextEl: '.brand-carousel-next',
+                prevEl: '.brand-carousel-prev',
+            },
+        });
+        function Acceptshipping(orderId){
+                 fetch(`/delivery/delivery/Acceptshipping/${orderId}`, {
+            method: 'POST'
+        })
+            .then(response => {
+                if (response.ok) {
+                     alert(" Out for shipping!");
+                    location.reload();
+                } else {
+                    alert("Failed to mark order as done.");
+                }
+            });
+        }
+
+        function GetOrderDetails(order) {
+            fetch('/delivery/delivery/GetOrderDetails', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(order)
+            })
+            .then(res => res.text())
+            .then(html => {
+                document.getElementById("orderDetailsContainer").innerHTML = html;
+            });
+        }
+
+        function GetOrderHistory(order) {
+            fetch('/delivery/delivery/GetOrderDetails', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(order)
+            })
+            .then(res => res.text())
+            .then(html => {
+                document.getElementById("accordion-body-id").innerHTML = html;
+            });
+        }
+    </script>
+
+</body>
+</html>
+
+
+@* ////////////////////////////////////////////////////// ///////////////////////////////////////////////////////////////////*@
+@* @section Styles {
+<link rel="stylesheet" href="~/css/Delivery/style.css" />
+<link rel="stylesheet" href="~/css/Delivery/vendor.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+
+}
+
+<section class="p-5 overflow-hidden">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+
+                <div class="section-header d-flex flex-wrap justify-content-between mb-5">
+                    <h2 class="section-title header-design p-3">Waiting To Deliver</h2>
+                    <div class="d-flex align-items-center">
+                        <div class="swiper-buttons">
+                            <button class="swiper-prev category-carousel-prev btn btn-yellow">❮</button>
+                            <button class="swiper-next category-carousel-next btn btn-yellow">❯</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="category-carousel swiper">
+                    <div class="swiper-wrapper" style="height: 310px;">
+                        @foreach (var item in Model)
+                        {
+                            <a id="@item.Id"
+                               class="nav-link category-item swiper-slide order-card"
+                               onclick='GetOrderDetails(@Html.Raw(JsonSerializer.Serialize(item)))'>
+
+                                <div class="d-flex align-items-center gap-3 p-2 bg-light rounded shadow-sm">
+                                    <img src="~/images/Icons/add-cart.png" alt="N/A" width="50" height="50" class="flex-shrink-0" style="object-fit: contain;">
+                                    <h6 class="mb-0 text-dark">@item.Restaurant.Name</h6>
+                                    <h6 class="mb-0 text-dark">@item.Restaurant.Address</h6>
+                                </div>
+
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+     
+
+
+
+
+        @* <div class="container py-5">
+            <div class=" row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+
+                @foreach (var item in Model)
+                {
+                    <a id="@item.Id" class="nav-link category-item swiper-slide order-card">
+                        <div>
+                            <img src="~/images/Icons/add-cart.png" alt="" width="50px" height="50px">
+                        </div>
+                        <h3 class="category-title">@item.Id</h3>
+                        <h5 class="category-title">Restaurant Name</h5>
+                        <h5 class="category-title">Restaurant Location</h5>
+                    </a>
+                }
+            </div>
+        </div> 
+
+
+
+
+     </div> 
+
+    <!-- =============================================== Partial View ============================================ -->
+    <div id="orderDetailsContainer""> 
+
+     </div> 
+
+
+
+</section>
+
+
+
+
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+    <script src="~/js/Delivery/jquery-1.11.0.min.js"></script>
+    <script> 
+          function GetOrderDetails(order) { 
+
+             fetch('/delivery/delivery/GetOrderDetails', { 
+                 method: 'POST', 
+                 headers: { 'Content-Type': 'application/json' }, 
+                 body: JSON.stringify(order) 
+             }) 
+             .then(res => res.text())
+             .then(html => { 
+                 document.getElementById("orderDetailsContainer").innerHTML = html; 
+             }); 
+         } 
+     </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            new Swiper('.category-carousel', {
+                slidesPerView: 3,
+                spaceBetween: 20,
+                navigation: {
+                    nextEl: '.category-carousel-next',
+                    prevEl: '.category-carousel-prev',
+                },
+                breakpoints: {
+                    768: {
+                        slidesPerView: 2,
+                    },
+                    992: {
+                        slidesPerView: 3,
+                    },
+                    1200: {
+                        slidesPerView: 4,
+                    },
+                },
+            });
+        });
+    </script>
+
+    <script src="~/js/delivery/script.js"></script>
+
+}  
+  *@

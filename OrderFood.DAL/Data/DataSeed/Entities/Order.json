@@ -11,6 +11,7 @@
     "Lat": 31.205753,
     "Long": 29.924526,
     "RestaurantId": 1,
+    "OrderStatus": 3,
     "CouponId": 1,
     "OrderMeals": [
       {
@@ -27,7 +28,7 @@
     "ShippingAddress": "5 Corniche St, Alexandria",
     "SubTotal": 220.00,
     "CreatedOrder": "2025-04-09T15:45:00",
-    "OrderStatus": 0,
+    "OrderStatus": 4,
     "PaymentId": "PMT002",
     "PaymentMethod": 0,
     "PayDate": "2025-04-09T16:00:00",
@@ -56,11 +57,10 @@
     "ShippingAddress": "22 Zaid St, Giza",
     "SubTotal": 300.00,
     "CreatedOrder": "2025-04-09T15:45:00",
-    "OrderStatus": 0,
+    "OrderStatus": 2,
     "PaymentId": "PMT003",
     "PaymentMethod": 0,
     "PayDate": "2025-04-09T16:00:00",
-    "DriverId": "96d5a95c-32c9-42c3-9fca-5d2bef6cbb20",
     "CustomerId": "92cd486d-ec55-430c-8af1-7c749b26d110",
     "Lat": 28.033333,
     "Long": 30.233334,
@@ -84,11 +84,118 @@
     "ShippingAddress": "20 AbouKer St, Alexandria",
     "SubTotal": 500.00,
     "CreatedOrder": "2025-04-09T15:45:00",
-    "OrderStatus": 0,
+    "OrderStatus": 2,
     "PaymentId": "PMT004",
     "PaymentMethod": 0,
     "PayDate": "2025-04-09T16:00:00",
-    "DriverId": "a47f85f9-3cb0-440d-a995-113d05187458",
+    "CustomerId": "9bfcccd8-a013-4828-9a6d-91cde4d17af2",
+    "Lat": 30.033333,
+    "Long": 31.233334,
+    "RestaurantId": 5,
+    "OrderMeals": [
+      {
+        "MealId": 10,
+        "Quantity": 2
+      },
+      {
+        "MealId": 11,
+        "Quantity": 3
+      },
+      {
+        "MealId": 12,
+        "Quantity": 3
+      }
+    ]
+  },
+  {
+    "ShippingAddress": "20 AbouKer St, Alexandria",
+    "SubTotal": 500.00,
+    "CreatedOrder": "2025-04-09T15:45:00",
+    "OrderStatus": 2,
+    "PaymentId": "PMT004",
+    "PaymentMethod": 0,
+    "PayDate": "2025-04-09T16:00:00",
+    "CustomerId": "9bfcccd8-a013-4828-9a6d-91cde4d17af2",
+    "Lat": 30.033333,
+    "Long": 31.233334,
+    "RestaurantId": 5,
+    "OrderMeals": [
+      {
+        "MealId": 10,
+        "Quantity": 2
+      },
+      {
+        "MealId": 11,
+        "Quantity": 3
+      },
+      {
+        "MealId": 12,
+        "Quantity": 3
+      }
+    ]
+  },
+  {
+    "ShippingAddress": "20 AbouKer St, Alexandria",
+    "SubTotal": 500.00,
+    "CreatedOrder": "2025-04-09T15:45:00",
+    "OrderStatus": 2,
+    "PaymentId": "PMT004",
+    "PaymentMethod": 0,
+    "PayDate": "2025-04-09T16:00:00",
+    "CustomerId": "9bfcccd8-a013-4828-9a6d-91cde4d17af2",
+    "Lat": 30.033333,
+    "Long": 31.233334,
+    "RestaurantId": 5,
+    "OrderMeals": [
+      {
+        "MealId": 10,
+        "Quantity": 2
+      },
+      {
+        "MealId": 11,
+        "Quantity": 3
+      },
+      {
+        "MealId": 12,
+        "Quantity": 3
+      }
+    ]
+  },
+  {
+    "ShippingAddress": "20 AbouKer St, Alexandria",
+    "SubTotal": 500.00,
+    "CreatedOrder": "2025-04-09T15:45:00",
+    "OrderStatus": 2,
+    "PaymentId": "PMT004",
+    "PaymentMethod": 0,
+    "PayDate": "2025-04-09T16:00:00",
+    "CustomerId": "9bfcccd8-a013-4828-9a6d-91cde4d17af2",
+    "Lat": 30.033333,
+    "Long": 31.233334,
+    "RestaurantId": 5,
+    "OrderMeals": [
+      {
+        "MealId": 10,
+        "Quantity": 2
+      },
+      {
+        "MealId": 11,
+        "Quantity": 3
+      },
+      {
+        "MealId": 12,
+        "Quantity": 3
+      }
+    ]
+  },
+  {
+    "ShippingAddress": "20 AbouKer St, Alexandria",
+    "SubTotal": 500.00,
+    "CreatedOrder": "2025-04-09T15:45:00",
+    "OrderStatus": 2,
+    "PaymentId": "PMT004",
+    "PaymentMethod": 0,
+    "PayDate": "2025-04-09T16:00:00",
     "CustomerId": "9bfcccd8-a013-4828-9a6d-91cde4d17af2",
     "Lat": 30.033333,
     "Long": 31.233334,

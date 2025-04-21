@@ -29,8 +29,6 @@ namespace OrderFood.DAL.Context
             builder.Entity<OrderMeals>()
                 .Ignore(om => om.Id);
             
-            builder.Entity<OrderMeals>()
-                .Ignore(om => om.IsDelete);
 
             // create NonClustered Index on Restaurant Name
             builder.Entity<Restaurant>()

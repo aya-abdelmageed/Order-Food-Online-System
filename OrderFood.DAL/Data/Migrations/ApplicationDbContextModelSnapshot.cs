@@ -343,6 +343,9 @@ namespace OrderFood.Pl.Migrations
                     b.Property<int>("MealId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
