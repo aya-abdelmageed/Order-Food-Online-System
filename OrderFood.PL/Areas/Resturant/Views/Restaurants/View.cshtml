@@ -1,4 +1,8 @@
-﻿@model OrderFood.DAL.Entities.Models.Category
+﻿@model List<OrderFood.DAL.Entities.Models.Meal>
+@{
+    ViewData["Title"] = "Restaurant Details";
+}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,17 +26,19 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Open+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
 
-    <!-- Custom Style for Heart Fill -->
 
 </head>
 
 <body>
-
     <div class="row d-flex flex-wrap justify-content-center gap-4">
-        @if (Model.Meals.Where(m => !m.IsDelete).Any())
-    {
-            @foreach (var meal in Model.Meals.Where(m => !m.IsDelete))
+        @if (Model.Count == 0)
         {
+            <div class="text-muted text-center">No meals match your search.</div>
+        }
+        else
+        {
+            @foreach (var meal in Model)
+            {
                 <div class="product-card p-3 shadow rounded-4 position-relative bg-white" style="width: 250px; height:460px">
 
                     @if (User.IsInRole("Customer"))
@@ -44,7 +50,7 @@
                     }
 
                     <!-- Meal Image -->
-                    <img src="/@meal.Image" class="img-fluid my-3" style="height: 150px; width:200px object-fit: contain;" />
+                    <img src="@meal.Image" class="img-fluid my-3" style="height: 150px; width:200px object-fit: contain;" />
 
                     <!-- Meal Name -->
                     <h5 class="fw-bold text-center mb-1">@meal.Name</h5>
@@ -68,20 +74,49 @@
                         </div>
                     }
 
-                    <!-- Edit and Delete button -->
-                    @* <div class="d-flex  align-items-center gap-2"> *@
-                    @*     <a asp-action="Delete" asp-route-id="@meal.Id" class="btn btn-danger btn-sm w-50">Delete</a> *@
-                    @*     <a asp-action="Update" asp-route-id="@meal.Id" class="btn btn-warning btn-sm w-50">Edit</a> *@
-                    @* </div> *@
+                </div>
 
-            </div>
+            }
         }
-    }
-    else
+
+    </div>
+    </div>
+
+    <!-- Pagination -->
+    <!-- Hidden inputs to keep current filter values -->
+    <input type="hidden" id="currentSearchTerm" value="@ViewBag.SearchTerm" />
+    <input type="hidden" id="currentMaxPrice" value="@ViewBag.maxPrice" />
+    <input type="hidden" id="currentCategoryId" value="@ViewBag.CategoryId" />
+    <input type="hidden" id="currentPageNo" value="@ViewBag.PageNo" />
+
+    @if (ViewBag.NoOfPages != null && ViewBag.NoOfPages > 1)
     {
-        <div class="text-center text-muted">No meals available in this category.</div>
+        var currentPage = ViewBag.PageNo ?? 1;
+        <nav aria-label="Meals pagination" class="mt-4">
+            <ul class="pagination justify-content-center">
+
+                <!-- Previous Button -->
+                <li class="page-item @(currentPage == 1 ? "disabled" : "")">
+                    <a class="page-link" href="javascript:void(0);" onclick="goToPage(@(currentPage - 1))">Previous</a>
+                </li>
+
+                <!-- Page Numbers -->
+                @for (int i = 1; i <= ViewBag.NoOfPages; i++)
+                {
+                    <li class="page-item @(currentPage == i ? "active" : "")">
+                        <a class="page-link" href="javascript:void(0);" onclick="goToPage(@i)">
+                            @i
+                        </a>
+                    </li>
+                }
+
+                <!-- Next Button -->
+                <li class="page-item @(currentPage == ViewBag.NoOfPages ? "disabled" : "")">
+                    <a class="page-link" href="javascript:void(0);" onclick="goToPage(@(currentPage + 1))">Next</a>
+                </li>
+            </ul>
+        </nav>
     }
-</div>
 
 
     <script src="~/js/Restaurant/jquery-1.11.0.min.js"></script>

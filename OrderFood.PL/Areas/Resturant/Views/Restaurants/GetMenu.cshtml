@@ -32,14 +32,14 @@
 
                         <div class="text-end">
                             <div class="d-flex align-items-center">
-                                <a asp-action="GetAllCat" class="btn-link text-decoration-none">View All Categories →</a>
+                                <a  asp-action="GetAllCat" asp-route-id ="@Model.Id" class="btn-link text-decoration-none">View All Categories →</a>
                                 <div class="swiper-buttons">
                                     <button class="swiper-prev category-carousel-prev btn btn-yellow">❮</button>
                                     <button class="swiper-next category-carousel-next btn btn-yellow">❯</button>
                                 </div>
                             </div>
                             <div class="mt-2">
-                                <a asp-action="AddCategory" asp-route-restaurantId="@Model.Id" class="btn btn-outline-success btn-sm me-2 bi bi-plus-circle"> Add Category</a>
+                                <a asp-action="AddCategory" asp-route-id="@Model.Id" class="btn btn-outline-success btn-sm me-2 bi bi-plus-circle"> Add Category</a>
                                 <button type="button" class="btn btn-outline-danger btn-sm bi bi-trash" onclick="toggleDeleteIcons()"> Delete Category</button>
                             </div>
                         </div>
@@ -47,6 +47,26 @@
                     <!-- End Header -->
                 </div>
             </div>
+
+            <!-- Search Form -->
+            <form id="searchForm" class="row justify-content-center mb-4">
+                <div class="col-md-3">
+                    <input type="text" name="searchTerm" class="form-control" placeholder="Search meals..." oninput="searchMeals()">
+                </div>
+                <div class="col-md-2">
+                    <input type="number" name="maxPrice" class="form-control" placeholder="Max price" step="0.01" oninput="searchMeals()">
+                </div>
+                <div class="col-md-2">
+                    <select name="categoryId" class="form-select" onchange="searchMeals()">
+                        <option value="">All Categories</option>
+                        @foreach (var category in Model.Categories.Where(c => !c.IsDelete))
+                        {
+                            <option value="@category.Id">@category.Name</option>
+                        }
+                    </select>
+                </div>
+
+            </form>
 
             <div class="row">
                 <div class="col-md-12">
@@ -69,7 +89,6 @@
                             }
                         </div>
                     </div>
-
                     <!-- Meals Section -->
                     <div id="mealsSection" class="container mt-5">
                         <h2 class="text-center mb-4">Meals</h2>
@@ -89,13 +108,14 @@
     </form>
 
     <!-- Scripts -->
+
     <script src="~/js/Restaurant/jquery-1.11.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/Restaurant/plugins.js"></script>
     <script src="~/js/Restaurant/script.js"></script>
 
     <script>
+
         function choose(element) {
             var categoryId = $(element).data('category-id');
             var restaurantId = @Model.Id;
@@ -147,6 +167,87 @@
                 alert(error.message);
             });
         }
+
+        //---------------------------------------------
+        let debounceTimer;
+
+        function searchMeals() {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+                const form = document.getElementById("searchForm");
+                const formData = new FormData(form);
+                const query = new URLSearchParams(formData).toString();
+
+                // If input is empty, reset content
+                if (!query || (!formData.get('maxPrice') && !formData.get('searchTerm') && !formData.get('categoryId'))) {
+                    document.getElementById("mealsContent").innerHTML =
+                        `<div class="text-muted text-center">Select a category to view its meals.</div>`;
+                    return;
+                }
+
+                fetch(`@Url.Action("SearchMeals", "Restaurants")?restaurantId=@Model.Id&${query}`)
+                    .then(res => {
+                        if (!res.ok) throw new Error("Search failed");
+                        return res.text();
+                    })
+                    .then(html => {
+                        document.getElementById("mealsContent").innerHTML = html;
+                    })
+                    .catch(err => {
+                        document.getElementById("mealsContent").innerHTML =
+                            `<div class="text-danger text-center">${err.message}</div>`;
+                    });
+            }, 300); // delay in ms
+
+                   if (deleteMode) {
+            document.querySelectorAll('.delete-category-btn').forEach(btn => {
+                btn.classList.remove('d-none');
+            });
+        }
+
+        }
+        //----------------
+
+         function loadMeals(restaurantId, searchTerm = "", categoryId = "", maxPrice = "", pageNo = 1) {
+            $.ajax({
+                url: 'Restaurants/SearchMeals',
+                data: {
+                    restaurantId,
+                    searchTerm,
+                    categoryId,
+                    maxPrice,
+                    PageNo: pageNo
+                },
+                success: function (result) {
+                    $('#mealsContent').html(result);
+
+                    // Re-bind delete category button events
+                    bindDeleteButtons();
+                },
+                error: function () {
+                    $('#mealsContent').html('<div class="text-danger text-center">Error loading meals.</div>');
+                }
+            });
+                    if (deleteMode) {
+            document.querySelectorAll('.delete-category-btn').forEach(btn => {
+                btn.classList.remove('d-none');
+            });
+        }
+
+        }
+
+
+                function goToPage(pageNo) {
+            const searchTerm = document.getElementById("currentSearchTerm").value;
+            const maxPrice = document.getElementById("currentMaxPrice").value;
+            const categoryId = document.getElementById("currentCategoryId").value;
+
+            // Use your AJAX function
+            loadMeals(@Model.Id, searchTerm, categoryId, maxPrice, pageNo);
+        }
+
+
+
     </script>
 </body>
 </html>

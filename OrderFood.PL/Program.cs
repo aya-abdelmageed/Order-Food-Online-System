@@ -120,18 +120,16 @@ public class Program
         app.UseRouting();
 
         app.UseAuthorization();
-        app.MapStaticAssets();
+        app.UseStaticFiles();
 
-
-        //     app.MapAreaControllerRoute(
-        //name: "area",
-        //areaName: "Resturant",
-        //pattern: "{controller=Restaurants}/{action=GetMenu}/{id=4}");
+      
 
         app.MapControllerRoute(
             name: "areas",
-            pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
-       
+            pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}")
+            .WithStaticAssets();
+
+
         app.MapAreaControllerRoute(
             name: "Identity",
             areaName: "Identity",

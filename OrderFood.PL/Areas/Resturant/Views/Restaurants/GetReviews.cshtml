@@ -1,0 +1,72 @@
+﻿@model IEnumerable<OrderFood.DAL.Entities.Models.Review>
+@inject IConfiguration Configuration;
+@{
+    ViewData["Title"] = "GetReviews";
+}
+<style>
+    
+
+     .card-hover:hover {
+         transform: scale(1.05);
+        transition: transform 0.2s;
+     }
+
+    .card-img{
+        width: 3.5rem;
+        height: 3.5rem;
+        object-fit: cover;
+        border-radius: 0.5rem;
+        margin-right: 1rem;
+        
+    }
+    .date-card{
+        position: absolute;
+        bottom: 5px;
+        right: 5px;
+        
+    }
+
+    .card{
+        position: relative;
+    }
+</style>
+
+
+<div class="container">
+    <div class="d-flex flex-column justify-content-center">
+        <h1>Reviews</h1>
+        <hr class="border-3 bg-light"/>
+    </div>
+    <div class="card border-1 w-100 h-auto p-3 rounded-2">
+        <div class="row">
+
+            @foreach (var rev in Model)
+            {
+                <div class=" col-6 col-md-4 col-xl-3 mb-3 d-flex justify-content-center">
+                    <div class="card shadow card-hover" style="width: 18rem;">
+                        <div class="user d-flex align-items-center">
+                            <img class="card-img m-2" style="width: 50px; height: 50px; object-fit: cover;" src="@Configuration["BaseURL"]@rev.Customer.Image" />
+                            <p class="user-name mb-0">@rev.Customer.FirstName</p>
+                        </div>
+                        <div class="card-body flex-column d-flex flex-column">
+                            <h5 class="card-title text-dark fs-8 fw-bold">@rev.Restaurant.Name</h5>
+                            <h6 class="card-subtitle mb-2 fs-6">
+                                   @for(var i = 0; i < rev.Rate; i++){
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                   }
+                                </h6>
+                             <h6  class="card-text mb-4">@rev.Comment</h6>
+                            <div class="d-flex flex-column date-card align-items-end justify-content-end">
+
+                                <h6 class="text-muted"><span class="bi bi-calendar4"></span> @rev.ReviewDate.ToShortDateString()</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               
+            }
+        </div>
+    </div>
+</div>
+
+

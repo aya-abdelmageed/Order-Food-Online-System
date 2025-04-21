@@ -9,6 +9,7 @@ using OrderFood.BLL.Interfaces;
 using OrderFood.BLL.Repositories;
 using OrderFood.DAL.Context;
 using OrderFood.DAL.Entities.Models;
+using OrderFood.PL.Areas.Delivery.ViewModel;
 using OrderFood.PL.Areas.Resturant.ViewModel;
 
 namespace OrderFood.PL.Areas.Resturant.Controllers
@@ -100,20 +101,22 @@ namespace OrderFood.PL.Areas.Resturant.Controllers
         //-----------------------------------------------------------------------
         // GET: Add Category
         [HttpGet]
-        public IActionResult AddCategory(int restaurantId)
+        public IActionResult AddCategory(int id)
         {
-            var model = new CategoryViewModel
-            {
-                RestaurantId = restaurantId
-            };
-            ViewBag.RestaurantId = restaurantId;
-            return View(model);
+            return View(new CategoryViewModel { RestaurantId = id });
+
+
         }
 
         // POST: Add Category
         [HttpPost]
-        public async Task<IActionResult> AddCategory(CategoryViewModel model, int restaurantId)
+        public async Task<IActionResult> AddCategory(CategoryViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                ViewBag.RestaurantId = model.RestaurantId;
+                return View(model);
+            }
 
             string imagePath = null;
             if (model.ImageFile != null && model.ImageFile.Length > 0)
@@ -135,20 +138,15 @@ namespace OrderFood.PL.Areas.Resturant.Controllers
             var category = new Category
             {
                 Name = model.Name,
-                RestaurantId = restaurantId,
+                RestaurantId = model.RestaurantId,
                 IsDelete = false,
                 Image = imagePath
             };
-            if (!ModelState.IsValid)
-            {
-                ViewBag.RestaurantId = restaurantId;
-                return View(model);
-            }
 
-            _context.GetRepository<Category>().AddAsync(category);
+             _context.GetRepository<Category>().AddAsync(category);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction(nameof(GetMenu), new { id = model.RestaurantId });
+            return RedirectToAction(nameof(GetMenu),new {id= model.RestaurantId});
         }
 
 
@@ -169,8 +167,11 @@ namespace OrderFood.PL.Areas.Resturant.Controllers
             _context.GetRepository<Meal>().Update(meal);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction(nameof(GetAllCat)); 
+            int restaurantId = meal.Category.RestaurantId;
+
+            return RedirectToAction(nameof(GetAllCat), new { id = restaurantId }); 
         }
+
         //----------------------------------------------------------------
         //get
         public async Task<IActionResult> UpdateMeal(int id)
@@ -183,17 +184,17 @@ namespace OrderFood.PL.Areas.Resturant.Controllers
 
             var categories = await _context.GetRepository<Category>().GetAllAsync();
             ViewBag.allCategories = categories.Where(i => i.RestaurantId ==meal.Category.RestaurantId);
+            ViewBag.RestaurantId = meal.Category.RestaurantId;
 
             return View(meal);
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateMeal(Meal updatedMeal)
+        public async Task<IActionResult> UpdateMeal(Meal updatedMeal, int RestaurantId)
         {
             var imageFile = Request.Form.Files["avatar"];
             var existingImagePath = Request.Form["existingImage"];
 
-            // Remove model error for Image if user didn't upload a new file and existing one is there
             if (string.IsNullOrEmpty(updatedMeal.Image) && string.IsNullOrEmpty(existingImagePath) && (imageFile == null || imageFile.Length == 0))
             {
                 ModelState.AddModelError("Image", "Image is required.");
@@ -212,6 +213,7 @@ namespace OrderFood.PL.Areas.Resturant.Controllers
                 {
                     ViewBag.allCategories = await categoryRepo
                         .GetAllAsync(c => c.RestaurantId == selectedCategory.RestaurantId);
+                    ViewBag.RestaurantId = selectedCategory.RestaurantId;
                 }
 
                 updatedMeal.Image = existingImagePath;
@@ -223,11 +225,10 @@ namespace OrderFood.PL.Areas.Resturant.Controllers
             if (existingMeal == null)
                 return NotFound();
 
-            //  Handle image upload or use existing
             if (imageFile != null && imageFile.Length > 0)
             {
                 var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/meals");
-                Directory.CreateDirectory(uploadsFolder); // Ensure folder exists
+                Directory.CreateDirectory(uploadsFolder);
 
                 var fileName = Guid.NewGuid().ToString() + Path.GetExtension(imageFile.FileName);
                 var filePath = Path.Combine(uploadsFolder, fileName);
@@ -252,33 +253,48 @@ namespace OrderFood.PL.Areas.Resturant.Controllers
             mealRepo.Update(existingMeal);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction(nameof(GetAllCat));
+            return RedirectToAction(nameof(GetAllCat), new { id = RestaurantId });
         }
+
         //----------------------------------------------------------------------------
         //GET
         [HttpGet]
-        public async Task<IActionResult> AddMeal(int restaurantId)
+        public async Task<IActionResult> AddMeal(int id)
         {
             ViewBag.allCategories = await _context.GetRepository<Category>()
-                                               .GetAllAsync(c => !c.IsDelete && c.RestaurantId == restaurantId);
+                                               .GetAllAsync(c => !c.IsDelete && c.RestaurantId == id);
 
-            ViewBag.RestaurantId = restaurantId;
+            ViewBag.RestaurantId = id;
 
-            return View();
+            return View(new MealViewModel { restaurantId = id });
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddMeal(MealViewModel mealVM, int restaurantId)
+        public async Task<IActionResult> AddMeal(MealViewModel mealVM)
         {
-            var meal = new Meal();
+            if (!ModelState.IsValid)
+            {
+                ViewBag.allCategories = await _context.GetRepository<Category>()
+                    .GetAllAsync(c => c.RestaurantId == mealVM.restaurantId);
+                ViewBag.RestaurantId = mealVM.restaurantId;
+                return View(mealVM);
+            }
+
+            var meal = new Meal
+            {
+                Name = mealVM.Name,
+                Description = mealVM.Description,
+                Price = mealVM.Price,
+                CategoryId = mealVM.CategoryId
+            };
 
             // Handle image file
             if (mealVM.ImageFile != null && mealVM.ImageFile.Length > 0)
             {
                 var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/meals");
-                Directory.CreateDirectory(uploadsFolder); 
+                Directory.CreateDirectory(uploadsFolder);
 
-                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(mealVM.ImageFile.FileName);
+                var fileName = Guid.NewGuid() + Path.GetExtension(mealVM.ImageFile.FileName);
                 var filePath = Path.Combine(uploadsFolder, fileName);
 
                 using (var stream = new FileStream(filePath, FileMode.Create))
@@ -286,27 +302,57 @@ namespace OrderFood.PL.Areas.Resturant.Controllers
                     await mealVM.ImageFile.CopyToAsync(stream);
                 }
 
-                meal.Name = mealVM.Name;
-                meal.Description = mealVM.Description;
-                meal.Price = mealVM.Price;
-                meal.CategoryId = mealVM.CategoryId;
-                meal.Image = "/images/meals/" + fileName; 
-               
-            }
-            
-            if (!ModelState.IsValid )
-            {
-                ViewBag.allCategories = await _context.GetRepository<Category>()
-                                          .GetAllAsync(c => c.RestaurantId == restaurantId);
-
-                ViewBag.RestaurantId = restaurantId;
-                return View(mealVM);
+                meal.Image = "/images/meals/" + fileName;
             }
 
-            _context.GetRepository<Meal>().AddAsync(meal);
+             _context.GetRepository<Meal>().AddAsync(meal);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction(nameof(GetAllCat));
+            return RedirectToAction(nameof(GetAllCat), new { id = mealVM.restaurantId });
+        }
+        //-------------------------------------------------------------------------------------------
+        public async Task<IActionResult> SearchMeals(int restaurantId, string? searchTerm, int? categoryId, decimal? maxPrice, int PageNo = 1)
+        {
+            var restaurant = await _context.GetRepository<Restaurant>().GetOneAsync(i => i.Id == restaurantId, query => query.Include(p => p.Categories).ThenInclude(m => m.Meals));
+
+
+            if (restaurant == null) return NotFound();
+
+            var meals = restaurant.Categories
+                .Where(c => !c.IsDelete && (!categoryId.HasValue || c.Id == categoryId.Value))
+                .SelectMany(c => c.Meals)
+                .Where(m => !m.IsDelete &&
+                    (string.IsNullOrEmpty(searchTerm) || m.Name.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) || m.Description.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)) &&
+                    (!maxPrice.HasValue || m.Price <= maxPrice.Value))
+                .OrderBy(m => m.Price)
+                .ToList();
+
+            /* Pagination */
+            int NoOfRecordsPerPage = 2;
+            int NoOfPages = Convert.ToInt32(Math.Ceiling(
+                Convert.ToDouble(meals.Count) / Convert.ToDouble(NoOfRecordsPerPage)));
+
+            int NoOfRecordsToSkip = (PageNo - 1) * NoOfRecordsPerPage;
+
+            ViewBag.PageNo = PageNo;
+            ViewBag.NoOfPages = NoOfPages;
+
+            ViewBag.RestaurantId = restaurantId;
+            ViewBag.SearchTerm = searchTerm;
+            ViewBag.CategoryId = categoryId;
+            ViewBag.maxPrice = maxPrice;
+
+            meals = meals.Skip(NoOfRecordsToSkip).Take(NoOfRecordsPerPage).ToList();
+
+            return PartialView("View", meals);
+        }
+        //----------------------------------------------------------------------------------------
+        //Get restaurant reviews
+        public async Task<IActionResult> GetReviews(int restaurantID)
+        {
+            var reviews = await _context.GetRepository<Review>()
+                .GetAllAsync(r => r.RestaurantId == 3, i => i.Include(o => o.Restaurant).Include(c => c.Customer));
+            return (View(reviews));
         }
 
         [HttpGet]
@@ -386,6 +432,7 @@ namespace OrderFood.PL.Areas.Resturant.Controllers
 
             return View(restOrders);
         }
+
 
     }
 }

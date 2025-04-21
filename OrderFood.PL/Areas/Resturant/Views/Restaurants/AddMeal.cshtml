@@ -43,7 +43,7 @@
 
 
 <h2 class="mt-4 mb-4 text-center text-white bg-dark p-3 rounded">Add Meal</h2>
-<a asp-action="GetAllCat" class="btn-link text-decoration-none">&larr; Back to all meals</a>
+<a asp-action="GetAllCat" asp-route-id="@ViewBag.RestaurantId" class="btn-link text-decoration-none">&larr; Back to all meals</a>
 
 <div class="container">
     <div class="row justify-content-center">
@@ -52,7 +52,9 @@
                 <div class="card-body p-4">
                     <form asp-action="AddMeal" enctype="multipart/form-data">
                         <div asp-validation-summary="All" class="text-danger mb-3"></div>
-                        <input type="hidden" name="restaurantId" value="@ViewBag.RestaurantId" />
+                        <input type="hidden" asp-for="restaurantId" />
+
+
 
                         <div class="mb-3">
                             <label asp-for="Name" class="form-label fw-bold"></label>

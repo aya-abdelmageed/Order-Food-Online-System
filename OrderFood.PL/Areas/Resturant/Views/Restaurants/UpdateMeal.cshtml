@@ -51,7 +51,8 @@
                 <div class="card-body p-4">
                     <form asp-action="UpdateMeal" enctype="multipart/form-data">
                         <div asp-validation-summary="All" class="text-danger mb-3"></div>
-                        <input type="hidden" asp-for="Id" />
+                        <input type="hidden" name="RestaurantId" value="@ViewBag.RestaurantId" />
+
                         <input type="hidden" name="existingImage" value="@Model.Image" />
 
                         <div class="mb-3">
