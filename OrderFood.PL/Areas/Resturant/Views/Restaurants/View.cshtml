@@ -1,0 +1,131 @@
+﻿@model List<OrderFood.DAL.Entities.Models.Meal>
+@{
+    ViewData["Title"] = "Restaurant Details";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" type="text/css" href="~/css/Restaurant/vendor.css">
+    <link rel="stylesheet" type="text/css" href="~/css/Restaurant/style.css">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Open+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+
+</head>
+
+<body>
+    <div class="row d-flex flex-wrap justify-content-center gap-4">
+        @if (Model.Count == 0)
+        {
+            <div class="text-muted text-center">No meals match your search.</div>
+        }
+        else
+        {
+            @foreach (var meal in Model)
+            {
+                <div class="product-card p-3 shadow rounded-4 position-relative bg-white" style="width: 250px; height:460px">
+
+                    @if (User.IsInRole("Customer"))
+                    {
+                        <!-- Favorite Icon -->
+                        <button class="btn btn-light rounded-circle position-absolute top-0 end-0 m-2">
+                            <i class="bi bi-heart" onclick="myFunction(this)"></i>
+                        </button>
+                    }
+
+                    <!-- Meal Image -->
+                    <img src="@meal.Image" class="img-fluid my-3" style="height: 150px; width:200px object-fit: contain;" />
+
+                    <!-- Meal Name -->
+                    <h5 class="fw-bold text-center mb-1">@meal.Name</h5>
+
+                    <!-- Meal Description -->
+                    <p class="text-muted text-center small mb-2" style="font-size: 0.9rem; line-height: 1.2;">@meal.Description</p>
+
+                    <!-- Price -->
+                    <h4 class="text-center text-dark mb-3">$@meal.Price</h4>
+
+                    @if (User.IsInRole("Customer"))
+                    {
+                        <!-- Quantity and Add to Cart -->
+                        <div class="d-flex flex-column align-items-center gap-2">
+                            <div class="input-group input-group-sm w-75">
+                                <button class="btn btn-outline-secondary" onclick="decrease(this)">−</button>
+                                <input type="text" class="form-control text-center" value="1">
+                                <button class="btn btn-outline-secondary" onclick="increase(this)">+</button>
+                            </div>
+                            <button class="btn btn-warning btn-sm w-75">Add to Cart</button>
+                        </div>
+                    }
+
+                </div>
+
+            }
+        }
+
+    </div>
+    </div>
+
+    <!-- Pagination -->
+    <!-- Hidden inputs to keep current filter values -->
+    <input type="hidden" id="currentSearchTerm" value="@ViewBag.SearchTerm" />
+    <input type="hidden" id="currentMaxPrice" value="@ViewBag.maxPrice" />
+    <input type="hidden" id="currentCategoryId" value="@ViewBag.CategoryId" />
+    <input type="hidden" id="currentPageNo" value="@ViewBag.PageNo" />
+
+    @if (ViewBag.NoOfPages != null && ViewBag.NoOfPages > 1)
+    {
+        var currentPage = ViewBag.PageNo ?? 1;
+        <nav aria-label="Meals pagination" class="mt-4">
+            <ul class="pagination justify-content-center">
+
+                <!-- Previous Button -->
+                <li class="page-item @(currentPage == 1 ? "disabled" : "")">
+                    <a class="page-link" href="javascript:void(0);" onclick="goToPage(@(currentPage - 1))">Previous</a>
+                </li>
+
+                <!-- Page Numbers -->
+                @for (int i = 1; i <= ViewBag.NoOfPages; i++)
+                {
+                    <li class="page-item @(currentPage == i ? "active" : "")">
+                        <a class="page-link" href="javascript:void(0);" onclick="goToPage(@i)">
+                            @i
+                        </a>
+                    </li>
+                }
+
+                <!-- Next Button -->
+                <li class="page-item @(currentPage == ViewBag.NoOfPages ? "disabled" : "")">
+                    <a class="page-link" href="javascript:void(0);" onclick="goToPage(@(currentPage + 1))">Next</a>
+                </li>
+            </ul>
+        </nav>
+    }
+
+
+    <script src="~/js/Restaurant/jquery-1.11.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+    @* <script src="~/js/Restaurant/plugins.js"></script> *@
+    <script src="~/js/Restaurant/script.js"></script>
+
+
+
+</body>
+</html>

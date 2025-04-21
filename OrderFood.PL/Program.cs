@@ -89,10 +89,15 @@ public class Program
 
         app.UseAuthorization();
 
+        //     app.MapAreaControllerRoute(
+        //name: "area",
+        //areaName: "Resturant",
+        //pattern: "{controller=Admin}/{action=ViewAllCoupons}/{id?}");
         app.MapAreaControllerRoute(
-   name: "area",
-   areaName: "Resturant",
-   pattern: "{controller=Restaurants}/{action=GetMenu}/{id=4}");
+        name: "area",
+        areaName: "Resturant",
+        pattern: "{controller=Admin}/{action=GetRestaurants}/{id?}");
+
 
         app.MapStaticAssets();
         app.MapAreaControllerRoute(
@@ -100,6 +105,7 @@ public class Program
             areaName:"Identity",
             pattern: "Identity/{controller=Home}/{action=OnboardingPage}/{id?}")
             .WithStaticAssets();
+
         app.MapControllerRoute(
             name: "default",
             pattern: "{controller=Home}/{action=OnboardingPage}/{id?}")
