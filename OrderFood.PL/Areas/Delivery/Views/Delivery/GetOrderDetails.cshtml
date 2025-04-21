@@ -68,6 +68,13 @@
                     <small class="text-muted">Total</small>
                     <div class="fw-bold text-warning fs-5">$ @Model.Total</div>
                 </div>
+                @if((int)Model.OrderStatus==2){
+                <div class="mt-3 d-flex justify-content-end" id="AcceptshippingButtonContainer" style="visibility:visible;">
+                        <button class="btn btn-outline-success text-white btn-success btn-lg" onclick="Acceptshipping(@Model.Id)">
+                        Accept
+                    </button>
+                </div>
+                }
             </div>
         </div>
     </div>

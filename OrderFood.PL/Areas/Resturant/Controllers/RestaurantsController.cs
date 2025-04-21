@@ -367,5 +367,17 @@ namespace OrderFood.PL.Areas.Resturant.Controllers
             }
         }
 
+        //***************************************************************************************************************
+        //get all restaurant orders
+        public async Task<IActionResult> GetRestOrders(int id)
+        {
+            var rest = await _context.GetRepository<Restaurant>().GetOneAsync(r => r.Id == id, q => q.Include(o => o.Orders)!.ThenInclude(o => o.OrderMeals)!.ThenInclude(m => m.Meal));
+            if (rest == null)
+                return NotFound();
+            var restOrders = rest.Orders!.ToList();
+
+            return View(restOrders);
+        }
+
     }
 }
