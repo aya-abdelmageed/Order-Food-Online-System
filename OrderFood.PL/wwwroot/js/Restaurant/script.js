@@ -180,3 +180,54 @@ function decrease(button) {
    
 }
 
+function choose(element) {
+    var categoryId = $(element).data('category-id');
+    var restaurantId = @Model.Id;
+
+    $('.category-item').removeClass('active-category');
+    $(element).addClass('active-category');
+
+    fetch('@Url.Action("GetCategoryMeals", "Restaurants")' + `?restaurantId=${restaurantId}&categoryId=${categoryId}`)
+        .then(response => {
+            if (!response.ok) throw new Error("Failed to load meals");
+            return response.text();
+        })
+        .then(html => {
+            document.getElementById("mealsContent").innerHTML = html;
+        })
+        .catch(error => {
+            document.getElementById("mealsContent").innerHTML =
+                `<div class="text-danger text-center">${error.message}</div>`;
+        });
+}
+
+function toggleDeleteIcons() {
+    const icons = document.querySelectorAll('.delete-category-btn');
+    icons.forEach(icon => icon.classList.toggle('d-none'));
+}
+
+function deleteCategory(button) {
+    if (!confirm('Are you sure you want to delete this category?')) return;
+
+    const categoryId = button.getAttribute('data-category-id');
+    const token = document.querySelector('#csrfTokenForm input[name="__RequestVerificationToken"]').value;
+
+    fetch('@Url.Action("DeleteCategory", "Restaurants")', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: `id=${categoryId}&__RequestVerificationToken=${encodeURIComponent(token)}`
+    })
+        .then(response => {
+            if (response.ok) {
+                // Remove the category from DOM
+                button.closest('.swiper-slide').remove();
+            } else {
+                throw new Error("Failed to delete category");
+            }
+        })
+        .catch(error => {
+            alert(error.message);
+        });
+}

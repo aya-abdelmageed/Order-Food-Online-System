@@ -9,285 +9,262 @@
     var lastName = user?.LastName;
     var userIMage = user?.Image;
 }
-<header id="header-demo" class="fixed-top" style="">
-    <!-- bg-body-tertiary -->
-    <nav class="navbar navbar-expand-md bsb-navbar-3 fixed-top" style="background-color:#0F172B; transition: top 0.3s;">
 
-        <div class="container rounded-pill  d-flex justify-content-between ">
+<header id="header-demo" class="fixed-top">
+    <!-- bg-body-tertiary -->
+    <nav class="navbar  navbar-expand-md bg-success  bsb-navbar-3 ">
+        <div class="container">
             <a class="navbar-brand" href="#!">
                 <img src="~/images/HomePageImages/logo (1).png" class="img-fluid rounded" alt="BootstrapBrain Logo" width="150"
-                height="80">
+                     height="80">
             </a>
-            <div class="collapse navbar-collapse d-flex ms-5 justify-content-between" id="bsbNavbar">
-                <div>
-                    <form class="container my-4">
-                        <div class="input-group">
-                            <!-- Dropdown Button -->
-                            <button class="btn bg-light dropdown-toggle shadow-none" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                All categories
-                            </button>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#bsbNavbar" aria-controls="bsbNavbar" aria-label="Toggle Navigation">
+                <i class="bi bi-three-dots"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="bsbNavbar">
+                <ul class="navbar-nav d-flex flex-row align-items-center ms-auto gap-3">
 
-                            <ul class="dropdown-menu">
-                                <li><button class="dropdown-item" type="button">Mockups</button></li>
-                                <li><button class="dropdown-item" type="button">Templates</button></li>
-                                <li><button class="dropdown-item" type="button">Design</button></li>
-                                <li><button class="dropdown-item" type="button">Logos</button></li>
+                    <partial name="_LoginPartial" />
+                    @* -- Dark Mode Validation-- *@
+                    @if (User.Identity.IsAuthenticated)
+                    {
+
+                        <li class="theme-wrapper d-flex gap-3">
+                            <i class="bx bxs-moon theme-icon"></i>
+
+                            <div class="theme-btn">
+                                <span class="theme-ball"></span>
+                            </div>
+                        </li>
+                    }
+                    
+                    
+                    @if (User.IsInRole("Customer"))
+                    {
+                        <li class="nav-item dropdown cart-dropdown text-black position-relative">
+                            <a class="nav-link dropdown-toggle" href="#">
+                                <span class="position-relative ">
+                                    <i class="bi bi-cart fs-5 "></i>
+                                    <span class="text-black position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">2</span>
+                                </span>
+                            </a>
+
+                            <div class="dropdown-menu dropdown-menu-right end-50">
+                                <h6 class="dropdown-header text-center mb-2">Your Cart (2 items)</h6>
+
+                                <!-- Cart Item -->
+                                <div class="mini-cart-item d-flex border-bottom pb-3 mb-3">
+                                    <img src="image/burger.jpg" alt="Product">
+                                    <div class="flex-grow-1">
+                                        <div class="d-flex justify-content-between align-items-start">
+                                            <span class="product-title">Burger  Ranch</span>
+                                            <a href="#"><i class="bi bi-x text-danger"></i></a>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="quantity-control">
+                                                <button class="btn btn-outline-secondary btn-sm"
+                                                        onclick="changeQty(this, -1)">
+                                                    −
+                                                </button>
+                                                <input type="text" value="1"
+                                                       class="form-control form-control-sm qty-input">
+                                                <button class="btn btn-outline-secondary btn-sm"
+                                                        onclick="changeQty(this, 1)">
+                                                    +
+                                                </button>
+                                            </div>
+                                            <span>$99</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Another item -->
+                                <div class="mini-cart-item d-flex border-bottom pb-3 mb-3">
+                                    <img src="~/images/burger.jpg" alt="Product">
+                                    <div class="flex-grow-1">
+                                        <div class="d-flex justify-content-between align-items-start">
+                                            <span class="product-title">Burger Ranch</span>
+                                            <a href="#"><i class="bi bi-x text-danger"></i></a>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="quantity-control">
+                                                <button class="btn btn-outline-secondary btn-sm"
+                                                        onclick="changeQty(this, -1)">
+                                                    −
+                                                </button>
+                                                <input type="text" value="1"
+                                                       class="form-control form-control-sm qty-input">
+                                                <button class="btn btn-outline-secondary btn-sm"
+                                                        onclick="changeQty(this, 1)">
+                                                    +
+                                                </button>
+                                            </div>
+                                            <span>$99</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Total -->
+                                <div class="d-flex justify-content-between cart-total mb-3">
+                                    <span>Subtotal:</span><span>$198</span>
+                                </div>
+
+                                <!-- Buttons -->
+                                <div class="d-grid gap-2">
+                                    <a href="#" class="btn btn-danger">View Cart</a>
+                                    <a href="#" class="btn btn-outline-secondary">Checkout</a>
+                                </div>
+                            </div>
+                        </li>
+
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle bsb-dropdown-toggle-caret-disable" href="#"
+                               role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <span class="position-relative pt-1">
+                                    <i class="bi bi-heart fs-5"></i>
+                                    <span class="p-1 bg-danger border border-light rounded-circle position-absolute top-0 start-100 translate-middle">
+                                        <span class="visually-hidden">New Wishlist Items</span>
+                                    </span>
+                                </span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-md-end bsb-dropdown-animation end-0 ">
+                                <li>
+                                    <h6 class="dropdown-header fs-7 text-center">Your Wishlist (3 items)</h6>
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <!-- Wishlist Item 1 -->
+                                <li class="wishlist-item">
+                                    <a class="dropdown-item d-flex align-items-center" href="#!">
+                                        <img src="~/images/pizza.avif" alt="Product 1"
+                                             class="img-fluid rounded-2 me-2" style="width: 40px;">
+                                        <span class="fs-7">PIZZA</span>
+                                        <button class="btn btn-link ms-auto text-danger remove-item"
+                                                aria-label="Remove">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </a>
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <!-- Wishlist Item 2 -->
+                                <li class="wishlist-item">
+                                    <a class="dropdown-item d-flex align-items-center" href="#!">
+                                        <img src="~/images/pizza.avif" alt="Product 2"
+                                             class="img-fluid rounded-2 me-2" style="width: 40px;">
+                                        <span class="fs-7">PIZZA</span>
+                                        <button class="btn btn-link ms-auto text-danger remove-item"
+                                                aria-label="Remove">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </a>
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <!-- Wishlist Item 3 -->
+                                <li class="wishlist-item">
+                                    <a class="dropdown-item d-flex align-items-center" href="#!">
+                                        <img src="~/images/pizza.avif" alt="Product 3"
+                                             class="img-fluid rounded-2 me-2" style="width: 40px;">
+                                        <span class="fs-7">PIZZA</span>
+                                        <button class="btn btn-link ms-auto text-danger remove-item"
+                                                aria-label="Remove">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </a>
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li>
+                                    <a class="dropdown-item fs-7 text-center" href="#">
+                                        See All Wishlist
+                                        Items
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+
+
+
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link  bsb-dropdown-toggle-caret-disable" href="#"
+                               role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src="~/images/users/@userIMage"
+                                     width="60" height="60"
+                                     class="rounded-circle border border-2 border-primary"
+                                     style="object-fit: cover; object-position: top center;"
+                                     alt="@firstName @lastName">
+
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-md-end bsb-dropdown-animation end-0"
+                                style="min-width: max-content;">
+
+                                <li>
+                                    <h6 class="dropdown-header fs-7 text-center">Welcome, @firstName @lastName </h6>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+
+                                <li>
+                                    <a class="dropdown-item" href="#!">
+                                        <i class="bi bi-person-fill me-2"></i>
+                                        <span class="fs-7">View Profile</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="#!">
+                                        <i class="bi bi-envelope-open me-2"></i>
+                                        <span class="fs-7">@User.FindFirst(ClaimTypes.Email)?.Value</span>
+                                    </a>
+                                </li>
+
+                                <li><hr class="dropdown-divider"></li>
+
+                                <li>
+                                    <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index">
+                                        <i class="bi bi-gear-fill me-2"></i>
+                                        <span class="fs-7">Settings & Privacy</span>
+                                    </a>
+
+
+
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="#!">
+                                        <i class="bi bi-question-circle-fill me-2"></i>
+                                        <span class="fs-7">Help Center</span>
+                                    </a>
+                                </li>
+
+                                <li><hr class="dropdown-divider"></li>
+
+                                <li>
+                                    <form asp-area="Identity" asp-controller="Account" asp-action="Logout" method="post" asp-route-returnUrl="@Url.Action("OnboardingPage", "Home", new { area = "" })" class="text-center">
+                                        <button type="submit" class="dropdown-item w-100 d-flex justify-content-center align-items-center gap-3">
+
+                                            <i class="bi bi-box-arrow-left"></i>
+                                            <span class="fs-7">Log Out</span>
+                                        </button>
+                                    </form>
+
+                                </li>
                             </ul>
 
-                            <!-- Search Input -->
-                            <input type="search" class="form-control" placeholder="Search Mockups, Logos, Design Templates..." required>
+                        </li>
+                    }
 
-                            <!-- Search Button -->
-                            <button class="btn btn-primary" type="submit">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 20 20" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                          d="M19 19l-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-                                </svg>
-                            </button>
-                        </div>
-                    </form>
+                </ul>
 
-                </div>
-                <div>
-                    <ul class="navbar-nav d-flex flex-row align-items-center ms-auto gap-3">
-                        @* -- Dark Mode Validation-- *@
-                        @if (User.Identity.IsAuthenticated)
-                        {
-
-                            <li class="theme-wrapper d-flex gap-3">
-                                <i class="bx bxs-moon theme-icon "></i>
-
-                                <div class="theme-btn">
-                                    <span class="theme-ball"></span>
-                                </div>
-                            </li>
-                        }
-
-                        @if (User.IsInRole("Customer"))
-                        {
-                            <li class="nav-item dropdown cart-dropdown text-black position-relative">
-                                <a class="nav-link dropdown-toggle" href="#">
-                                    <span class="position-relative ">
-                                        <i class="bi bi-cart fs-5 text-light"></i>
-                                        <span class="text-black position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">2</span>
-                                    </span>
-                                </a>
-
-                                <div class="dropdown-menu dropdown-menu-right end-0">
-                                    <h6 class="dropdown-header text-center mb-2">Your Cart (2 items)</h6>
-
-                                    <!-- Cart Item -->
-                                    <div class="mini-cart-item d-flex border-bottom pb-3 mb-3">
-                                        <img src="image/burger.jpg" alt="Product">
-                                        <div class="flex-grow-1">
-                                            <div class="d-flex justify-content-between align-items-start">
-                                                <span class="product-title">Burger  Ranch</span>
-                                                <a href="#"><i class="bi bi-x text-danger"></i></a>
-                                            </div>
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <div class="quantity-control">
-                                                    <button class="btn btn-outline-secondary btn-sm"
-                                                            onclick="changeQty(this, -1)">
-                                                        −
-                                                    </button>
-                                                    <input type="text" value="1"
-                                                           class="form-control form-control-sm qty-input">
-                                                    <button class="btn btn-outline-secondary btn-sm"
-                                                            onclick="changeQty(this, 1)">
-                                                        +
-                                                    </button>
-                                                </div>
-                                                <span>$99</span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Another item -->
-                                    <div class="mini-cart-item d-flex border-bottom pb-3 mb-3">
-                                        <img src="image/burger.jpg" alt="Product">
-                                        <div class="flex-grow-1">
-                                            <div class="d-flex justify-content-between align-items-start">
-                                                <span class="product-title">Burger Ranch</span>
-                                                <a href="#"><i class="bi bi-x text-danger"></i></a>
-                                            </div>
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <div class="quantity-control">
-                                                    <button class="btn btn-outline-secondary btn-sm"
-                                                            onclick="changeQty(this, -1)">
-                                                        −
-                                                    </button>
-                                                    <input type="text" value="1"
-                                                           class="form-control form-control-sm qty-input">
-                                                    <button class="btn btn-outline-secondary btn-sm"
-                                                            onclick="changeQty(this, 1)">
-                                                        +
-                                                    </button>
-                                                </div>
-                                                <span>$99</span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Total -->
-                                    <div class="d-flex justify-content-between cart-total mb-3">
-                                        <span>Subtotal:</span><span>$198</span>
-                                    </div>
-
-                                    <!-- Buttons -->
-                                    <div class="d-grid gap-2">
-                                        <a href="#" class="btn btn-danger">View Cart</a>
-                                        <a href="#" class="btn btn-outline-secondary">Checkout</a>
-                                    </div>
-                                </div>
-                            </li>
-
-
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle bsb-dropdown-toggle-caret-disable" href="#"
-                                   role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <span class="position-relative pt-1">
-                                        <i class="bi bi-heart fs-5 text-light"></i>
-                                        <span class="p-1 bg-danger border border-light rounded-circle position-absolute top-0 start-100 translate-middle">
-                                            <span class="visually-hidden">New Wishlist Items</span>
-                                        </span>
-                                    </span>
-                                </a>
-                                <ul class="dropdown-menu dropdown-menu-md-end bsb-dropdown-animation bsb-fadeIn">
-                                    <li>
-                                        <h6 class="dropdown-header fs-7 text-center">Your Wishlist (3 items)</h6>
-                                    </li>
-                                    <li>
-                                        <hr class="dropdown-divider">
-                                    </li>
-                                    <!-- Wishlist Item 1 -->
-                                    <li class="wishlist-item">
-                                        <a class="dropdown-item d-flex align-items-center" href="#!">
-                                            <img src="image/pizza.avif" alt="Product 1"
-                                                 class="img-fluid rounded-2 me-2" style="width: 40px;">
-                                            <span class="fs-7">PIZZA</span>
-                                            <button class="btn btn-link ms-auto text-danger remove-item"
-                                                    aria-label="Remove">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <hr class="dropdown-divider">
-                                    </li>
-                                    <!-- Wishlist Item 2 -->
-                                    <li class="wishlist-item">
-                                        <a class="dropdown-item d-flex align-items-center" href="#!">
-                                            <img src="image/pizza.avif" alt="Product 2"
-                                                 class="img-fluid rounded-2 me-2" style="width: 40px;">
-                                            <span class="fs-7">PIZZA</span>
-                                            <button class="btn btn-link ms-auto text-danger remove-item"
-                                                    aria-label="Remove">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <hr class="dropdown-divider">
-                                    </li>
-                                    <!-- Wishlist Item 3 -->
-                                    <li class="wishlist-item">
-                                        <a class="dropdown-item d-flex align-items-center" href="#!">
-                                            <img src="image/pizza.avif" alt="Product 3"
-                                                 class="img-fluid rounded-2 me-2" style="width: 40px;">
-                                            <span class="fs-7">PIZZA</span>
-                                            <button class="btn btn-link ms-auto text-danger remove-item"
-                                                    aria-label="Remove">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <hr class="dropdown-divider">
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item fs-7 text-center" href="#">
-                                            See All Wishlist
-                                            Items
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                        }
-
-
-
-                        @if (User.Identity.IsAuthenticated)
-                        {
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle bsb-dropdown-toggle-caret-disable" href="#"
-                                   role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <img src="~/images/user/@userIMage"
-                                         width="60" height="60"
-                                         class="rounded-circle border border-2 border-primary"
-                                         style="object-fit: cover; object-position: top center;"
-                                         alt="@firstName @lastName">
-
-                                </a>
-                                <ul class="dropdown-menu dropdown-menu-md-end bsb-dropdown-animation bsb-fadeIn"
-                                    style="min-width: max-content;">
-
-                                    <li>
-                                        <h6 class="dropdown-header fs-7 text-center">Welcome, @firstName @lastName </h6>
-                                    </li>
-                                    <li><hr class="dropdown-divider"></li>
-
-                                    <li>
-                                        <a class="dropdown-item" href="#!">
-                                            <i class="bi bi-person-fill me-2"></i>
-                                            <span class="fs-7">View Profile</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" href="#!">
-                                            <i class="fa-regular fa-envelope me-2"></i>
-                                            <span class="fs-7">@User.FindFirst(ClaimTypes.Email)?.Value</span>
-                                        </a>
-                                    </li>
-
-                                    <li><hr class="dropdown-divider"></li>
-
-                                    <li>
-                                        <a class="dropdown-item" asp-area="Identity" asp-controller="Account" asp-action="Manage">
-                                            <i class="bi bi-gear-fill me-2"></i>
-                                            <span class="fs-7">Settings & Privacy</span>
-                                        </a>
-
-
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" href="#!">
-                                            <i class="bi bi-question-circle-fill me-2"></i>
-                                            <span class="fs-7">Help Center</span>
-                                        </a>
-                                    </li>
-
-                                    <li><hr class="dropdown-divider"></li>
-
-                                    <li>
-                                        <form asp-area="Identity" asp-controller="Account" asp-action="Logout" method="post" asp-route-returnUrl="@Url.Action("OnboardingPage", "Home", new { area = "" })" class="text-center">
-                                            <button type="submit" class="dropdown-item w-100 d-flex justify-content-center align-items-center gap-3">
-                                                <span class="fs-7">Log Out</span>
-                                                <i class="fa-solid fa-right-from-bracket"></i>
-                                            </button>
-                                        </form>
-
-                                    </li>
-                                </ul>
-
-                            </li>
-                        }
-
-                    </ul>
-
-                </div>
 
             </div>
         </div>
     </nav>
-
 </header>
