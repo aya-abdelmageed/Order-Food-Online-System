@@ -30,7 +30,8 @@
 
   <ItemGroup>
     <Folder Include="Areas\Identity\Data\" />
-    <Folder Include="NewFolder\" />
+    <Folder Include="wwwroot\css\Delivery\" />
+    <Folder Include="wwwroot\js\Delivery\" />
   </ItemGroup>
 
 </Project>

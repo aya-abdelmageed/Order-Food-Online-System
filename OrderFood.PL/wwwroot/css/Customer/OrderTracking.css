@@ -1,0 +1,45 @@
+﻿.order-tracker-card {
+    border: 2px solid #FFC107;
+    border-radius: 15px;
+    max-width: 800px;
+    margin: 40px auto;
+    min-height: 320px;
+}
+
+.tracker-header h2 {
+    color: #007BFF;
+    font-weight: 600;
+    margin: 0;
+}
+
+.tracker-step-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    padding: 0;
+}
+
+.tracker-step-line {
+    flex-grow: 1;
+    height: 4px;
+}
+
+.tracker-step-label i {
+    font-size: 1.8rem;
+}
+
+.tracker-step-label p {
+    margin: 0;
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.header-text {
+    color: #ffc107;
+}
+
+.card-body, .card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
