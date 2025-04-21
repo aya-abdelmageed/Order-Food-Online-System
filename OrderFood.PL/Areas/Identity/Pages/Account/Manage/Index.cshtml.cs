@@ -70,7 +70,7 @@ public class IndexModel : PageModel
 
         [Display(Name = "Last Name")]
         public string? LastName { get; set; }
-        public string? Email { get; set; }
+        public string Email { get; set; }
 
     [Display(Name = "Address")]
         public string? Address { get; set; }
@@ -97,6 +97,7 @@ public class IndexModel : PageModel
         DateOfBirth = user.DateOfBirth;
         Email=user.Email;
         uniqueFileName=user.Image;
+        
 
 
 
@@ -142,6 +143,8 @@ public class IndexModel : PageModel
         user.Address =data.Address;
         user.DateOfBirth = data.DateOfBirth;
         user.PhoneNumber = data.PhoneNumber;
+        user.Email= data.Email;
+        user.UserName = data.Email.Split("@")[0];
 
         //if (PhoneNumber != user.PhoneNumber)
         //{
