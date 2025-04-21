@@ -7,6 +7,7 @@ using OrderFood.DAL.Context;
 using OrderFood.DAL.Data.DataSeed.Entities;
 using OrderFood.DAL.Data.DataSeed.Identity;
 using OrderFood.DAL.Data.DataSeed.Identity.Users;
+using OrderFood.DAL.Entities.Models;
 using OrderFood.DAL.Entities.User;
 using OrderFood.PL.Helper;
 using StackExchange.Redis;
@@ -114,7 +115,7 @@ public class Program
             // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
             app.UseHsts();
         }
-
+        app.UseStaticFiles();
         app.UseHttpsRedirection();
         app.UseRouting();
 

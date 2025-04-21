@@ -1,0 +1,19 @@
+﻿@media (max-width: 767.98px) {
+    .border-sm-start-none {
+        border-left: none !important;
+    }
+}
+
+
+.card-body > .row {
+    align-items: stretch;
+}
+
+.card {
+    height: auto;
+}
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+}
