@@ -25,7 +25,7 @@ namespace OrderFood.PL.Areas.Customer.Controllers
         public async Task<IActionResult> GetCustomerCart()
         {
             //var userId = _userManager.GetUserId(User);
-            string userId = "Cart-306e5a79-171d-49c5-96c3-3e63953555a7";
+            string userId = $"Cart-{_userManager.GetUserId(User)}";
 
             var UserBasket = await _basket.GetBasketAsync(userId);
 
@@ -42,15 +42,26 @@ namespace OrderFood.PL.Areas.Customer.Controllers
 
         public async Task<IActionResult> UpdateCustomerCart(BasketItem customerBasket)
         {
-            string userId = "Cart-306e5a79-171d-49c5-96c3-3e63953555a7";
+            string userId = $"Cart-{_userManager.GetUserId(User)}";
             var UserBasket = await _basket.GetBasketAsync(userId);
             if (UserBasket is null)
                 UserBasket = new CustomerBasket(userId);
 
+            // check if item is exists in the basket
+            var existingItem = UserBasket.basketItems.FirstOrDefault(x => x.Id == customerBasket.Id);
+            if (existingItem != null)
+            {
+                // Update the existing item
+                existingItem.Quantity = customerBasket.Quantity;
+            }
+            else
+            {
+                UserBasket.basketItems.Add(customerBasket);
+            }
 
-            UserBasket.basketItems.Add(customerBasket);
 
             var UpdateOrCreateBasket = await _basket.UpdateBasketAsync(UserBasket);
+
             if (UpdateOrCreateBasket is null)
             {
                 TempData["Error"] = "Failed to update the basket.";
@@ -66,7 +77,7 @@ namespace OrderFood.PL.Areas.Customer.Controllers
 
         public async Task<IActionResult> DeleteCart()
         {
-            string userId = "Cart-306e5a79-171d-49c5-96c3-3e63953555a7";
+            string userId = $"Cart-{_userManager.GetUserId(User)}";
             var result = await _basket.DeleteBasketAsync(userId);
             if (result)
             {
@@ -85,7 +96,7 @@ namespace OrderFood.PL.Areas.Customer.Controllers
         public async Task<IActionResult> GetCustomerFavourite()
         {
             //var userId = _userManager.GetUserId(User);
-            string userId = "Favourite-306e5a79-171d-49c5-96c3-3e63953555a7";
+            string userId = $"Favourite-{_userManager.GetUserId(User)}";
             var UserFavourite = await _fvourite.GetBasketAsync(userId);
             if (UserFavourite is null)
             {
@@ -99,13 +110,18 @@ namespace OrderFood.PL.Areas.Customer.Controllers
 
         public async Task<IActionResult> UpdateCustomerFavourite(FavouriteItem customerFavourite)
         {
-            string userId = "Favourite-306e5a79-171d-49c5-96c3-3e63953555a7";
+            string userId = $"Favourite-{_userManager.GetUserId(User)}";
             var UserFavourite = await _fvourite.GetBasketAsync(userId);
 
             if (UserFavourite is null)
                 UserFavourite = new CustomerFavourite(userId);
 
-            UserFavourite.FavouriteItems.Add(customerFavourite);
+            // check if item is exists in the favourite
+            var existingItem = UserFavourite.FavouriteItems.FirstOrDefault(x => x.Id == customerFavourite.Id);
+
+            if (existingItem is null)
+                UserFavourite.FavouriteItems.Add(customerFavourite);
+
 
             var UpdateOrCreateBasket = await _fvourite.UpdateBasketAsync(UserFavourite);
 
@@ -122,7 +138,7 @@ namespace OrderFood.PL.Areas.Customer.Controllers
 
         public async Task<IActionResult> DeleteFavourite()
         {
-            string userId = "Favourite-306e5a79-171d-49c5-96c3-3e63953555a7";
+            string userId = $"Favourite-{_userManager.GetUserId(User)}";
             var result = await _fvourite.DeleteBasketAsync(userId);
             if (result)
             {
