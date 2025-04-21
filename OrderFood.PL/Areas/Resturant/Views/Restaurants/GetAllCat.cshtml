@@ -28,10 +28,10 @@
 </head>
 
 <body>
-    <a asp-action="GetMenu" class="btn-link text-decoration-none">&larr; Back to home</a>
+    <a asp-action="GetMenu" asp-route-id="@Model.Id" class="btn-link text-decoration-none">&larr; Back to home</a>
 
     <div class="d-flex justify-content-end mb-3">
-        <a asp-action="AddMeal" asp-route-restaurantId="@Model.Id" class="btn btn-success">
+        <a asp-action="AddMeal" asp-route-id="@Model.Id" class="btn btn-success">
             <i class="bi bi-plus-circle me-1"></i> Add Meal
         </a>
     </div>
@@ -92,6 +92,7 @@
                                     <input type="hidden" name="mealId" value="@meal.Id" />
                                     <button type="submit" class="btn btn-danger">Delete</button>
                                 </form>
+
 
                                 <a asp-action="UpdateMeal" asp-route-id="@meal.Id" class="btn btn-warning">Edit</a>
                             </div>

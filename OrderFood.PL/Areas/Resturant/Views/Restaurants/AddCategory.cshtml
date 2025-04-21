@@ -41,7 +41,7 @@
 </head>
 
 <h2 class="mt-4 mb-4 text-center text-white bg-dark p-3 rounded">Add Category</h2>
-<a asp-action="GetMenu" class="btn-link text-decoration-none">&larr; Back to home</a>
+<a asp-action="GetMenu" asp-route-id="@Model.RestaurantId" class="btn-link text-decoration-none">&larr; Back to home</a>
 
 
 <div class="container">
@@ -49,11 +49,12 @@
         <div class="col-md-8">
             <div class="card shadow-sm border-0">
                 <div class="card-body p-4">
-                    <form asp-action="AddCategory" enctype="multipart/form-data">
+                    <form asp-action="AddCategory" asp-route-id="@Model.RestaurantId" enctype="multipart/form-data">
 
             <div asp-validation-summary="All" class="text-danger"></div>
 
-            <input type="hidden" name="RestaurantId" value="@ViewBag.RestaurantId" />
+                        <input type="hidden" asp-for="RestaurantId" />
+
 
                         <div class="mb-3">
                             <label asp-for="Name" class="form-label fw-bold"></label>
