@@ -15,14 +15,16 @@ namespace OrderFood.PL.Areas.Resturant.Controllers
     {
         private readonly IUnitOfWork _context;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
         public Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> UserManager { get; }
 
-        public AdminController(IUnitOfWork context, IWebHostEnvironment webHostEnvironment, UserManager<ApplicationUser> userManager)
+        public AdminController(IUnitOfWork context, IWebHostEnvironment webHostEnvironment, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             _context = context;
             _webHostEnvironment = webHostEnvironment;
             UserManager = userManager;
+            _roleManager = roleManager;
         }
         //----------------------------------------------
         public async Task<IActionResult> GetRestaurants(string nameSearch = "", string ownerSearch = "", string addressSearch = "", int PageNo = 1)
@@ -258,6 +260,43 @@ namespace OrderFood.PL.Areas.Resturant.Controllers
 
             return RedirectToAction("ViewAllCoupons"); 
         }
+        //--------------------------------------------------------------------------------
+        [HttpPost]
+        public async Task<IActionResult> RegisterOwner(RegisterOwnerViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return RedirectToAction("AddRestaurant", "Admin");
+
+            var user = new ApplicationUser
+            {
+                UserName = model.UserName,
+                Email = model.Email,
+            };
+
+            var result = await UserManager.CreateAsync(user, model.Password);
+            if (result.Succeeded)
+            {
+                var roleExists = await _roleManager.RoleExistsAsync("Owner");
+                if (!roleExists)
+                {
+                    await _roleManager.CreateAsync(new IdentityRole("Owner"));
+                }
+
+                await UserManager.AddToRoleAsync(user, "Owner");
+
+                TempData["Success"] = "Owner registered and role assigned successfully!";
+                TempData["OwnerCreated"] = true;
+                return RedirectToAction("AddRestaurant", "Admin");
+            }
+
+            foreach (var error in result.Errors)
+            {
+                TempData["Error"] += error.Description + " ";
+            }
+
+            return RedirectToAction("AddRestaurant", "Admin");
+        }
+
 
 
 

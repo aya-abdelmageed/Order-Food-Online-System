@@ -16,7 +16,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
 
-    <!-- Leaflet (map) -->
+    <!-- Leaflet (Map) -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
     <!-- Custom CSS -->
@@ -66,6 +66,22 @@
     <div class="container mt-4">
         <h2 class="text-center text-white bg-dark p-3 rounded">Add New Restaurant</h2>
         <a asp-action="GetRestaurants" class="btn-link text-decoration-none">&larr; Back to home</a>
+
+        <!-- Alert Messages -->
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+                @TempData["Success"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+                @TempData["Error"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
 
         <div class="row justify-content-center mt-3">
             <div class="col-md-8">
@@ -145,7 +161,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="@Url.Action("RegisterOwner", "Account")" method="post">
+                    <form action="@Url.Action("RegisterOwner", "Admin")" method="post">
                         <div class="mb-3">
                             <label for="UserName" class="form-label">Username</label>
                             <input type="text" class="form-control" id="UserName" name="UserName" required />
@@ -179,8 +195,22 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            InitializeFromMap();
+            setTimeout(function () {
+                InitializeFromMap();
+            }, 200); // wait a bit to make sure the map DOM is ready
+
+        @if (TempData["OwnerCreated"] != null && (bool)TempData["OwnerCreated"])
+        {
+            <text>
+                        const modalEl = document.getElementById("newOwnerModal");
+                        const modalInstance = bootstrap.Modal.getInstance(modalEl);
+                        if (modalInstance) {
+                            modalInstance.hide();
+                        }
+            </text>
+        }
         });
     </script>
+
 </body>
 </html>
