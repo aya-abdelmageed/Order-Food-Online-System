@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace OrderFood.BLL.Interfaces
 {
-    public interface IBasketRepository
+    public interface IBasketRepository<T> where T : BaseBasket, new()
     {
         public Task<bool> DeleteBasketAsync(string id);
 
-        public Task<CustomerBasket?> GetBasketAsync(string id);
+        public Task<T?> GetBasketAsync(string id);
 
-        public Task<CustomerBasket?> UpdateBasketAsync(CustomerBasket Basket);
+        public Task<T?> UpdateBasketAsync(T Basket);
     }
 }

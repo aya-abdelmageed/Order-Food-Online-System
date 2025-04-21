@@ -36,16 +36,17 @@ public class Program
         // Add Unit Of Work To The Container
         builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-        builder.Services.AddScoped<IBasketRepository, BasketRepository>();
+        builder.Services.AddScoped(typeof(IBasketRepository<>), typeof (BasketRepository<>));
 
         builder.Services.AddScoped<IConnectionMultiplexer>(sp =>
         {
             return ConnectionMultiplexer.Connect(new ConfigurationOptions
-             {
-                 EndPoints = { { "redis-10154.crce176.me-central-1-1.ec2.redns.redis-cloud.com", 10154 } },
-                 User = "default",
-                 Password = "NQYpHcpMhgm7mLBwnu3DZo4u8b9keOsC"
-             });
+            {
+                EndPoints = { { builder.Configuration.GetConnectionString("RedisConnection")!, int.Parse(builder.Configuration.GetConnectionString("RedisPort")!) } },
+
+                User = builder.Configuration.GetConnectionString("RedisUserName"),
+                Password = builder.Configuration.GetConnectionString("RedisPassword")
+            });
         });
 
 
