@@ -18,6 +18,8 @@ namespace OrderFood.PL.Areas.Resturant.ViewModel
         [Required]
         public int CategoryId { get; set; }
 
+        public int restaurantId { get; set; }
+
 
 
     }

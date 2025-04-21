@@ -1,0 +1,137 @@
+﻿@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+<section class="p-3 w-100 p-md-4 p-xl-5">
+    <div class="container">
+        <div class="card border-light-subtle shadow-sm">
+            <div class="row g-0">
+                <div class="col-12 col-md-6 text-bg-primary">
+                    <div class="d-flex align-items-center justify-content-center h-100">
+                        <div class="col-10 col-xl-8 py-3">
+                            <img class="img-fluid rounded mb-4" loading="lazy" src="./assets/img/bsb-logo-light.svg" width="245" height="80" alt="BootstrapBrain Logo">
+                            <hr class="border-primary-subtle mb-4">
+                            <div asp-validation-summary="All" class="text-danger" role="alert"></div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6">
+                    <div class="card-body p-3 p-md-4 p-xl-5">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="mb-5">
+                                    <h2 class="h3">Registration</h2>
+                                    <h3 class="fs-6 fw-normal text-secondary m-0">Enter your details to register</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <form method="post" enctype="multipart/form-data">
+                            <div class="row gy-3 gy-md-4 overflow-hidden">
+                                <!-- First Name -->
+                                <div class="col-12">
+                                    <label for="FirstName" class="form-label">First Name <span class="text-danger">*</span></label>
+                                    <input asp-for="Input.FirstName" class="form-control" id="FirstName" placeholder="First Name" required />
+                                    <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+                                </div>
+
+                                <!-- Last Name -->
+                                <div class="col-12">
+                                    <label for="LastName" class="form-label">Last Name <span class="text-danger">*</span></label>
+                                    <input asp-for="Input.LastName" class="form-control" id="LastName" placeholder="Last Name" required />
+                                    <span asp-validation-for="Input.LastName" class="text-danger"></span>
+                                </div>
+
+                                <!-- Email -->
+                                <div class="col-12">
+                                    <label for="Email" class="form-label">Email <span class="text-danger">*</span></label>
+                                    <input asp-for="Input.Email" class="form-control" id="Email" placeholder="name@example.com" required />
+                                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                                </div>
+
+                                <!-- Password -->
+                                <div class="col-12">
+                                    <label for="Password" class="form-label">Password <span class="text-danger">*</span></label>
+                                    <input asp-for="Input.Password" type="password" class="form-control" id="Password" required />
+                                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                                </div>
+
+                                <!-- Confirm Password -->
+                                <div class="col-12">
+                                    <label for="ConfirmPassword" class="form-label">Confirm Password <span class="text-danger">*</span></label>
+                                    <input asp-for="Input.ConfirmPassword" type="password" class="form-control" id="ConfirmPassword" required />
+                                    <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                                </div>
+
+                                <!-- Profile Image -->
+                                <div class="col-12">
+                                    <label for="Image" class="form-label">Profile Image <span class="text-danger">*</span></label>
+                                    <input asp-for="Input.Image" class="form-control" type="file" id="Image" accept="image/*" />
+                                    <span asp-validation-for="Input.Image" class="text-danger"></span>
+                                </div>
+
+                                <!-- Address -->
+                                <div class="col-12">
+                                    <label for="Address" class="form-label">Address <span class="text-danger">*</span></label>
+                                    <input asp-for="Input.Address" class="form-control" id="Address" placeholder="Your Address" required />
+                                    <span asp-validation-for="Input.Address" class="text-danger"></span>
+                                </div>
+                                <!-- Submit Button -->
+                                <div class="col-12">
+                                    <div class="d-grid">
+                                        <button class="btn bsb-btn-xl btn-primary" type="submit">Sign up</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
+                        <!-- Already Have an Account -->
+                        <div class="row">
+                            <div class="col-12">
+                                <hr class="mt-5 mb-4 border-secondary-subtle">
+                                <p class="m-0 text-secondary text-center">Already have an account? <a href="#!" class="link-primary text-decoration-none">Sign in</a></p>
+                            </div>
+                        </div>
+
+                        <!-- External Login Options -->
+                        <div class="row">
+                            <div class="col-12">
+                                <p class="mt-5 mb-4">Or sign in with</p>
+                                @if ((Model.ExternalLogins?.Count ?? 0) > 0)
+                                {
+                                    <form asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="text-center">
+                                        @foreach (var provider in Model.ExternalLogins!)
+                                        {
+                                            <div class="social-login">
+                                                <button type="submit" class="btn btn-social btn-light btn-lg d-flex align-items-center justify-content-center shadow-sm border rounded-pill px-4 py-2" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">
+                                                    <img src="https://img.icons8.com/color/48/000000/google-logo.png" alt="Google Logo" class="me-2" width="24" height="24">
+                                                    <span class="">Sign in with @provider.DisplayName</span>
+                                                </button>
+                                            </div>
+                                        }
+                                    </form>
+                                }
+                                else
+                                {
+                                    <div class="text-center">
+                                        <p>
+                                            There are no external authentication services configured.
+                                        </p>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

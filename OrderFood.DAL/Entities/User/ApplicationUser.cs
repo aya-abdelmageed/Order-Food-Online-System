@@ -13,7 +13,7 @@ namespace OrderFood.DAL.Entities.User
         public string? LastName { get; set; }
         public string? Address { get; set; }
         public DateTime? DateOfBirth { get; set; }
-        public string Image { get; set; } = "images/DefaultUserImage.png";
+        public string Image { get; set; } = "images/users/DefaultUserImage.png";
         public bool IsActive { get; set; } = true;
         public bool IsDeleted { get; set; } = false;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
