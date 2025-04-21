@@ -7,6 +7,7 @@ using OrderFood.DAL.Context;
 using OrderFood.DAL.Data.DataSeed.Entities;
 using OrderFood.DAL.Data.DataSeed.Identity;
 using OrderFood.DAL.Data.DataSeed.Identity.Users;
+using OrderFood.DAL.Entities.Models;
 using OrderFood.DAL.Entities.User;
 using OrderFood.PL.Helper;
 using StackExchange.Redis;
@@ -114,27 +115,27 @@ public class Program
             // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
             app.UseHsts();
         }
-
+        app.UseStaticFiles();
         app.UseHttpsRedirection();
         app.UseRouting();
 
         app.UseAuthorization();
-        app.MapStaticAssets();
         app.UseStaticFiles();
 
-        //     app.MapAreaControllerRoute(
-        //name: "area",
-        //areaName: "Resturant",
-        //pattern: "{controller=Restaurants}/{action=GetMenu}/{id=4}");
+      
 
         app.MapControllerRoute(
             name: "areas",
-            pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}").WithStaticAssets();
+            pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}")
+            .WithStaticAssets();
+
+
         app.MapAreaControllerRoute(
             name: "Identity",
             areaName: "Identity",
             pattern: "Identity/{controller=Home}/{action=OnboardingPage}/{id?}")
             .WithStaticAssets();
+
         app.MapControllerRoute(
             name: "default",
             pattern: "{controller=Home}/{action=OnboardingPage}/{id?}")

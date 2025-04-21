@@ -17,5 +17,7 @@ namespace OrderFood.DAL.Entities.Basket
             Id = id;
         }
         public List<BasketItem> basketItems { get; set; } = new List<BasketItem>();
+        public string? PaymentIntentId { get; set; }
+        public string? ClientSecret { get; set; }
     }
 }

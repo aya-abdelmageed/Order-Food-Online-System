@@ -26,7 +26,7 @@ namespace OrderFood.PL.Areas.Customer.Controllers
         // GET: CustomerController
 
         //the customer main page
-        public async Task<ActionResult> Index(string? name)
+        public async Task<ActionResult> CustomerHomeAllResturant(string? name)
         {
             //get the categories data to view
             var categories = await UnitOfWork.GetRepository<Category>().GetAllAsync(includes: m => m.Include(t => t.Meals));
@@ -84,13 +84,47 @@ namespace OrderFood.PL.Areas.Customer.Controllers
             {
                 query = query.Where(r => r.Restaurant.Name.ToLower().Contains(searchTerm.ToLower()));
             }
-            if (!string.IsNullOrEmpty(selectedStatus ))
+            if (!string.IsNullOrEmpty(selectedStatus))
             {
                 query = query.Where(r => r.OrderStatus.ToString() == selectedStatus);
             }
-            
+
             return PartialView("_OrderslistPartial", query);
         }
 
+
+
+
+
+        //----------------------Cusotmer Cart------------------------------
+
+
+        public async Task<IActionResult> userCart() {
+
+            return View();
+        }
+
+
+        public async Task<IActionResult> userWishlist()
+        {
+
+            return View();
+        }
+
+        public async Task<IActionResult> userCheckout()
+        {
+
+            return View();
+        }
+
+
+        //view meal details
+
+        public async Task<IActionResult> MealDetails(int id)
+        {
+            var meal =await UnitOfWork.GetRepository<Meal>().GetOneAsync(m => m.Id == id);
+            
+            return View(meal);
+        }
     }
 }

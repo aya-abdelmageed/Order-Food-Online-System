@@ -1,0 +1,78 @@
+﻿@model OrderFood.PL.Areas.Resturant.ViewModel.CouponViewModel
+
+@{
+    ViewData["Title"] = "Create New Coupon";
+}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" type="text/css" href="~/css/Restaurant/vendor.css">
+    <link rel="stylesheet" type="text/css" href="~/css/Restaurant/style.css">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Open+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+
+</head>
+
+
+
+<div class="container py-5">
+    <a asp-action="ViewAllCoupons" class="btn-link text-decoration-none">&larr; Back to all coupons</a>
+    <div class="card shadow p-4 mx-auto" style="max-width: 700px;">
+        <h3 class="mb-4 text-primary">
+            <i class="bi bi-ticket-perforated-fill"></i> Create New Coupon
+        </h3>
+
+        <form asp-action="CreateCoupon" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            <!-- Hidden AdminId -->
+            @* <input asp-for="AdminId" type="hidden" /> *@
+
+            <div class="mb-3">
+                <label asp-for="Code" class="form-label"></label>
+                <input asp-for="Code" class="form-control" />
+                <span asp-validation-for="Code" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="AmountPercentage" class="form-label"></label>
+                <input asp-for="AmountPercentage" class="form-control" type="number" min="1" max="100" />
+                <span asp-validation-for="AmountPercentage" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="ExpireDate" class="form-label"></label>
+                <input asp-for="ExpireDate" class="form-control" type="date"/>
+
+                <span asp-validation-for="ExpireDate" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="ImageFile" class="form-label"></label>
+                <input asp-for="ImageFile" class="form-control" type="file" />
+                <span asp-validation-for="ImageFile" class="text-danger"></span>
+            </div>
+
+            <div class="d-grid">
+                <input type="submit" value="Create Coupon" class="btn btn-outline-dark fw-bold" />
+            </div>
+        </form>
+    </div>
+</div>
+
+
+}
