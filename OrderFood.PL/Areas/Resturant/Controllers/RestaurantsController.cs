@@ -309,6 +309,13 @@ namespace OrderFood.PL.Areas.Resturant.Controllers
             return RedirectToAction(nameof(GetAllCat));
         }
 
+        public async Task<IActionResult> GetReviews(int restaurantID)
+        {
+            var reviews = await _context.GetRepository<Review>()
+                .GetAllAsync(r => r.RestaurantId == 3, i => i.Include(o => o.Restaurant).Include(c => c.Customer));
+            return (View(reviews));
+        }
+
         [HttpGet]
         //Get the Restaurant info to Edit
         public async Task<IActionResult> Settings()
