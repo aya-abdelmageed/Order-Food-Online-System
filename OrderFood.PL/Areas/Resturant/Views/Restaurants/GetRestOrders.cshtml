@@ -1,0 +1,151 @@
+﻿@using OrderFood.DAL.Entities.Models
+@model List<Order>
+
+<head>
+    <!-- Custom Styles -->
+    <link rel="stylesheet" type="text/css" href="~/css/Restaurant/GetRestOrders.css">
+    <link rel="stylesheet" type="text/css" href="~/css/Restaurant/style.css" >
+</head>
+
+@{
+    ViewData["Title"] = "Restaurant Orders";
+    var pendingOrders = Model.Where(o => o.OrderStatus == OrderStatus.Pending).ToList();
+    var preparingOrders = Model.Where(o => o.OrderStatus == OrderStatus.Preparing).ToList();
+    var doneOrders = Model.Where(o => o.OrderStatus == OrderStatus.Prepared).ToList();
+    var canceledOrders = Model.Where(o => o.OrderStatus == OrderStatus.Cancelled).ToList();
+}
+
+<div class="row g-4 mx-2 mt-2">
+    <!-- Sidebar with Tabs -->
+    <div class="col-12 col-md-6">
+        <div class="border rounded shadow-sm p-3 bg-white">
+            <ul class="nav nav-justified  nav-fill mb-3" id="orderTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="pending-tab" data-bs-toggle="tab" data-bs-target="#pending" type="button" role="tab" aria-controls="pending" aria-selected="true">Pending</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="preparing-tab" data-bs-toggle="tab" data-bs-target="#preparing" type="button" role="tab" aria-controls="preparing" aria-selected="false">Preparing</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="done-tab" data-bs-toggle="tab" data-bs-target="#done" type="button" role="tab" aria-controls="done" aria-selected="false">Done</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="canceled-tab" data-bs-toggle="tab" data-bs-target="#canceled" type="button" role="tab" aria-controls="canceled" aria-selected="false">Canceled</button>
+                </li>
+            </ul>
+
+            <div class="tab-content" id="orderTabsContent">
+                <!-- Pending -->
+                <div class="tab-pane fade show active" id="pending" role="tabpanel" aria-labelledby="pending-tab">
+                    <ul class="list-group  ">
+                        @foreach (var order in pendingOrders)
+                        {
+                            <li class="list-group-item bg-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong>Order #@order.Id </strong><br />
+                                    <span class="text-muted small">@order.CreatedOrder.ToString("MMM d, yyyy, hh:mm tt")</span><br />
+                                    <span class="order-price small">@order.getTotal().ToString("C")</span>
+                                </div>
+                                <button type="button"
+                                        class="btn btn-link collapsed"
+                                        data-bs-toggle="collapse"
+                                        data-bs-target="Details"
+                                        aria-expanded="false"
+                                        aria-controls="Orders"
+                                        onclick="loadOrderDetails(@order.Id)">
+                                    <i class="bi bi-chevron-right fs-4 order-price"></i>
+                                </button>
+                            </li>
+                        }
+                    </ul>
+                </div>
+
+                <!-- Preparing -->
+                <div class="tab-pane fade" id="preparing" role="tabpanel" aria-labelledby="preparing-tab">
+                    <ul class="list-group  ">
+                        @foreach (var order in preparingOrders)
+                        {
+                            <li class="list-group-item bg-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong>Order #@order.Id</strong><br />
+                                    <span class="text-muted small">@order.CreatedOrder.ToString("MMM d, yyyy, hh:mm tt")</span><br />
+                                    <span class="order-price small">@order.getTotal().ToString("C")</span>
+                                </div>
+                                <button type="button"
+                                        class="btn btn-link collapsed"
+                                        data-bs-toggle="collapse"
+                                        data-bs-target="Details"
+                                        aria-expanded="false"
+                                        aria-controls="Orders"
+                                        onclick="loadOrderDetails(@order.Id)">
+                                    <i class="bi bi-chevron-right fs-4 order-price"></i>
+                                </button>
+                            </li>
+                        }
+                    </ul>
+                </div>
+
+                <!-- Done -->
+                <div class="tab-pane fade  " id="done" role="tabpanel" aria-labelledby="done-tab">
+                    <ul class="list-group ">
+                        @foreach (var order in doneOrders)
+                        {
+                            <li class="list-group-item bg-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong>Order #@order.Id</strong><br />
+                                    <span class="text-muted small">@order.CreatedOrder.ToString("MMM d, yyyy, hh:mm tt")</span><br />
+                                    <span class="order-price small">@order.getTotal().ToString("C")</span>
+                                </div>
+                                <button type="button"
+                                        class="btn btn-link collapsed"
+                                        data-bs-toggle="collapse"
+                                        data-bs-target="Details"
+                                        aria-expanded="false"
+                                        aria-controls="Orders"
+                                        onclick="loadOrderDetails(@order.Id)">
+                                    <i class="bi bi-chevron-right fs-4 order-price"></i>
+                                </button>
+
+                            </li>
+
+                        }
+                    </ul>
+                </div>
+
+                <!-- Canceled -->
+                <div class="tab-pane fade" id="canceled" role="tabpanel" aria-labelledby="canceled-tab">
+                    <ul class="list-group ">
+                        @foreach (var order in canceledOrders)
+                        {
+                            <li class="list-group-item bg-item  d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong>Order #@order.Id</strong><br />
+                                    <span class="text-muted small">@order.CreatedOrder.ToString("MMM d, yyyy, hh:mm tt")</span><br />
+                                    <span class="order-price small">@order.getTotal().ToString("C")</span>
+                                </div>
+                                <button type="button"
+                                        class="btn btn-link collapsed"
+                                        data-bs-toggle="collapse"
+                                        data-bs-target="Details"
+                                        aria-expanded="false"
+                                        aria-controls="Orders"
+                                        onclick="loadOrderDetails(@order.Id)">
+                                    <i class="bi bi-chevron-right fs-4 order-price"></i>
+                                </button>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Details Panel -->
+    <div class="col-12 col-md-6 mb-4" id="orderDetailsContainer">
+    </div>
+</div>
+
+
+<script src="~/js/Restaurant/GetRestOrders.js"></script>
+ 
+

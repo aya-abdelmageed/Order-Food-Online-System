@@ -29,7 +29,7 @@ namespace OrderFood.PL.Areas.Delivery.Controllers
         public async Task<IActionResult> PreparedOrders()
         {
             var orders = await _unitOfWork.GetRepository<Order>().GetAllAsync(
-                criteria: O => O.OrderStatus == OrderStatus.Prepared,
+             // criteria: O => O.OrderStatus == OrderStatus.Prepared,
                 includes: O => O.Include(or => or.Restaurant).Include(or => or.Customer).Include(or => or.Coupon).Include(or => or.OrderMeals)!.ThenInclude(om => om.Meal)
                 );
 
@@ -103,7 +103,17 @@ namespace OrderFood.PL.Areas.Delivery.Controllers
             return RedirectToAction(nameof(PreparedOrders));
         }
 
+        //Accept Order for shipping
 
+        public async Task<IActionResult> Acceptshipping (int id)
+        {
+            var order = await _unitOfWork.GetRepository<Order>().GetOneAsync(O => O.Id == id, q => q.Include(o => o.OrderMeals)!.ThenInclude(i => i.Meal));
+
+            order.OrderStatus = OrderStatus.Shipping;
+            await _unitOfWork.SaveChangesAsync();
+            return Ok();
+
+        }
 
     }
 }
