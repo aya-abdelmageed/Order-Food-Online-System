@@ -7,6 +7,7 @@ using OrderFood.DAL.Context;
 using OrderFood.DAL.Data.DataSeed.Entities;
 using OrderFood.DAL.Data.DataSeed.Identity;
 using OrderFood.DAL.Data.DataSeed.Identity.Users;
+using OrderFood.DAL.Entities.Models;
 using OrderFood.DAL.Entities.User;
 using OrderFood.PL.Helper;
 using StackExchange.Redis;
@@ -33,6 +34,14 @@ public class Program
 
         builder.Services.AddControllersWithViews();
 
+        //--Google Authintication
+
+        builder.Services.AddAuthentication()
+            .AddGoogle(options =>
+            {
+               options.ClientId = "99950342398-k1lib9ust9o852cfnoirnf4f6t3u7nkb.apps.googleusercontent.com";
+               options.ClientSecret = "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";
+            });
         // Add Unit Of Work To The Container
         builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
@@ -106,23 +115,27 @@ public class Program
             // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
             app.UseHsts();
         }
-
+        app.UseStaticFiles();
         app.UseHttpsRedirection();
         app.UseRouting();
 
         app.UseAuthorization();
-        app.MapStaticAssets();
+        app.UseStaticFiles();
+
+      
 
         app.MapControllerRoute(
             name: "areas",
-            pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+            pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}")
+            .WithStaticAssets();
 
-        app.MapStaticAssets();
+
         app.MapAreaControllerRoute(
             name: "Identity",
             areaName: "Identity",
             pattern: "Identity/{controller=Home}/{action=OnboardingPage}/{id?}")
             .WithStaticAssets();
+
         app.MapControllerRoute(
             name: "default",
             pattern: "{controller=Home}/{action=OnboardingPage}/{id?}")

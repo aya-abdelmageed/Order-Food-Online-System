@@ -1,0 +1,216 @@
+﻿@model OrderFood.PL.Areas.Resturant.ViewModel.RestaurantViewModel
+
+@{
+    ViewData["Title"] = "Add Restaurant";
+    var owners = ViewData["Owners"] as List<OrderFood.DAL.Entities.User.ApplicationUser>;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+
+    <!-- Bootstrap & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+
+    <!-- Leaflet (Map) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" type="text/css" href="~/css/Restaurant/vendor.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/Restaurant/style.css" />
+
+    <style>
+        .card {
+            background-color: #f9f9f9;
+            border-radius: 1rem;
+        }
+
+        .btn-primary, .btn-outline-primary-sm {
+            border-radius: 0.5rem;
+        }
+
+        .form-label {
+            font-weight: bold;
+        }
+
+        .btn-outline-primary-sm {
+            height: calc(1.5em + 0.75rem + 2px);
+            padding: 0.375rem 0.75rem;
+        }
+
+        .custom-select-width {
+            width: 100%;
+        }
+
+        .modal-content {
+            background-color: white !important;
+            color: black !important;
+            border-radius: 1rem;
+        }
+
+        .modal-body {
+            max-height: calc(100vh - 200px);
+            overflow-y: auto;
+        }
+
+        .modal-backdrop.show {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <h2 class="text-center text-white bg-dark p-3 rounded">Add New Restaurant</h2>
+        <a asp-action="GetRestaurants" class="btn-link text-decoration-none">&larr; Back to home</a>
+
+        <!-- Alert Messages -->
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+                @TempData["Success"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+                @TempData["Error"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
+        <div class="row justify-content-center mt-3">
+            <div class="col-md-8">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body p-4">
+                        <form asp-action="AddRestaurant" method="post" enctype="multipart/form-data">
+                            <div asp-validation-summary="All" class="text-danger"></div>
+
+                            <div class="mb-3">
+                                <label asp-for="Name" class="form-label"></label>
+                                <input asp-for="Name" class="form-control" />
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+
+                            <div class="mb-3 d-flex justify-content-between align-items-end">
+                                <div class="w-100 me-2">
+                                    <label asp-for="OwnerId" class="form-label">Owner</label>
+                                    <select asp-for="OwnerId" class="form-control custom-select-width" asp-items="@(new SelectList(owners, "Id", "UserName"))">
+                                        <option disabled selected>-- Select Owner --</option>
+                                    </select>
+                                    <span asp-validation-for="OwnerId" class="text-danger"></span>
+                                </div>
+                                <div style="width: 20%;">
+                                    <button type="button" class="btn btn-sm btn-outline-primary-sm" data-bs-toggle="modal" data-bs-target="#newOwnerModal">
+                                        <i class="bi bi-person-plus-fill"></i> New Owner
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <label asp-for="Logo" class="form-label">Restaurant Logo</label>
+                                <input asp-for="Logo" type="file" class="form-control" />
+                                <span asp-validation-for="Logo" class="text-danger"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="Description" class="form-label">Description</label>
+                                <textarea asp-for="Description" class="form-control"></textarea>
+                                <span asp-validation-for="Description" class="text-danger"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="HotLine" class="form-label">HotLine</label>
+                                <input asp-for="HotLine" class="form-control" />
+                                <span asp-validation-for="HotLine" class="text-danger"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="Address" class="form-label">Address</label>
+                                <input asp-for="Address" class="form-control" />
+                                <span asp-validation-for="Address" class="text-danger"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Location (Click on the map)</label>
+                                <div id="map" style="height: 300px; border-radius: 10px;"></div>
+                                <input id="Lat" name="Lat" class="form-control mt-2" type="hidden" readonly />
+                                <input id="Long" name="Long" class="form-control mt-2" type="hidden" readonly />
+                            </div>
+
+                            <div class="d-grid">
+                                <input type="submit" value="Add Restaurant" class="btn btn-outline-dark fw-bold" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for New Owner -->
+    <div class="modal fade" id="newOwnerModal" tabindex="-1" aria-labelledby="newOwnerModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content shadow">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="newOwnerModalLabel">Register New Owner</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="@Url.Action("RegisterOwner", "Admin")" method="post">
+                        <div class="mb-3">
+                            <label for="UserName" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="UserName" name="UserName" required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="Email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="Email" name="Email" required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="Password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="Password" name="Password" required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="ConfirmPassword" class="form-label">Confirm Password</label>
+                            <input type="password" class="form-control" id="ConfirmPassword" name="ConfirmPassword" required />
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Register Owner</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/Restaurant/jquery-1.11.0.min.js"></script>
+    <script src="~/js/Restaurant/script.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            setTimeout(function () {
+                InitializeFromMap();
+            }, 200); // wait a bit to make sure the map DOM is ready
+
+        @if (TempData["OwnerCreated"] != null && (bool)TempData["OwnerCreated"])
+        {
+            <text>
+                        const modalEl = document.getElementById("newOwnerModal");
+                        const modalInstance = bootstrap.Modal.getInstance(modalEl);
+                        if (modalInstance) {
+                            modalInstance.hide();
+                        }
+            </text>
+        }
+        });
+    </script>
+
+</body>
+</html>

@@ -13,13 +13,6 @@
     });
     }
 
-  // init Chocolat light box
-	var initChocolat = function() {
-		Chocolat(document.querySelectorAll('.image-link'), {
-		  imageSize: 'contain',
-		  loop: true,
-		})
-	}
 
   var initSwiper = function() {
 
@@ -126,14 +119,7 @@
 
   }
 
-  // init jarallax parallax
-  var initJarallax = function() {
-    jarallax(document.querySelectorAll(".jarallax"));
 
-    jarallax(document.querySelectorAll(".jarallax-keep-img"), {
-      keepImg: true,
-    });
-  }
 
   // document ready
   $(document).ready(function() {
@@ -141,17 +127,12 @@
     initPreloader();
     initSwiper();
     initProductQty();
-    initJarallax();
-    initChocolat();
+
 
   }); // End of a document
 
   //---------------------------------------------------
    
-       
-
- 
-
  
 })(jQuery);
 
@@ -166,17 +147,75 @@ function increase(button) {
     input.value = value + 1;
 }
 
+let deleteMode = false;
 function toggleDeleteIcons() {
-    document.querySelector('.category-carousel .swiper-wrapper')
-        .classList.toggle('show-delete-icons');
+    deleteMode = !deleteMode;
+    document.querySelectorAll('.delete-category-btn').forEach(btn => {
+        btn.classList.toggle('d-none', !deleteMode);
+
+    });
 }
+
 
 function decrease(button) {
     const input = button.parentElement.querySelector("input");
     let value = parseInt(input.value) || 0;
     if (value > 1) {
         input.value = value - 1;
-    }
-   
+    }  
+}
+
+function initializeMap(restaurantId, lat, lng, restaurantName) {
+    var map = L.map('map-' + restaurantId, {
+        attributionControl: false
+    }).setView([lat, lng], 13);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '' 
+    }).addTo(map);
+
+    L.marker([lat, lng])
+        .addTo(map)
+        .bindPopup(restaurantName)
+        .openPopup();
+
+    map.on('click', function (e) {
+        var clickedLat = e.latlng.lat;
+        var clickedLng = e.latlng.lng;
+        console.log("Latitude: " + clickedLat + ", Longitude: " + clickedLng);
+
+        L.popup()
+            .setLatLng(e.latlng)
+            .setContent("You clicked at latitude: " + clickedLat + ", longitude: " + clickedLng)
+            .openOn(map);
+    });
+}
+
+
+function InitializeFromMap() {
+    var map = L.map('map', {
+        attributionControl: false // Disable the attribution control completely
+    }).setView([30.0444, 31.2357], 13);
+
+    // Add OpenStreetMap tile layer without attribution
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: ''  // Remove any attribution (including logo)
+    }).addTo(map);
+
+    // Add marker at the default location
+    var marker = L.marker([30.0444, 31.2357]).addTo(map);
+
+    // Handle map click event
+    map.on('click', function (e) {
+        var lat = e.latlng.lat;
+        var lng = e.latlng.lng;
+
+        // Update the marker position and the Lat/Long hidden fields
+        marker.setLatLng([lat, lng]);
+        document.getElementById("Lat").value = lat;
+        document.getElementById("Long").value = lng;
+
+        marker.bindPopup("Selected Location: <br/> Lat: " + lat + "<br/> Long: " + lng).openPopup();
+    });
 }
 

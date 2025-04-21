@@ -108,3 +108,31 @@
 .show-delete-icons .category-item .delete-icon {
     display: block !important;
 }
+
+/*     Admin Part    */
+.restaurant-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-align: center;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    margin-bottom: 0.5rem;
+}
+
+.card-img-top
+{
+    height: 200px;
+    object-fit: cover;
+}
+
+.leaflet-container {
+    border-radius: 8px;
+}
+.card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-img-top {
+    object-fit: cover;
+    height: 200px;
+}
+
