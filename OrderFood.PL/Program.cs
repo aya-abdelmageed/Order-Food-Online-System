@@ -10,6 +10,7 @@ using OrderFood.DAL.Data.DataSeed.Identity.Users;
 using OrderFood.DAL.Entities.Models;
 using OrderFood.DAL.Entities.User;
 using OrderFood.PL.Helper;
+using OrderFood.Service;
 using StackExchange.Redis;
 using System;
 using System.Threading.Tasks;
@@ -44,6 +45,7 @@ public class Program
             });
         // Add Unit Of Work To The Container
         builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+        builder.Services.AddScoped<IPaymentService, PaymentService>();
 
         builder.Services.AddScoped(typeof(IBasketRepository<>), typeof (BasketRepository<>));
 

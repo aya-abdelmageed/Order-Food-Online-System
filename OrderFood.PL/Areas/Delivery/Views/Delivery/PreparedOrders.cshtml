@@ -131,7 +131,7 @@
                                 <h2 class="accordion-header" id="@headingId">
                                     <button class="accordion-button collapsed p-0 border-0 bg-transparent" type="button"
                                             data-bs-toggle="collapse" data-bs-target="#@collapseId"
-                                            aria-expanded="false" aria-controls="@collapseId">
+                                            aria-expanded="false" aria-controls="@collapseId" onclick='GetDoneOrderDetails(@Html.Raw(JsonSerializer.Serialize(item)))'>
                                         <div class="w-100 d-flex flex-wrap align-items-center justify-content-between p-3">
                                             <div>
                                                 <div>
@@ -152,7 +152,7 @@
                                             </div>
                                             <div class="text-start">
                                                 <small class="text-muted">Total</small><br>
-                                                <span class="fw-bold">$@item.Total</span>
+                                                <span class="fw-bold">$@item.getTotal()</span>
                                             </div>
                                             <div class="text-start">
                                                 <small class="text-muted">Restaurant</small><br>
@@ -181,9 +181,15 @@
                                 </h2>
                                 <div id="@collapseId" class="accordion-collapse collapse" aria-labelledby="@headingId"
                                      data-bs-parent="#accordionFlushExample">
+
                                     <div class="accordion-body" id="accordion-body-id">
-                                        Additional order details go here...
+
+
+                                        
+
                                     </div>
+
+
                                 </div>
                             </div>
                         }
@@ -227,6 +233,21 @@
                  document.getElementById("orderDetailsContainer").innerHTML = html;
              });
          }
+        function GetDoneOrderDetails(order) {
+
+             fetch('/delivery/delivery/GetOrderDetails', {
+                 method: 'POST',
+                 headers: { 'Content-Type': 'application/json' },
+                 body: JSON.stringify(order)
+             })
+             .then(res => res.text())
+             .then(html => {
+                 document.getElementById("accordion-body-id").innerHTML = html;
+             });
+         }
+
+
+
         function updateShippingtoComplete(orderId){
                  fetch(`/delivery/delivery/updateShippingtoComplete/${orderId}`, {
             method: 'POST'

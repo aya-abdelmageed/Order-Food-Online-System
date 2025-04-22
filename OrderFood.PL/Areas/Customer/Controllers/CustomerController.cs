@@ -51,6 +51,52 @@ namespace OrderFood.PL.Areas.Customer.Controllers
             return View(distinctCategories);
         }
 
+
+
+        public async Task<IActionResult> GetMenu(int id)
+        {
+
+            var foodDbContext = await UnitOfWork.GetRepository<Restaurant>().GetOneAsync(i => i.Id == id, query => query.Include(p => p.Categories).ThenInclude(m => m.Meals));
+
+            if (foodDbContext == null)
+                return NotFound();
+            else
+                return View(foodDbContext);
+        }
+
+
+        public async Task<IActionResult> GetAllCat(int id)
+        {
+            var restaurant = await UnitOfWork.GetRepository<Restaurant>()
+       .GetOneAsync(r => r.Id == id, query => query
+           .Include(r => r.Categories)
+           .ThenInclude(c => c.Meals));
+
+            if (restaurant == null)
+                return NotFound();
+
+            return View(restaurant);
+        }
+
+
+        public async Task<IActionResult> GetCategoryMeals(int restaurantId, int categoryId)
+        {
+            var restaurant = await UnitOfWork.GetRepository<Restaurant>()
+                .GetOneAsync(r => r.Id == restaurantId, query => query
+                .Include(r => r.Categories)
+                .ThenInclude(c => c.Meals));
+
+            if (restaurant == null)
+                return NotFound();
+
+            var category = restaurant.Categories.FirstOrDefault(c => c.Id == categoryId);
+
+            if (category == null)
+                return NotFound("Category not found in this restaurant.");
+
+            return PartialView("_MealsPartial", category);
+        }
+
         //The Customer Order List & Details History Action
         [HttpGet]
         public async Task<IActionResult> OrdersListDetails()

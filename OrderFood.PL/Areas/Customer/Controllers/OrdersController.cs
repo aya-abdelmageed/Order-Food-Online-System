@@ -60,16 +60,18 @@ namespace OrderFood.PL.Areas.Customer.Controllers
             return View(OrderTracking);
         }
 
+
+
         // Check Coupon
-        //public async Task<IActionResult> CheckCoupon(string couponCode)
-        //{
-        //    var coupon = await _unitOfWork.GetRepository<Coupon>().GetOneAsync(c => c.Code == couponCode);
-        //    if (coupon == null || coupon.ExpireDate < DateTime.Now)
-        //    {
-        //        return Json(new { isValid = false, discount = 0 });
-        //    }
-        //    return Json(new { isValid = true, discount = coupon.AmountPercentage });
-        //}
+        public async Task<IActionResult> CheckCoupon(string couponCode)
+        {
+            var coupon = await _unitOfWork.GetRepository<Coupon>().GetOneAsync(c => c.Code == couponCode);
+            if (coupon == null || coupon.ExpireDate < DateTime.Now)
+            {
+                return Json(new { isValid = false, discount = 0 });
+            }
+            return Json(new { isValid = true, discount = coupon.AmountPercentage, id = coupon.Id });
+        }
 
         // checkout form
         public async Task<IActionResult> userCheckout(string? couponCode)
@@ -77,7 +79,7 @@ namespace OrderFood.PL.Areas.Customer.Controllers
             int CouponAmount = 0;
             int? CouponId = null;
             bool SameRestaurant = true;
-            if (string.IsNullOrEmpty(couponCode))
+            if (!string.IsNullOrEmpty(couponCode))
             {
                 var coupon = await _unitOfWork.GetRepository<Coupon>().GetOneAsync(c => c.Code == couponCode);
 
@@ -141,7 +143,9 @@ namespace OrderFood.PL.Areas.Customer.Controllers
             return View(checkout);
         }
 
+
         //Create Order In DB After Checkout
+        [HttpPost]
         public async Task<IActionResult> MakeOrder(OrderCreateVM createOrder)
         {
             var UserBasket = new CustomerBasket();
@@ -160,6 +164,7 @@ namespace OrderFood.PL.Areas.Customer.Controllers
                 if (UserBasket is null)
                     return View(createOrder);
             }
+            var mealsBasket = new List<OrderMeals>();
             // Calculate Total Cost
             if (UserBasket.basketItems.Count > 0)
             {
@@ -172,6 +177,11 @@ namespace OrderFood.PL.Areas.Customer.Controllers
                         return View(createOrder);
 
                     }
+                    mealsBasket.Add(new OrderMeals()
+                    {
+                        MealId = Meal.Id,
+                        Quantity = item.Quantity
+                    });
                     TotalCost += Meal.Price * item.Quantity;
                 }
             }
@@ -197,25 +207,22 @@ namespace OrderFood.PL.Areas.Customer.Controllers
 
             createOrder.CustomerId = _userManager.GetUserId(User)!;
             createOrder.PayDate = DateTime.Now;
-            createOrder.SubTotal = TotalCost;
+            createOrder.Total = TotalCost;
             createOrder.TransactionId = UpdateOrCreateBasket.PaymentIntentId;
 
 
+            var coupon = await _unitOfWork.GetRepository<Coupon>().GetOneAsync(c => c.Code == createOrder.CouponId);
             var FinalOrder = new Order()
             {
                 ShippingAddress = createOrder.ShippingAddress,
-                SubTotal = createOrder.SubTotal,
+                SubTotal = createOrder.Total??0,
                 TransactionId = createOrder.TransactionId,
                 PaymentMethod = createOrder.PaymentMethod,
                 PayDate = createOrder.PayDate,
                 RestaurantId = createOrder.RestaurantId,
                 CustomerId = createOrder.CustomerId,
-                CouponId = createOrder.CouponId,
-                OrderMeals = createOrder.Meals.Select(m => new OrderMeals()
-                {
-                    MealId = m.MealId,
-                    Quantity = m.Quantity
-                }).ToList(),
+                CouponId = coupon?.Id,
+                OrderMeals = mealsBasket
             };
 
             // Add Order to DB
@@ -231,6 +238,55 @@ namespace OrderFood.PL.Areas.Customer.Controllers
             return RedirectToAction(nameof(GetCustomerOrder));
         }
 
+
+
+        // ================================================================//
+        [HttpGet]
+        public async Task<IActionResult> GetCheckoutSummary(string? couponCode)
+        {
+            int couponAmount = 0;
+            decimal discount = 0;
+            int? couponId = null;
+
+            if (!string.IsNullOrEmpty(couponCode))
+            {
+                var coupon = await _unitOfWork.GetRepository<Coupon>().GetOneAsync(c => c.Code == couponCode);
+                if (coupon != null && coupon.ExpireDate >= DateTime.Now)
+                {
+                    couponAmount = coupon.AmountPercentage;
+                    couponId = coupon.Id;
+                }
+            }
+
+            var basketId = $"Cart-{_userManager.GetUserId(User)}";
+            var userBasket = await _basket.GetBasketAsync(basketId);
+
+            decimal subTotal = 0;
+
+            if (userBasket != null && userBasket.basketItems.Any())
+            {
+                foreach (var item in userBasket.basketItems)
+                {
+                    var meal = await _unitOfWork.GetRepository<Meal>()
+                        .GetOneAsync(m => m.Id == item.Id, q => q.Include(m => m.Category));
+                    if (meal != null)
+                    {
+                        subTotal += meal.Price * item.Quantity;
+                    }
+                }
+            }
+
+            discount = subTotal * couponAmount / 100;
+            decimal total = subTotal - discount + 5; // +5 for delivery
+
+            return Json(new
+            {
+                isValid = true,
+                total = total,
+                discount = discount,
+                couponId = couponId
+            });
+        }
 
     }
 }

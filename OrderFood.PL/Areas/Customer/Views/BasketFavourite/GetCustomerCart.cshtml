@@ -1,0 +1,271 @@
+﻿@using OrderFood.DAL.Entities.Basket
+@model CustomerBasket
+
+
+<div class="cart-wrapper">
+    <div class="container">
+        <div class="row g-4">
+            <!-- Cart Items Section -->
+            <div class="col-lg-8">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4 class="mb-0">Your Shopping Cart</h4>
+                    <span class="text-muted">@Model.basketItems.Count Items</span>
+                </div>
+
+                <!-- Product Cards -->
+                <div class="d-flex flex-column gap-3">
+                    <!-- Product 1 -->
+                    
+                    
+                    <!--
+                @foreach(var item in Model.basketItems)
+                {
+                    @* Hidden Input for id *@
+                    <input type="hidden" name="Id" value="@item.Id" />
+                    <input type="hidden" name="Image" value="@item.Image" />
+
+                        <div class="product-card p-3 shadow-sm" data-id="@item.Id" data-price="@item.Price">
+                            <div class="row align-items-center">
+                            <div class="col-md-2">
+                                <img src="@item.Image" alt="Product" class="product-image">
+                            </div>
+                            <div class="col-md-4">
+
+                            <input asp-for="@item.Name" class="mb-1 border-0 bg-transparent" readonly />
+                            <input asp-for="@item.Description" class="text-muted border-0 bg-transparent" readonly />
+
+                            </div>
+                            <div class="col-md-3">
+
+                                <div class="d-flex align-items-center gap-2">
+                                    <button type="button" class="quantity-btn" onclick="updateQuantity(@item.Id, -1)">-</button>
+                                    <input id="qty-@item.Id" name="Quantity" type="number" class="quantity-input" value="@item.Quantity" min="1"
+                                            onchange="onManualQuantityChange(@item.Id)" />
+                                    <button type="button" class="quantity-btn" onclick="updateQuantity(@item.Id, 1)">+</button>
+                                </div>
+
+                            </div>
+                            <div class="col-md-2">
+                                <span class="fw-bold">$@item.Price</span>
+                            </div>
+                            <div class="col-md-1">
+                                    <a href="javascript:void(0);" onclick="DeleteCart(@item.Id)" class="text-danger">
+                                        <i class="bi bi-trash remove-btn"></i>
+                                    </a>
+                            </div>
+                        </div>
+                    </div>
+                }
+                   -->
+
+                @* ////////////////////////////=========================//////////////// *@
+
+                    @foreach (var item in Model.basketItems)
+                    {
+                        <div class="product-card p-3 shadow-sm" data-id="@item.Id" data-price="@item.Price">
+                            <div class="row align-items-center">
+                                <div class="col-md-2">
+                                    <img src="@item.Image" alt="Product" class="product-image">
+                                </div>
+
+                                <div class="col-md-4">
+                                    <input type="hidden" name="Image" value="@item.Image" />
+                                    <input type="text" class="mb-1 border-0 bg-transparent basket-name" value="@item.Name" readonly />
+                                    <input type="text" class="text-muted border-0 bg-transparent basket-description" value="@item.Description" readonly />
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <button type="button" class="quantity-btn" onclick="updateQuantity(@item.Id, -1)">-</button>
+                                        <input id="qty-@item.Id" type="number" class="quantity-input" value="@item.Quantity" min="1"
+                                               onchange="onManualQuantityChange(@item.Id)" />
+                                        <button type="button" class="quantity-btn" onclick="updateQuantity(@item.Id, 1)">+</button>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <span class="fw-bold">$@item.Price</span>
+                                </div>
+
+                                <div class="col-md-1">
+                                    <a href="javascript:void(0);" onclick="DeleteCart(@item.Id)" class="text-danger">
+                                        <i class="bi bi-trash remove-btn"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+
+                </div>
+            </div>
+
+
+            <!-- Summary Section -->
+            <div class="col-lg-4">
+                <div class="summary-card p-4 shadow-sm">
+                    <h5 class="mb-4">Order Summary</h5>
+
+                    <div class="d-flex justify-content-between mb-3">
+                        <span class="text-muted">Subtotal</span>
+                        <span id="subtotal">$479.97</span>
+                    </div>
+
+                    <div class="d-flex justify-content-between mb-3">
+                        <span class="text-muted">Shipping</span>
+                        <span>+$5.00</span>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between mb-4">
+                        <span class="fw-bold">Total</span>
+                        <span class="fw-bold" id="total">$458.97</span>
+                    </div>
+
+
+                    <a asp-action="userCheckout" asp-controller="Orders" asp-area="Customer" class="btn btn-primary checkout-btn w-100 mb-3">
+                        Proceed to Checkout
+                    </a>
+
+                    <div class="d-flex justify-content-center gap-2">
+                        <i class="bi bi-shield-check text-success"></i>
+                        <small class="text-muted">Secure checkout</small>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Continue Shopping Button -->
+            <div class="text-start mb-4 mt-3">
+                <a asp-action="CustomerHomeAllResturant"
+                   asp-controller="Customer"
+                   asp-area="Customer"
+                   class="btn btn-outline-primary">
+                    <i class="bi bi-arrow-left me-2"></i>Continue Shopping
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+@section Styles{
+	<link href="~/css/Customer/cart.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+}
+
+
+@section Scripts {
+    @* <script src="~/js/Customer/cart.js"></script> *@
+
+    <script>
+        function DeleteCart(id) {
+            fetch(`/Customer/BasketFavourite/DeleteCart/${id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value
+                }
+            })
+            .then(res => res.ok ? res.json() : Promise.reject(res))
+            .then(response => {
+                if (response.success) {
+                    location.reload(); // reload current page
+                } else {
+                    alert("Failed to delete favourite.");
+                }
+            })
+            .catch(error => {
+                console.error("AJAX error:", error);
+                alert("Something went wrong.");
+            });
+        }
+
+
+
+         function updateQuantity(id, delta) {
+            const qtyInput = document.getElementById(`qty-${id}`);
+            let quantity = parseInt(qtyInput.value) + delta;
+            if (quantity < 1) quantity = 1;
+            qtyInput.value = quantity;
+            updateBasketItem(id, quantity);
+            recalculateSummary();
+        }
+
+        function onManualQuantityChange(id) {
+            const qtyInput = document.getElementById(`qty-${id}`);
+            let quantity = parseInt(qtyInput.value);
+            if (isNaN(quantity) || quantity < 1) {
+                quantity = 1;
+                qtyInput.value = quantity;
+            }
+
+            updateBasketItem(id, quantity);
+            recalculateSummary();
+        }
+
+        function recalculateSummary() {
+            let subtotal = 0;
+
+            document.querySelectorAll('.product-card').forEach(card => {
+                const id = card.dataset.id;
+                const price = parseFloat(card.dataset.price);
+                const qty = parseInt(document.getElementById(`qty-${id}`).value);
+                if (!isNaN(price) && !isNaN(qty)) {
+                    subtotal += price * qty;
+                }
+            });
+
+            const discount = 0; // static for now
+             const shipping = 5.00;
+            let total = subtotal - discount + shipping;
+            if (total < 0) total = 0;
+
+            document.getElementById("subtotal").textContent = `$${subtotal.toFixed(2)}`;
+            document.getElementById("total").textContent = `$${total.toFixed(2)}`;
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            recalculateSummary(); // initial run
+        });
+
+
+
+        function updateBasketItem(id, quantity) {
+            // Find the card with the given item ID
+            const card = document.querySelector(`.product-card[data-id="${id}"]`);
+
+            // Create object with current item data
+            const basketItem = {
+                Id: id,
+                Name: card.querySelector('input[asp-for$=".Name"]')?.value || '',
+                Image: card.querySelector('input[name="Image"]')?.value || '',
+                Description: card.querySelector('input[asp-for$=".Description"]')?.value || '',
+                Price: parseFloat(card.dataset.price),
+                Quantity: quantity
+            };
+
+            fetch('/Customer/BasketFavourite/UpdateCustomerCart', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value
+                },
+                body: JSON.stringify(basketItem)
+            })
+            .then(res => res.ok ? res.json() : Promise.reject(res))
+            .then(response => {
+                if (!response.success) {
+                    alert("Failed to update cart.");
+                }
+            })
+            .catch(error => {
+                console.error("Error updating cart:", error);
+                alert("Error updating cart.");
+            });
+        }
+    </script>
+
+}
