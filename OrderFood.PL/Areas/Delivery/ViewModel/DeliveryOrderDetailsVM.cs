@@ -14,7 +14,7 @@ namespace OrderFood.PL.Areas.Delivery.ViewModel
 
         public decimal getTotal()
         {
-            return SubTotal - (SubTotal * (Coupon?.AmountPercentage ?? 0) / 100) + 5;
+            return SubTotal - (SubTotal * (AmountPercentageCoupon ?? 0) / 100) + 5;
             // 5 is the delivery fee
         }
 
@@ -30,8 +30,6 @@ namespace OrderFood.PL.Areas.Delivery.ViewModel
         public UserVM Customer { get; set; }
 
         public ICollection<OrderMealsVM> OrderMeals { get; set; }
-
-        public Coupon Coupon { get; set; }
 
     }
 }

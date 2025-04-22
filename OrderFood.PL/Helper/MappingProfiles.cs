@@ -17,7 +17,9 @@ namespace OrderFood.PL.Helper
                             opt => opt.MapFrom(src => src.Coupon != null ? src.Coupon.AmountPercentage : 0))
                 .ForMember(dovm => dovm.Customer,
                             opt => opt.MapFrom(src => src.Customer))
-                .ForMember(Coupon => Coupon, opt => opt.MapFrom(src => src.Coupon));
+                .ForMember(dovm => dovm.AmountPercentageCoupon,
+                            opt => opt.MapFrom(src => src.Coupon.Id));
+
 
 
 
