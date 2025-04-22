@@ -583,6 +583,32 @@ a {
     transition: all 0.5s ease !important;
     box-shadow: none;
 }
+body.dark-mode {
+    background-color: #343A40;
+}
+
+.restaurant-card {
+    transition: background-color 0.3s ease;
+}
+
+body.dark-mode .restaurant-card {
+    background-color: #212529;
+    color: #fff;
+}
+
+    body.dark-mode .restaurant-card .card-header h3 {
+        color: #fff;
+    }
+
+body.dark-mode .btn-outline-secondary {
+    color: #fff;
+    border-color: #6c757d;
+}
+
+    body.dark-mode .btn-outline-secondary:hover {
+        background-color: #6c757d;
+        color: #fff;
+    }
 
 
 

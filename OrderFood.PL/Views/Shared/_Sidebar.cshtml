@@ -80,7 +80,7 @@
                 <span class="tooltip">Reviews</span>
             </li>
             <li>
-                <a asp-area="Resturant" asp-action="Settings" asp-controller="Restaurants"`>
+                <a asp-area="Resturant" asp-action="Settings" asp-controller="Restaurants">
                     <i class="bi bi-shop"></i>
                     <span class="title">Resturant Profile</span>
                 </a>
@@ -97,13 +97,6 @@
         <ul class="nav-links">
 
             <li>
-                <a href="#">
-                    <i class="bx bx-home-alt-2"></i>
-                    <span class="title">Home</span>
-                </a>
-                <span class="tooltip">Home</span>
-            </li>
-            <li>
                 <a asp-area="Delivery" asp-action="PreparedOrders" asp-controller="Delivery">
                     <i class="bi bi-truck"></i>
                     <span class="title">Orders</span>
@@ -112,7 +105,7 @@
             </li>
 
             <li>
-                <a href="#">
+                <a asp-area="Identity" asp-page="/Account/Manage/Index">
                     <i class="bi bi-person-fill"></i>
                     <span class="title">Profile</span>
                 </a>
@@ -127,7 +120,7 @@
     {
         <ul class="nav-links">
             <li>
-                <a href="#">
+                <a asp-area="Admin" asp-controller="Admin" asp-action="GetRestaurants">
                     <i class="bi bi-plus-circle"></i>
                     <span class="title">Manage Resturants</span>
                 </a>
@@ -135,37 +128,23 @@
             </li>
 
             <li>
-                <a href="#">
-                    <i class="bi bi-person"></i>
+                <a asp-area="Admin" asp-controller="Admin" asp-action="GetAll">
+                    <i class="bi bi-people"></i>
                     <span class="title">Customer Info</span>
                 </a>
                 <span class="tooltip">Customer Info</span>
             </li>
 
             <li>
-                <a asp-area="Admin" asp-controller="Admin" asp-action="GetAll">
-                    <i class="bi bi-people"></i>
-                    <span class="title">Users Info</span>
-                </a>
-                <span class="tooltip">Users Info</span>
-            </li>
-
-            <li>
-                <a href="#">
+                <a asp-area="Admin" asp-controller="Admin" asp-action="ViewAllCoupons">
                     <i class="bi bi-percent"></i>
                     <span class="title">Discounts</span>
                 </a>
                 <span class="tooltip">Discounts</span>
             </li>
+
             <li>
-                <a href="#">
-                    <i class="bi bi-star"></i>
-                    <span class="title">Reviews</span>
-                </a>
-                <span class="tooltip">Reviews</span>
-            </li>
-            <li>
-                <a href="#">
+                <a asp-area="Identity" asp-page="/Account/Manage/Index">
                     <i class="bi bi-person"></i>
                     <span class="title">Profile</span>
                 </a>

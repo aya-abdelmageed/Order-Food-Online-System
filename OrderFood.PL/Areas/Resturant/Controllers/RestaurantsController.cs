@@ -14,10 +14,12 @@ using OrderFood.DAL.Entities.User;
 using OrderFood.PL.Areas.Delivery.ViewModel;
 using OrderFood.DAL.Entities.User;
 using OrderFood.PL.Areas.Resturant.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 
 namespace OrderFood.PL.Areas.Resturant.Controllers
 {
     [Area("Resturant")]
+    [Authorize(Roles = "Owner")]
     public class RestaurantsController : Controller
     {
         private readonly IUnitOfWork _context;
@@ -321,8 +323,10 @@ namespace OrderFood.PL.Areas.Resturant.Controllers
         //-------------------------------------------------------------------------------------------
         public async Task<IActionResult> SearchMeals(int restaurantId, string? searchTerm, int? categoryId, decimal? maxPrice, int PageNo = 1)
         {
-            var restaurant = await _context.GetRepository<Restaurant>().GetOneAsync(i => i.Id == restaurantId, query => query.Include(p => p.Categories).ThenInclude(m => m.Meals));
-
+            var restaurant = await _context.GetRepository<Restaurant>().GetOneAsync(
+                i => i.Id == restaurantId,
+                query => query.Include(p => p.Categories).ThenInclude(m => m.Meals)
+            );
 
             if (restaurant == null) return NotFound();
 
@@ -335,25 +339,21 @@ namespace OrderFood.PL.Areas.Resturant.Controllers
                 .OrderBy(m => m.Price)
                 .ToList();
 
-            /* Pagination */
             int NoOfRecordsPerPage = 2;
-            int NoOfPages = Convert.ToInt32(Math.Ceiling(
-                Convert.ToDouble(meals.Count) / Convert.ToDouble(NoOfRecordsPerPage)));
-
+            int NoOfPages = (int)Math.Ceiling((double)meals.Count / NoOfRecordsPerPage);
             int NoOfRecordsToSkip = (PageNo - 1) * NoOfRecordsPerPage;
 
             ViewBag.PageNo = PageNo;
             ViewBag.NoOfPages = NoOfPages;
-
             ViewBag.RestaurantId = restaurantId;
             ViewBag.SearchTerm = searchTerm;
             ViewBag.CategoryId = categoryId;
-            ViewBag.maxPrice = maxPrice;
+            ViewBag.MaxPrice = maxPrice;
 
-            meals = meals.Skip(NoOfRecordsToSkip).Take(NoOfRecordsPerPage).ToList();
-
-            return PartialView("View", meals);
+            var pagedMeals = meals.Skip(NoOfRecordsToSkip).Take(NoOfRecordsPerPage).ToList();
+            return PartialView("View", pagedMeals);
         }
+
         //----------------------------------------------------------------------------------------
         //Get restaurant reviews
         public async Task<IActionResult> GetReviews()
@@ -364,70 +364,152 @@ namespace OrderFood.PL.Areas.Resturant.Controllers
                 .GetAllAsync(r => r.RestaurantId == restaurant.Id, i => i.Include(o => o.Restaurant).Include(c => c.Customer));
             return (View(reviews));
         }
+        //----------------------------------------------------------------------
+        //[HttpGet]
+        ////Get the Restaurant info to Edit
+        //public async Task<IActionResult> Settings()
+        //{
+        //    var restuarant = await _context.GetRepository<Restaurant>().GetOneAsync(
+        //        criteria: c => c.Id == 5
+        //        );
+        //    var model = new UpdateRestaurantViewModel
+        //    {
+        //        //Restaurant = restuarant,
+        //        Name = restuarant.Name,
+        //        Address = restuarant.Address,
+        //        Description = restuarant.Description,
+        //        HotLine = restuarant.HotLine,
+        //        Long = restuarant.Long,
+        //        Lat = restuarant.Lat,
+        //        ImageFile = null // Initialize to null
+        //    };
+        //    return (View(model));
+        //}
+
+        //[HttpPost]
+        ////update restaurant info including uploade files for logo
+        //public async Task<IActionResult> Settings(UpdateRestaurantViewModel model)
+        //{
+        //    if (model == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    //check if the image file is included
+        //    if (model.ImageFile != null && model.ImageFile.Length > 0)
+        //    {
+        //        // Ensure wwwroot/images exists
+        //        var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/restaurant");
+        //        Directory.CreateDirectory(uploadsFolder); // Creates it if not exists
+
+        //        // Unique file name (to prevent collisions)
+        //        var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(model.ImageFile.FileName);
+        //        var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+        //        // Save the file
+        //        using (var stream = new FileStream(filePath, FileMode.Create))
+        //        {
+        //            await model.ImageFile.CopyToAsync(stream);
+        //        }
+
+        //        //copy the path of created file into the Logo field to save to database
+        //        model.Restaurant.Logo = "/images/restaurant/" + uniqueFileName;
+        //    }
+
+        //    //check the validation restaurant info that included into the model
+        //    if (ModelState.IsValid)
+        //    {
+        //        _context.GetRepository<Restaurant>().Update(model.Restaurant);
+        //        await _context.SaveChangesAsync();
+
+        //        return RedirectToAction("Settings");
+        //    }
+        //    else
+        //    {
+        //        return View(model);
+
+        //    }
+        //}
 
         [HttpGet]
-        //Get the Restaurant info to Edit
         public async Task<IActionResult> Settings()
         {
             var user = await _userManager.GetUserAsync(User);
-            var restuarant = await _context.GetRepository<Restaurant>().GetOneAsync(
-                criteria: c => c.OwnerId == user.Id
-                );
+            if (user == null) return Unauthorized();
+
+            var restaurant = await _context.GetRepository<Restaurant>()
+                .GetOneAsync(c => c.OwnerId == user.Id);
+
+            if (restaurant == null) return NotFound();
+
             var model = new UpdateRestaurantViewModel
             {
-                Restaurant = restuarant,
-                Name = restuarant.Name,
-                Address = restuarant.Address,
-                Description = restuarant.Description,
-                HotLine = restuarant.HotLine,
-                Long = restuarant.Long,
-                Lat = restuarant.Lat,
-                ImageFile = null // Initialize to null
+                Name = restaurant.Name,
+                Address = restaurant.Address,
+                Description = restaurant.Description,
+                HotLine = restaurant.HotLine,
+                Long = restaurant.Long,
+                Lat = restaurant.Lat,
+                Id = restaurant.Id,
+                OwnerId = restaurant.OwnerId,
+                Logo = restaurant.Logo
             };
-            return (View(model));
+
+            return View(model);
         }
 
         [HttpPost]
-        //update restaurant info including uploade files for logo
         public async Task<IActionResult> Settings(UpdateRestaurantViewModel model)
         {
-            if (model == null)
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) return Unauthorized();
+
+            var restaurant = await _context.GetRepository<Restaurant>()
+                .GetOneAsync(c => c.OwnerId == user.Id);
+            if (restaurant == null) return NotFound();
+
+            if (!ModelState.IsValid)
             {
-                return NotFound();
+                model.Logo = restaurant.Logo; // retain existing logo in the view
+                return View(model);
             }
 
-            // Check if image is uploaded
+            // Handle Logo upload
             if (model.ImageFile != null && model.ImageFile.Length > 0)
             {
-                // Path: wwwroot/images/Restaurant
-                var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "Restaurant");
-                Directory.CreateDirectory(uploadsFolder); // Create folder if not exists
+                var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/restaurant");
+                Directory.CreateDirectory(uploadsFolder);
 
-                // Unique file name to avoid conflicts
-                var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(model.ImageFile.FileName);
+                var uniqueFileName = Guid.NewGuid() + Path.GetExtension(model.ImageFile.FileName);
                 var filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
-                // Save the file
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
                     await model.ImageFile.CopyToAsync(stream);
                 }
 
-                // Save only the file name in DB
-                model.Restaurant.Logo = uniqueFileName;
+                restaurant.Logo = "/images/restaurant/" + uniqueFileName;
             }
-
-            // Validate model and update
-            if (ModelState.IsValid)
+            else
             {
-                _context.GetRepository<Restaurant>().Update(model.Restaurant);
-                await _context.SaveChangesAsync();
-
-                return RedirectToAction("Settings");
+                restaurant.Logo = model.Logo; // retain the old logo if not uploading a new one
             }
 
-            return View(model);
+            restaurant.Name = model.Name;
+            restaurant.Address = model.Address;
+            restaurant.Description = model.Description;
+            restaurant.HotLine = model.HotLine;
+            restaurant.Lat = model.Lat;
+            restaurant.Long = model.Long;
+
+            _context.GetRepository<Restaurant>().Update(restaurant);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Settings");
         }
+
+
+
 
 
 

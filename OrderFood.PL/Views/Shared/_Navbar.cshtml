@@ -14,10 +14,12 @@
     <!-- bg-body-tertiary -->
     <nav class="navbar  navbar-expand-md bg-success  bsb-navbar-3 ">
         <div class="container">
-            <a href="@Url.Action("OnboardingPage", "Home", new { area = "" })" class="navbar-brand">
+
+                <a href="#" class="navbar-brand">
                 <img src="~/images/HomePageImages/logo (1).png" class="img-fluid rounded" alt="BootstrapBrain Logo" width="150"
                    height="80">
             </a>
+
             <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse"
                     data-bs-target="#bsbNavbar" aria-controls="bsbNavbar" aria-label="Toggle Navigation">
                 <i class="bi bi-three-dots"></i>
@@ -118,6 +120,7 @@
                                     
                                 </div>
                             </div>
+                      
                         </li>
 
 
@@ -160,20 +163,19 @@
                     @if (User.Identity.IsAuthenticated)
                     {
                         <li class="nav-item dropdown">
-                            <a class="nav-link  bsb-dropdown-toggle-caret-disable" href="#"
-                               role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a class="nav-link bsb-dropdown-toggle-caret-disable" href="#" role="button" aria-expanded="true">
                                 <img src="~/images/users/@userIMage"
                                      width="60" height="60"
                                      class="rounded-circle border border-2 border-primary"
                                      style="object-fit: cover; object-position: top center;"
                                      alt="@firstName @lastName">
-
                             </a>
+
                             <ul class="dropdown-menu dropdown-menu-md-end bsb-dropdown-animation end-0"
-                                style="min-width: max-content;">
+                                style="min-width: max-content;" data-bs-popper="static">
 
                                 <li>
-                                    <h6 class="dropdown-header fs-7 text-center">Welcome, @firstName @lastName </h6>
+                                    <h6 class="dropdown-header fs-7 text-center">Welcome, @firstName @lastName</h6>
                                 </li>
                                 <li><hr class="dropdown-divider"></li>
 
@@ -197,9 +199,6 @@
                                         <i class="bi bi-gear-fill me-2"></i>
                                         <span class="fs-7">Settings & Privacy</span>
                                     </a>
-
-
-
                                 </li>
                                 <li>
                                     <a class="dropdown-item" href="#!">
@@ -211,17 +210,16 @@
                                 <li><hr class="dropdown-divider"></li>
 
                                 <li>
-                                    <form asp-area="Identity" asp-controller="Account" asp-action="Logout" method="post" asp-route-returnUrl="@Url.Action("OnboardingPage", "Home", new { area = "" })" class="text-center">
+                                    <form asp-area="Identity" asp-controller="Account" asp-action="Logout" method="post"
+                                          asp-route-returnUrl="@Url.Action("OnboardingPage", "Home", new { area = "" })"
+                                          class="text-center">
                                         <button type="submit" class="dropdown-item w-100 d-flex justify-content-center align-items-center gap-3">
-
                                             <i class="bi bi-box-arrow-left"></i>
                                             <span class="fs-7">Log Out</span>
                                         </button>
                                     </form>
-
                                 </li>
                             </ul>
-
                         </li>
                     }
 
@@ -232,3 +230,24 @@
         </div>
     </nav>
 </header>
+
+
+<style>
+    /* Hover effect for dropdown */
+    .nav-item.dropdown:hover .dropdown-menu {
+        display: block;
+        margin-top: 0;
+    }
+
+    /* Optional smooth fade-in */
+    .dropdown-menu {
+        transition: opacity 0.3s ease;
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .nav-item.dropdown:hover .dropdown-menu {
+        opacity: 1;
+        pointer-events: auto;
+    }
+</style>

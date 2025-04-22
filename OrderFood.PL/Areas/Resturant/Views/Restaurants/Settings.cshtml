@@ -1,104 +1,180 @@
 ﻿@using OrderFood.PL.Areas.Resturant.ViewModel
-@model UpdateRestaurantViewModel;
+@model UpdateRestaurantViewModel
 
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
-@{ 
-     ViewData["Title"] = "Settings"; 
-} 
+@{
+    ViewData["Title"] = "Settings";
+}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
 
-<div class="container bg-light vh-100 vw-100 justify-content-center mb-3">
-    <div class="d-grid row justify-content-center align-text-center text-opacity-75 pt-2 ">
-        <h2>@Model.Name</h2>
+    <!-- Bootstrap & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+
+    <!-- Leaflet (Map) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" type="text/css" href="~/css/Restaurant/vendor.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/Restaurant/style.css" />
+
+    <style>
+        .custom-map-style {
+            height: 200px;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<div class="container vh-100 vw-100 justify-content-center">
+    <div class="d-grid row justify-content-center align-text-center text-opacity-75 mt-5">
+        <h3>@Model.Name</h3>
     </div>
-    <div class="container d-grid border border-1  border-warning  mt-4 mb-5 p-3 h-auto w-100 shadow-lg" >
-        
-        <form asp-action="Settings" enctype="multipart/form-data" method="post"> 
-            
-            <input asp-for="@Model.Restaurant.Id" type="hidden" />
-            <input asp-for="@Model.Restaurant.OwnerId" type="hidden" />
 
+    <div class="container d-grid border border-5 border-warning border-opacity-25 mt-4 mb-5 p-3 h-auto w-100 shadow-lg">
+        <form asp-action="Settings" enctype="multipart/form-data" method="post">
+            <input asp-for="Id" type="hidden" />
+            <input asp-for="OwnerId" type="hidden" />
+            <input asp-for="Logo" type="hidden" id="logo-input" />
+            <input asp-for="Lat" type="hidden" id="Lat" />
+            <input asp-for="Long" type="hidden" id="Long" />
 
             <div class="row mb-3">
                 <div class="d-flex flex-row gap-2 align-items-end">
-                    <img id="logo-preview" class="rounded-2"  src="/images/Restaurant/@Model.Restaurant.Logo" alt="@Model.Name" class="me-5" width="200px" height="200px" >
+                    <img id="logo-preview" src="@Model.Logo" class="me-5" width="200px" height="200px">
                     <div class="form-outline w-50">
-                        <label asp-for="@Model.Restaurant.Logo" class="form-label">Logo</label>
-                        <input id="logo-input" type="hidden" asp-for="@Model.Restaurant.Logo" />
-                        <input type="file" name="ImageFile" asp-for="@Model.ImageFile" class="form-control" />
+                        <label asp-for="ImageFile" class="form-label">Logo</label>
+                        <input type="file" name="ImageFile" asp-for="ImageFile" class="form-control" />
                     </div>
                     <button id="btn-remove-logo" type="button" class="btn btn-light">Remove</button>
                 </div>
             </div>
+
             <div class="row mb-3">
-                <div class="col-md-6 form-group ">
-                <label asp-for="@Model.Name" class="form-label">Name</label>
-                <input asp-for="@Model.Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+                <div class="col-md-6 form-group">
+                    <label asp-for="Name" class="form-label">Name</label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
                 </div>
                 <div class="col-md-6 form-group">
-                    <!-- HotLine -->
-                <label asp-for="@Model.HotLine" class="form-label">HotLine</label>
-                <input asp-for="@Model.HotLine" class="form-control" />
-                <span asp-validation-for="HotLine" class="text-danger"></span>
+                    <label asp-for="HotLine" class="form-label">HotLine</label>
+                    <input asp-for="HotLine" class="form-control" />
+                    <span asp-validation-for="HotLine" class="text-danger"></span>
                 </div>
             </div>
+
             <div class="row mb-3">
                 <div class="col form-group">
-                    <label asp-for="@Model.Description" class="form-label">Description</label>
-                    <textarea asp-for="@Model.Description" class="form-control" rows="3"></textarea>
+                    <label asp-for="Description" class="form-label">Description</label>
+                    <textarea asp-for="Description" class="form-control" rows="3"></textarea>
                     <span asp-validation-for="Description" class="text-danger"></span>
-
                 </div>
             </div>
+
             <div class="row mb-3">
                 <div class="col-md-6 form-group">
-                <label asp-for="@Model.Address" class="form-label">Address</label>
-                <textarea asp-for="@Model.Address" class="form-control" rows="3"></textarea>
-                <span asp-validation-for="Address" class="text-danger"></span>
-
-
+                    <label asp-for="Address" class="form-label">Address</label>
+                    <textarea asp-for="Address" id="Address" name="Address" class="form-control" rows="3"></textarea>
+                    <span asp-validation-for="Address" class="text-danger"></span>
                 </div>
+
                 <div class="col-md-6">
-                    <label class="form-label">Your Location</label>
-                    <div class="form-control" rows="3">
-                    <input asp-for="@Model.Long" type="hidden" />
-                    <input asp-for="@Model.Lat" type="hidden" />
-                        @* <iframe    *@
-                        @*      src="https: //maps.googleapis.com/maps/api/staticmap?center =Jaipur&zoom =10&size =300x100&key =YOUR_API_KEY" *@
-                        @*      >  *@
-                        @*  </iframe> *@
-                    </div>
+                    <label class="form-label">Location (Click on the map)</label>
+                    <div id="map" class="custom-map-style"></div>
                 </div>
             </div>
-            <div class="d-flex justify-content-center ">
+            <div class="d-flex justify-content-start mt-4 mb-2">
                 <input type="submit" value="Save Setting" class="btn btn-warning text-white" />
             </div>
-            
+
         </form>
-       
-        </div>
     </div>
+</div>
 
 @section Scripts {
-    <script>
-            partial name="_ValidationScriptsPartial" />
-    </script>
-    <script>
-        document.getElementById("btn-remove-logo").addEventListener("click", function () {
-                // delete the logo from the server
-            // document.getElementById("logo-preview").src = "";
+    <partial name="_ValidationScriptsPartial" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/Restaurant/jquery-1.11.0.min.js"></script>
+    <script src="~/js/Restaurant/script.js"></script>
 
-                // delete the logo from the input field
-            // document.getElementById("logo-input").value = "";
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            setTimeout(function () {
+                InitializeFromMap();
+            }, 200);
 
-                // delete the logo from the file input field
-            const fileInput = document.querySelector("input[type='file'][name='ImageFile']");
-            if (fileInput) {
-                fileInput.value = "";
-            }
+            document.getElementById("btn-remove-logo").addEventListener("click", function () {
+                document.getElementById("logo-preview").src = "";
+                document.getElementById("logo-input").value = "";
+                const fileInput = document.querySelector("input[type='file'][name='ImageFile']");
+                if (fileInput) {
+                    fileInput.value = "";
+                }
+            });
         });
-    </script>
-        
-}
 
+        function InitializeFromMap() {
+            var defaultLat = parseFloat(document.getElementById("Lat").value) || 30.0444;
+            var defaultLng = parseFloat(document.getElementById("Long").value) || 31.2357;
+
+            var map = L.map('map', {
+                attributionControl: false
+            }).setView([defaultLat, defaultLng], 13);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: ''
+            }).addTo(map);
+
+            var marker = L.marker([defaultLat, defaultLng], { draggable: true }).addTo(map);
+
+            // Show initial address if available
+            if (document.getElementById("Lat").value && document.getElementById("Long").value) {
+                fetch(`https://nominatim.openstreetmap.org/reverse?lat=${defaultLat}&lon=${defaultLng}&format=json`)
+                    .then(res => res.json())
+                    .then(data => {
+                        document.getElementById("Address").value = data.display_name;
+                        marker.bindPopup(data.display_name).openPopup();
+                    });
+            }
+
+            // Update on map click
+            map.on('click', function (e) {
+                var lat = e.latlng.lat;
+                var lng = e.latlng.lng;
+
+                marker.setLatLng([lat, lng]);
+
+                document.getElementById("Lat").value = lat;
+                document.getElementById("Long").value = lng;
+
+                fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`)
+                    .then(response => response.json())
+                    .then(data => {
+                        var address = data.display_name || "Address not found";
+                        document.getElementById("Address").value = address;
+                        marker.bindPopup(address).openPopup();
+                    });
+            });
+
+            // Update on marker drag
+            marker.on('dragend', function (e) {
+                var latlng = e.target.getLatLng();
+                document.getElementById("Lat").value = latlng.lat;
+                document.getElementById("Long").value = latlng.lng;
+
+                fetch(`https://nominatim.openstreetmap.org/reverse?lat=${latlng.lat}&lon=${latlng.lng}&format=json`)
+                    .then(response => response.json())
+                    .then(data => {
+                        var address = data.display_name || "Address not found";
+                        document.getElementById("Address").value = address;
+                        marker.bindPopup(address).openPopup();
+                    });
+            });
+        }
+    </script>
+}

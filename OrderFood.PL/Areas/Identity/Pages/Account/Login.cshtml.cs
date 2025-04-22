@@ -133,24 +133,25 @@ namespace OrderFood.PL.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User logged in.");
                     //var user = await _usermanager.getuserasync(user);
-                    //var roles = await _usermanager.getrolesasync(user);
+                    var roles = await _userManager.GetRolesAsync(user);
                     //different redirect views based on it roles
-                    //if (roles[0] == "customer")
-                    //{
-                    //    return localredirect(returnurl);
-                    //}
-                    //if (roles[0] == "admin")
-                    //{
-                    //    return localredirect(returnurl);
-                    //}
-                    //if (roles[0] == "delivery")
-                    //{
-                    //    return localredirect(returnurl);
-                    //}
-                    //if (roles[0] == "owner")
-                    //{
-                    //    return localredirect(returnurl);
-                    //}
+                    if (roles.Contains("Customer"))
+                    {
+                        return RedirectToAction("CustomerHomeAllResturant", "Customer", new { area = "Customer" });
+                    }
+                    else if (roles.Contains("Admin"))
+                    {
+                        return RedirectToAction("GetRestaurants", "Admin", new { area = "Admin" });
+                    }
+                    else if (roles.Contains("Owner"))
+                    {
+                        return RedirectToAction("GetMenu", "Restaurants", new { area = "Resturant" });
+                    }
+                    else if (roles.Contains("Delivery"))
+                    {
+                        return RedirectToAction("PreparedOrders", "Delivery", new { area = "Delivery" });
+                    }
+
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)
