@@ -50,11 +50,20 @@
                 cursor:pointer;
             }
 
- 
+        .order-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+            .order-card:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+                background-color: #ffc107d2;
+            }
+
     </style>
 </head>
 <body>
-    <div class="container ">
+    <div class="container py-5 ">
     <section class="py-5 overflow-hidden">
         <div class="container-fluid">
             <div class="row">
@@ -84,19 +93,20 @@
                             {
                                       @if (item.OrderStatus == OrderStatus.Prepared){ 
                                     <div class="swiper-slide " onclick='GetOrderDetails(@Html.Raw(JsonSerializer.Serialize(item)))'>
-                                        <div class="card mb-3 p-3 rounded-4 order-card shadow border-0">
-                                        <div class="row g-0">
-                                            <div class="col-md-4">
-                                                <img src="~/images/Icons/add-cart.png" class="img-fluid rounded" alt="Order">
-                                            </div>
-                                            <div class="col-md-8">
-                                                <div class="card-body py-0">
-                                                    <p class="text-muted mb-0">@item.Restaurant.Name </p>
-                                                    <h5 class="card-title">@item.ShippingAddress</h5>
+                                            <div class="card mb-3 p-3 rounded-4 shadow-sm border-0 order-card bg-light-subtle">
+                                                <div class="row g-0 align-items-center">
+                                                    <div class="col-md-4 text-center">
+                                                        <img src="~/images/Icons/add-cart.png" class="img-fluid rounded-3 " width="50" height="50" alt="Order">
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <div class="card-body py-2">
+                                                            <p class="text-muted fw-semibold mb-1">@item.Restaurant.Name</p>
+                                                            <h5 class="card-title mb-0 text-dark">@item.ShippingAddress</h5>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
+
                                 </div>
                                       }  
                             }
@@ -118,8 +128,8 @@
 
         <span class="section-title fs-3  header-design ">Order History</span>
 
-        <div class="my-4">
-            <div class="card rounded-4 shadow-sm p-4">
+        <div class="">
+            <div class="card rounded-4 shadow-sm my-4 p-4">
                 <div class="accordion accordion-flush" id="accordionFlushExample">
                     @foreach (var item in Model)
                     {

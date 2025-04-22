@@ -14,10 +14,12 @@ using OrderFood.DAL.Entities.User;
 using OrderFood.PL.Areas.Delivery.ViewModel;
 using OrderFood.DAL.Entities.User;
 using OrderFood.PL.Areas.Resturant.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 
 namespace OrderFood.PL.Areas.Resturant.Controllers
 {
     [Area("Resturant")]
+    [Authorize(Roles = "Owner")]
     public class RestaurantsController : Controller
     {
         private readonly IUnitOfWork _context;
