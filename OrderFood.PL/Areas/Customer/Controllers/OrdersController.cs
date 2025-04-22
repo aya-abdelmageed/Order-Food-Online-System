@@ -212,6 +212,7 @@ namespace OrderFood.PL.Areas.Customer.Controllers
 
 
             var coupon = await _unitOfWork.GetRepository<Coupon>().GetOneAsync(c => c.Code == createOrder.CouponId);
+            var couponId = coupon?.Id;
             var FinalOrder = new Order()
             {
                 ShippingAddress = createOrder.ShippingAddress,
@@ -221,7 +222,7 @@ namespace OrderFood.PL.Areas.Customer.Controllers
                 PayDate = createOrder.PayDate,
                 RestaurantId = createOrder.RestaurantId,
                 CustomerId = createOrder.CustomerId,
-                CouponId = coupon?.Id,
+                CouponId = couponId,
                 OrderMeals = mealsBasket
             };
 
