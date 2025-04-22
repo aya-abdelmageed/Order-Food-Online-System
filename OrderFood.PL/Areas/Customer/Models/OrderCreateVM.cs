@@ -5,7 +5,7 @@ namespace OrderFood.PL.Areas.Customer.Models
     public class OrderCreateVM
     {
         public string ShippingAddress { get; set; }
-        public decimal SubTotal { get; set; }
+        public decimal? Total { get; set; }
         public string? TransactionId { get; set; } // stripe transaction id
         public PaymentMethod PaymentMethod { get; set; }
         public DateTime? PayDate { get; set; }
@@ -14,9 +14,7 @@ namespace OrderFood.PL.Areas.Customer.Models
 
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public int CouponId { get; set; }
-        public List<MealToOrder> Meals { get; set; } = new List<MealToOrder>();
-
+        public string? CouponId { get; set; }
     }
 
     public class MealToOrder

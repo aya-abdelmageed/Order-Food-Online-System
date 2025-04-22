@@ -40,7 +40,7 @@ namespace OrderFood.PL.Areas.Customer.Controllers
         }
 
 
-        public async Task<IActionResult> UpdateCustomerCart(BasketItem customerBasket)
+        public async Task<IActionResult> UpdateCustomerCart([FromBody]BasketItem customerBasket)
         {
             string userId = $"Cart-{_userManager.GetUserId(User)}";
             var UserBasket = await _basket.GetBasketAsync(userId);
@@ -71,28 +71,28 @@ namespace OrderFood.PL.Areas.Customer.Controllers
                 TempData["Success"] = "Basket updated successfully.";
             }
 
-            return RedirectToAction(nameof(GetCustomerCart));
+            return Json(new { success = true });
         }
 
 
-        public async Task<IActionResult> DeleteCart()
+        public async Task<IActionResult> DeleteCart(int Id)
         {
             string userId = $"Cart-{_userManager.GetUserId(User)}";
-            var result = await _basket.DeleteBasketAsync(userId);
-            if (result)
+
+            var basket = await _basket.GetBasketAsync(userId);
+            var existingItem = basket.basketItems.FirstOrDefault(x => x.Id == Id);
+            if (existingItem != null)
             {
-                TempData["Success"] = "Basket deleted successfully.";
+                basket.basketItems.Remove(existingItem);
             }
-            else
-            {
-                TempData["Error"] = "Failed to delete the basket.";
-            }
-            return RedirectToAction(nameof(GetCustomerCart));
+            var result = await _basket.UpdateBasketAsync(basket);
+
+            return Json(new { success = true });
         }
 
 
         // =============================================== Favourite ===============================================================
-        
+
         public async Task<IActionResult> GetCustomerFavourite()
         {
             //var userId = _userManager.GetUserId(User);
@@ -108,7 +108,8 @@ namespace OrderFood.PL.Areas.Customer.Controllers
             }
         }
 
-        public async Task<IActionResult> UpdateCustomerFavourite(FavouriteItem customerFavourite)
+        [HttpPost]
+        public async Task<IActionResult> UpdateCustomerFavourite([FromBody]FavouriteItem customerFavourite)
         {
             string userId = $"Favourite-{_userManager.GetUserId(User)}";
             var UserFavourite = await _fvourite.GetBasketAsync(userId);
@@ -133,22 +134,23 @@ namespace OrderFood.PL.Areas.Customer.Controllers
             {
                 TempData["Success"] = "Favourite updated successfully.";
             }
-            return RedirectToAction(nameof(GetCustomerFavourite));
+            return Json(new { success = true });
         }
 
-        public async Task<IActionResult> DeleteFavourite()
+        [HttpPost]
+        public async Task<IActionResult> DeleteFavourite(int Id)
         {
             string userId = $"Favourite-{_userManager.GetUserId(User)}";
-            var result = await _fvourite.DeleteBasketAsync(userId);
-            if (result)
+            var favourite = await _fvourite.GetBasketAsync(userId); 
+            var existingItem = favourite.FavouriteItems.FirstOrDefault(x => x.Id == Id);
+
+            if (existingItem != null)
             {
-                TempData["Success"] = "Favourite deleted successfully.";
+                favourite.FavouriteItems.Remove(existingItem);
             }
-            else
-            {
-                TempData["Error"] = "Failed to delete the favourite.";
-            }
-            return RedirectToAction(nameof(GetCustomerFavourite));
+            var result = await _fvourite.UpdateBasketAsync(favourite);
+
+            return Json(new { success = true });
         }
 
 

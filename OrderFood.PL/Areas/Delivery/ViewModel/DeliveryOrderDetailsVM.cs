@@ -11,12 +11,12 @@ namespace OrderFood.PL.Areas.Delivery.ViewModel
         public decimal SubTotal { get; set; }
         public DateTime CreatedOrder { get; set; }
         public int? AmountPercentageCoupon { get; set; }
-        public decimal Total { get; set; }
-        //public decimal getTotal()
-        //{
-        //    return SubTotal - (SubTotal * (Coupon?.AmountPercentage ?? 0) / 100) + 5;
-        //    // 5 is the delivery fee
-        //}
+
+        public decimal getTotal()
+        {
+            return SubTotal - (SubTotal * (AmountPercentageCoupon ?? 0) / 100) + 5;
+            // 5 is the delivery fee
+        }
 
         public OrderStatus OrderStatus { get; set; }
 
@@ -29,7 +29,7 @@ namespace OrderFood.PL.Areas.Delivery.ViewModel
 
         public UserVM Customer { get; set; }
 
-        public ICollection<OrderMealsVM> OrderMeals { get; set; } 
+        public ICollection<OrderMealsVM> OrderMeals { get; set; }
 
     }
 }
