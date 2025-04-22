@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +10,7 @@ using OrderFood.BLL.Interfaces;
 using OrderFood.BLL.Repositories;
 using OrderFood.DAL.Context;
 using OrderFood.DAL.Entities.Models;
+using OrderFood.DAL.Entities.User;
 using OrderFood.PL.Areas.Delivery.ViewModel;
 using OrderFood.PL.Areas.Resturant.ViewModel;
 
@@ -18,10 +20,12 @@ namespace OrderFood.PL.Areas.Resturant.Controllers
     public class RestaurantsController : Controller
     {
         private readonly IUnitOfWork _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public RestaurantsController(IUnitOfWork context)
+        public RestaurantsController(IUnitOfWork context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
         //----------------------------------------------------------------
         // GET: Resturant/Restaurants
@@ -311,42 +315,6 @@ namespace OrderFood.PL.Areas.Resturant.Controllers
             return RedirectToAction(nameof(GetAllCat), new { id = mealVM.restaurantId });
         }
         //-------------------------------------------------------------------------------------------
-        //public async Task<IActionResult> SearchMeals(int restaurantId, string? searchTerm, int? categoryId, decimal? maxPrice, int PageNo = 1)
-        //{
-        //    var restaurant = await _context.GetRepository<Restaurant>().GetOneAsync(i => i.Id == restaurantId, query => query.Include(p => p.Categories).ThenInclude(m => m.Meals));
-
-
-        //    if (restaurant == null) return NotFound();
-
-        //    var meals = restaurant.Categories
-        //        .Where(c => !c.IsDelete && (!categoryId.HasValue || c.Id == categoryId.Value))
-        //        .SelectMany(c => c.Meals)
-        //        .Where(m => !m.IsDelete &&
-        //            (string.IsNullOrEmpty(searchTerm) || m.Name.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) || m.Description.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)) &&
-        //            (!maxPrice.HasValue || m.Price <= maxPrice.Value))
-        //        .OrderBy(m => m.Price)
-        //        .ToList();
-
-        //    /* Pagination */
-        //    int NoOfRecordsPerPage = 2;
-        //    int NoOfPages = Convert.ToInt32(Math.Ceiling(
-        //        Convert.ToDouble(meals.Count) / Convert.ToDouble(NoOfRecordsPerPage)));
-
-        //    int NoOfRecordsToSkip = (PageNo - 1) * NoOfRecordsPerPage;
-
-        //    ViewBag.PageNo = PageNo;
-        //    ViewBag.NoOfPages = NoOfPages;
-
-        //    ViewBag.RestaurantId = restaurantId;
-        //    ViewBag.SearchTerm = searchTerm;
-        //    ViewBag.CategoryId = categoryId;
-        //    ViewBag.maxPrice = maxPrice;
-
-        //    meals = meals.Skip(NoOfRecordsToSkip).Take(NoOfRecordsPerPage).ToList();
-
-        //    return PartialView("View", meals);
-        //}
-
         public async Task<IActionResult> SearchMeals(int restaurantId, string? searchTerm, int? categoryId, decimal? maxPrice, int PageNo = 1)
         {
             var restaurant = await _context.GetRepository<Restaurant>().GetOneAsync(
@@ -388,72 +356,154 @@ namespace OrderFood.PL.Areas.Resturant.Controllers
                 .GetAllAsync(r => r.RestaurantId == 3, i => i.Include(o => o.Restaurant).Include(c => c.Customer));
             return (View(reviews));
         }
+        //----------------------------------------------------------------------
+        //[HttpGet]
+        ////Get the Restaurant info to Edit
+        //public async Task<IActionResult> Settings()
+        //{
+        //    var restuarant = await _context.GetRepository<Restaurant>().GetOneAsync(
+        //        criteria: c => c.Id == 5
+        //        );
+        //    var model = new UpdateRestaurantViewModel
+        //    {
+        //        //Restaurant = restuarant,
+        //        Name = restuarant.Name,
+        //        Address = restuarant.Address,
+        //        Description = restuarant.Description,
+        //        HotLine = restuarant.HotLine,
+        //        Long = restuarant.Long,
+        //        Lat = restuarant.Lat,
+        //        ImageFile = null // Initialize to null
+        //    };
+        //    return (View(model));
+        //}
+
+        //[HttpPost]
+        ////update restaurant info including uploade files for logo
+        //public async Task<IActionResult> Settings(UpdateRestaurantViewModel model)
+        //{
+        //    if (model == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    //check if the image file is included
+        //    if (model.ImageFile != null && model.ImageFile.Length > 0)
+        //    {
+        //        // Ensure wwwroot/images exists
+        //        var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/restaurant");
+        //        Directory.CreateDirectory(uploadsFolder); // Creates it if not exists
+
+        //        // Unique file name (to prevent collisions)
+        //        var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(model.ImageFile.FileName);
+        //        var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+        //        // Save the file
+        //        using (var stream = new FileStream(filePath, FileMode.Create))
+        //        {
+        //            await model.ImageFile.CopyToAsync(stream);
+        //        }
+
+        //        //copy the path of created file into the Logo field to save to database
+        //        model.Restaurant.Logo = "/images/restaurant/" + uniqueFileName;
+        //    }
+
+        //    //check the validation restaurant info that included into the model
+        //    if (ModelState.IsValid)
+        //    {
+        //        _context.GetRepository<Restaurant>().Update(model.Restaurant);
+        //        await _context.SaveChangesAsync();
+
+        //        return RedirectToAction("Settings");
+        //    }
+        //    else
+        //    {
+        //        return View(model);
+
+        //    }
+        //}
 
         [HttpGet]
-        //Get the Restaurant info to Edit
         public async Task<IActionResult> Settings()
         {
-            var restuarant = await _context.GetRepository<Restaurant>().GetOneAsync(
-                criteria: c => c.Id == 5
-                );
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) return Unauthorized();
+
+            var restaurant = await _context.GetRepository<Restaurant>()
+                .GetOneAsync(c => c.OwnerId == user.Id);
+
+            if (restaurant == null) return NotFound();
+
             var model = new UpdateRestaurantViewModel
             {
-                Restaurant = restuarant,
-                Name = restuarant.Name,
-                Address = restuarant.Address,
-                Description = restuarant.Description,
-                HotLine = restuarant.HotLine,
-                Long = restuarant.Long,
-                Lat = restuarant.Lat,
-                ImageFile = null // Initialize to null
+                Name = restaurant.Name,
+                Address = restaurant.Address,
+                Description = restaurant.Description,
+                HotLine = restaurant.HotLine,
+                Long = restaurant.Long,
+                Lat = restaurant.Lat,
+                Id = restaurant.Id,
+                OwnerId = restaurant.OwnerId,
+                Logo = restaurant.Logo
             };
-            return (View(model));
+
+            return View(model);
         }
 
         [HttpPost]
-        //update restaurant info including uploade files for logo
         public async Task<IActionResult> Settings(UpdateRestaurantViewModel model)
         {
-            if (model == null)
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) return Unauthorized();
+
+            var restaurant = await _context.GetRepository<Restaurant>()
+                .GetOneAsync(c => c.OwnerId == user.Id);
+            if (restaurant == null) return NotFound();
+
+            if (!ModelState.IsValid)
             {
-                return NotFound();
+                model.Logo = restaurant.Logo; // retain existing logo in the view
+                return View(model);
             }
 
-            //check if the image file is included
+            // Handle Logo upload
             if (model.ImageFile != null && model.ImageFile.Length > 0)
             {
-                // Ensure wwwroot/images exists
                 var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/restaurant");
-                Directory.CreateDirectory(uploadsFolder); // Creates it if not exists
+                Directory.CreateDirectory(uploadsFolder);
 
-                // Unique file name (to prevent collisions)
-                var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(model.ImageFile.FileName);
+                var uniqueFileName = Guid.NewGuid() + Path.GetExtension(model.ImageFile.FileName);
                 var filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
-                // Save the file
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
                     await model.ImageFile.CopyToAsync(stream);
                 }
 
-                //copy the path of created file into the Logo field to save to database
-                model.Restaurant.Logo = "/images/restaurant/" + uniqueFileName;
-            }
-
-            //check the validation restaurant info that included into the model
-            if (ModelState.IsValid)
-            {
-                _context.GetRepository<Restaurant>().Update(model.Restaurant);
-                await _context.SaveChangesAsync();
-                
-                return RedirectToAction("Settings");
+                restaurant.Logo = "/images/restaurant/" + uniqueFileName;
             }
             else
             {
-                return View(model);
-
+                restaurant.Logo = model.Logo; // retain the old logo if not uploading a new one
             }
+
+            restaurant.Name = model.Name;
+            restaurant.Address = model.Address;
+            restaurant.Description = model.Description;
+            restaurant.HotLine = model.HotLine;
+            restaurant.Lat = model.Lat;
+            restaurant.Long = model.Long;
+
+            _context.GetRepository<Restaurant>().Update(restaurant);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Settings");
         }
+
+
+
+
+
 
         //***************************************************************************************************************
         //get all restaurant orders

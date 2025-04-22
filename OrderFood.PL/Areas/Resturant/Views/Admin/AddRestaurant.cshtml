@@ -8,8 +8,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"]</title>
 
     <!-- Bootstrap & Icons -->
@@ -61,12 +61,10 @@
             display: none;
         }
 
-        .modal-body {
-            max-height: none;
-            overflow-y: auto;
+        #map {
+            height: 300px;
+            border-radius: 10px;
         }
-
- 
     </style>
 </head>
 <body>
@@ -74,7 +72,7 @@
         <h2 class="text-center text-white bg-dark p-3 rounded">Add New Restaurant</h2>
         <a asp-action="GetRestaurants" class="btn-link text-decoration-none">&larr; Back to home</a>
 
-        <!-- Alert Messages -->
+        <!-- Alerts -->
         @if (TempData["Success"] != null)
         {
             <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
@@ -138,15 +136,16 @@
 
                             <div class="mb-3">
                                 <label asp-for="Address" class="form-label">Address</label>
-                                <input asp-for="Address" class="form-control" />
+                                <textarea asp-for="Address" id="Address" name="Address" class="form-control" rows="3"></textarea>
                                 <span asp-validation-for="Address" class="text-danger"></span>
                             </div>
 
                             <div class="mb-3">
                                 <label class="form-label">Location (Click on the map)</label>
-                                <div id="map" style="height: 300px; border-radius: 10px;"></div>
-                                <input id="Lat" name="Lat" class="form-control mt-2" type="hidden" readonly />
-                                <input id="Long" name="Long" class="form-control mt-2" type="hidden" readonly />
+                                <div id="map"></div>
+                                <!-- Hidden fields for lat/long -->
+                                <input id="Lat" name="Lat" type="hidden" />
+                                <input id="Long" name="Long" type="hidden" />
                             </div>
 
                             <div class="d-grid">
@@ -159,6 +158,7 @@
         </div>
     </div>
 
+    <!-- Modal for registering new owner -->
     <div class="modal fade" id="newOwnerModal" tabindex="-1" aria-labelledby="newOwnerModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content shadow">
@@ -170,49 +170,100 @@
                     <form action="@Url.Action("RegisterOwner", "Admin")" method="post">
                         <div class="mb-3">
                             <label for="FirstName" class="form-label">First Name</label>
-                            <input type="text" class="form-control" id="FirstName" name="FirstName" required />
+                            <input type="text" class="form-control" name="FirstName" required />
                         </div>
                         <div class="mb-3">
                             <label for="LastName" class="form-label">Last Name</label>
-                            <input type="text" class="form-control" id="LastName" name="LastName" required />
+                            <input type="text" class="form-control" name="LastName" required />
                         </div>
                         <div class="mb-3">
                             <label for="UserName" class="form-label">Username</label>
-                            <input type="text" class="form-control" id="UserName" name="UserName" required />
+                            <input type="text" class="form-control" name="UserName" required />
                         </div>
                         <div class="mb-3">
                             <label for="Email" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="Email" name="Email" required />
+                            <input type="email" class="form-control" name="Email" required />
                         </div>
                         <div class="mb-3">
                             <label for="Password" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="Password" name="Password" required />
+                            <input type="password" class="form-control" name="Password" required />
                         </div>
                         <div class="mb-3">
                             <label for="ConfirmPassword" class="form-label">Confirm Password</label>
-                            <input type="password" class="form-control" id="ConfirmPassword" name="ConfirmPassword" required />
+                            <input type="password" class="form-control" name="ConfirmPassword" required />
                         </div>
+
                         <div class="d-grid">
                             <button type="submit" class="btn btn-primary">Register Owner</button>
                         </div>
                     </form>
-
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Scripts -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/Restaurant/jquery-1.11.0.min.js"></script>
-    <script src="~/js/Restaurant/script.js"></script>
-
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             setTimeout(function () {
-                InitializeFromMap();
-            }, 200); // wait a bit to make sure the map DOM is ready
+                InitializeMap();
+            }, 200);
+
+            function InitializeMap() {
+                const latInput = document.getElementById("Lat");
+                const longInput = document.getElementById("Long");
+
+                let defaultLat = parseFloat(latInput.value) || 30.0444;
+                let defaultLng = parseFloat(longInput.value) || 31.2357;
+
+                const map = L.map('map').setView([defaultLat, defaultLng], 13);
+
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+                const marker = L.marker([defaultLat, defaultLng], { draggable: true }).addTo(map);
+
+                // Set initial address
+                if (latInput.value && longInput.value) {
+                    fetch(`https://nominatim.openstreetmap.org/reverse?lat=${defaultLat}&lon=${defaultLng}&format=json`)
+                        .then(res => res.json())
+                        .then(data => {
+                            document.getElementById("Address").value = data.display_name;
+                            marker.bindPopup(data.display_name).openPopup();
+                        });
+                }
+
+                map.on("click", function (e) {
+                    const lat = e.latlng.lat;
+                    const lng = e.latlng.lng;
+                    marker.setLatLng([lat, lng]);
+                    latInput.value = lat;
+                    longInput.value = lng;
+
+                    fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`)
+                        .then(res => res.json())
+                        .then(data => {
+                            const address = data.display_name || "Address not found";
+                            document.getElementById("Address").value = address;
+                            marker.bindPopup(address).openPopup();
+                        });
+                });
+
+                marker.on("dragend", function (e) {
+                    const latlng = e.target.getLatLng();
+                    latInput.value = latlng.lat;
+                    longInput.value = latlng.lng;
+
+                    fetch(`https://nominatim.openstreetmap.org/reverse?lat=${latlng.lat}&lon=${latlng.lng}&format=json`)
+                        .then(res => res.json())
+                        .then(data => {
+                            const address = data.display_name || "Address not found";
+                            document.getElementById("Address").value = address;
+                            marker.bindPopup(address).openPopup();
+                        });
+                });
+            }
 
         @if (TempData["OwnerCreated"] != null && (bool)TempData["OwnerCreated"])
         {
@@ -226,6 +277,5 @@
         }
         });
     </script>
-
 </body>
 </html>
