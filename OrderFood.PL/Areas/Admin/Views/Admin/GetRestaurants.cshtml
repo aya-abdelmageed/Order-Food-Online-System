@@ -32,7 +32,7 @@
 </head>
 <body>
     <div class="container py-5">
-        <h1 class="text-center mb-4 text-primary">Admin - Manage Restaurants</h1>
+        <h1 class="text-center mb-4 text-primary p-2 bg-success rounded-2 text-light">Manage Restaurants</h1>
 
         <div class="text-end mb-3">
             <a asp-action="AddRestaurant" class="btn btn-success">
@@ -42,13 +42,13 @@
 
         <!-- Search Form -->
         <form class="row justify-content-center mb-4" id="searchForm">
-            <div class="col-md-3">
+            <div class="col-md-3 rounded-2">
                 <input type="text" id="nameSearch" class="form-control" placeholder="Search Restaurant Name..." />
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3 rounded-2">
                 <input type="text" id="ownerSearch" class="form-control" placeholder="Owner Name" />
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3 rounded-2">
                 <input type="text" id="addressSearch" class="form-control" placeholder="Address" />
             </div>
         </form>

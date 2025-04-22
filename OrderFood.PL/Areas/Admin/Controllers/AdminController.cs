@@ -72,6 +72,7 @@ namespace OrderFood.PL.Areas.Admin.Controllers
 
         // GET: AdminController/Create
         // //create Delivery of Admin
+        [HttpGet]
         public async Task<IActionResult> Create()
         {
             var roles = new List<string>{
@@ -121,6 +122,8 @@ namespace OrderFood.PL.Areas.Admin.Controllers
             return View(e);
         }
 
+
+        
         // GET: AdminController/Delete/5
         public async Task<IActionResult> Delete(string id)
         {
@@ -157,6 +160,7 @@ namespace OrderFood.PL.Areas.Admin.Controllers
                 return RedirectToAction(nameof(GetAll));
             }
         }
+
 
 
 

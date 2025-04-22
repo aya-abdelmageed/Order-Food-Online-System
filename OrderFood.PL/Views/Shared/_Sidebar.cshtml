@@ -120,7 +120,7 @@
     {
         <ul class="nav-links">
             <li>
-                <a asp-area="Admin" asp-controller="Admin" asp-action="GetAll">
+                <a asp-area="Admin" asp-controller="Admin" asp-action="GetRestaurants">
                     <i class="bi bi-plus-circle"></i>
                     <span class="title">Manage Resturants</span>
                 </a>
@@ -136,21 +136,15 @@
             </li>
 
             <li>
-                <a href="#">
+                <a asp-area="Admin" asp-controller="Admin" asp-action="ViewAllCoupons">
                     <i class="bi bi-percent"></i>
                     <span class="title">Discounts</span>
                 </a>
                 <span class="tooltip">Discounts</span>
             </li>
+
             <li>
-                <a href="#">
-                    <i class="bi bi-star"></i>
-                    <span class="title">Reviews</span>
-                </a>
-                <span class="tooltip">Reviews</span>
-            </li>
-            <li>
-                <a href="#">
+                <a asp-area="Identity" asp-page="/Account/Manage/Index">
                     <i class="bi bi-person"></i>
                     <span class="title">Profile</span>
                 </a>
