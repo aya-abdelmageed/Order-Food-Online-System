@@ -90,6 +90,9 @@ namespace OrderFood.PL.Areas.Resturant.Controllers
             return RedirectToAction(nameof(GetRestaurants));
         }
         //-----------------------------------------------------------------------------
+        
+        
+        
         // GET: Restaurant/Add
         public async Task<IActionResult> AddRestaurant()
         {
@@ -153,6 +156,9 @@ namespace OrderFood.PL.Areas.Resturant.Controllers
 
         }
         //--------------------------------------------------------------------------
+        
+        
+        
         public async Task<IActionResult> SearchRestaurants(string nameSearch = "", string ownerSearch = "", string addressSearch = "", int PageNo = 1)
         {
             var restaurant = await _context.GetRepository<Restaurant>().GetAllAsync(r =>
