@@ -22,7 +22,7 @@
 </head>
 
 <body>
-    <section class="py-5 overflow-hidden">
+    <section class="container py-5 overflow-hidden">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-12">
@@ -32,16 +32,19 @@
 
                         <div class="text-end">
                             <div class="d-flex align-items-center">
-                                <a  asp-action="GetAllCat" asp-route-id ="@Model.Id" class="btn-link text-decoration-none">View All Categories →</a>
+                                <a  asp-action="GetAllCat" asp-route-id ="@Model.Id" class="btn-link text-decoration-none bg-secondary p-2 text-light rounded-2">View All Categories →</a>
                                 <div class="swiper-buttons">
                                     <button class="swiper-prev category-carousel-prev btn btn-yellow">❮</button>
                                     <button class="swiper-next category-carousel-next btn btn-yellow">❯</button>
                                 </div>
                             </div>
-                            <div class="mt-2">
-                                <a asp-action="AddCategory" asp-route-id="@Model.Id" class="btn btn-outline-success btn-sm me-2 bi bi-plus-circle"> Add Category</a>
-                                <button type="button" class="btn btn-outline-danger btn-sm bi bi-trash" onclick="toggleDeleteIcons()"> Delete Category</button>
-                            </div>
+                            @if (User.IsInRole("Owner"))
+                            {
+                                <div class="mt-2">
+                                    <a asp-action="AddCategory" asp-route-id="@Model.Id" class="btn btn-outline-success btn-sm me-2 bi bi-plus-circle"> Add Category</a>
+                                    <button type="button" class="btn btn-outline-danger btn-sm bi bi-trash" onclick="toggleDeleteIcons()"> Delete Category</button>
+                                </div>
+                            }
                         </div>
                     </div>
                     <!-- End Header -->
@@ -93,7 +96,7 @@
                     <div id="mealsSection" class="container mt-5">
                         <h2 class="text-center mb-4">Meals</h2>
                         <div id="mealsContent" class="row justify-content-center">
-                            <div class="text-muted text-center">Select a category to view its meals.</div>
+                            <div class="text-muted text-center p-2  rounded-2 text-light">Select a category to view its meals.</div>
                         </div>
                     </div>
                     <!-- End Meals Section -->

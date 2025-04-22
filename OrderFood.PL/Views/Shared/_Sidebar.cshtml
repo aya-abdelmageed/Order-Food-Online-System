@@ -1,4 +1,6 @@
-﻿<section class="sidebar">
+﻿
+
+<section class="sidebar">
     <div class="nav-header">
         <p class="logo">FoodMart</p>
         <i class="bx bx-menu btn-menu"></i>
@@ -15,28 +17,22 @@
                 <span class="tooltip">Home</span>
             </li>
             <li>
-                <a>
+                <a asp-area="Customer" asp-action="GetCustomerOrder" asp-controller="Orders">
                     <i class="bi bi-card-list"></i>
                     <span class="title">Food Order</span>
                 </a>
                 <span class="tooltip">Food Order</span>
             </li>
             <li>
-                <a href="#">
+                <a asp-area="Customer" asp-controller="Customer" asp-action="OrdersListDetails">
                     <i class="bi bi-clock-history"></i>
                     <span class="title">Bills</span>
                 </a>
                 <span class="tooltip">Bills</span>
             </li>
+
             <li>
-                <a href="#">
-                    <i class="bi bi-truck"></i>
-                    <span class="title">Order Tracking</span>
-                </a>
-                <span class="tooltip">Order Tracking</span>
-            </li>
-            <li>
-                <a href="#">
+                <a asp-area="Identity" asp-page="/Account/Manage/Index">
                     <i class="bx bx-cog"></i>
                     <span class="title">Setting</span>
                 </a>
@@ -52,7 +48,7 @@
     {
         <ul class="nav-links">
             <li>
-                <a href="#">
+                <a asp-area="Resturant" asp-action="GetMenu" asp-controller="Restaurants" >
                     <i class="bx bx-home-alt-2"></i>
                     <span class="title">Home</span>
                 </a>
@@ -60,7 +56,7 @@
             </li>
 
             <li>
-                <a href="#">
+                <a asp-area="Identity" asp-page="/Account/Manage/Index">
                     <i class="bi bi-person"></i>
                     <span class="title">Profile</span>
                 </a>
@@ -68,21 +64,21 @@
             </li>
             
             <li>
-                <a href="#">
+                <a asp-area="Resturant" asp-action="GetRestOrders" asp-controller="Restaurants">
                     <i class="bi bi-card-list"></i>
                     <span class="title">Orders</span>
                 </a>
                 <span class="tooltip">Orders</span>
             </li>
             <li>
-                <a href="#">
+                <a asp-area="Resturant" asp-action="GetReviews" asp-controller="Restaurants">
                     <i class="bi bi-star"></i>
                     <span class="title">Reviews</span>
                 </a>
                 <span class="tooltip">Reviews</span>
             </li>
             <li>
-                <a href="#">
+                <a asp-area="Resturant" asp-action="Settings" asp-controller="Restaurants"`>
                     <i class="bi bi-shop"></i>
                     <span class="title">Resturant Profile</span>
                 </a>
@@ -106,7 +102,7 @@
                 <span class="tooltip">Home</span>
             </li>
             <li>
-                <a href="#">
+                <a asp-area="Delivery" asp-action="PreparedOrders" asp-controller="Delivery">
                     <i class="bi bi-truck"></i>
                     <span class="title">Orders</span>
                 </a>

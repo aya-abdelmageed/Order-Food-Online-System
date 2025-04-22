@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +10,7 @@ using OrderFood.BLL.Interfaces;
 using OrderFood.BLL.Repositories;
 using OrderFood.DAL.Context;
 using OrderFood.DAL.Entities.Models;
+using OrderFood.DAL.Entities.User;
 using OrderFood.PL.Areas.Delivery.ViewModel;
 using OrderFood.PL.Areas.Resturant.ViewModel;
 
@@ -18,16 +20,21 @@ namespace OrderFood.PL.Areas.Resturant.Controllers
     public class RestaurantsController : Controller
     {
         private readonly IUnitOfWork _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public RestaurantsController(IUnitOfWork context)
+        public RestaurantsController(IUnitOfWork context , UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
         //----------------------------------------------------------------
+
         // GET: Resturant/Restaurants
-        public async Task<IActionResult> GetMenu(int id)
+        public async Task<IActionResult> GetMenu()
         {
-            var foodDbContext = await _context.GetRepository<Restaurant>().GetOneAsync(i => i.Id == id, query => query.Include(p => p.Categories).ThenInclude(m => m.Meals));
+            var owner =await _userManager.GetUserAsync(User);
+            
+            var foodDbContext = await _context.GetRepository<Restaurant>().GetOneAsync(i => i.OwnerId == owner.Id, query => query.Include(p => p.Categories).ThenInclude(m => m.Meals));
 
             if (foodDbContext == null)
                 return NotFound();
@@ -348,10 +355,12 @@ namespace OrderFood.PL.Areas.Resturant.Controllers
         }
         //----------------------------------------------------------------------------------------
         //Get restaurant reviews
-        public async Task<IActionResult> GetReviews(int restaurantID)
+        public async Task<IActionResult> GetReviews()
         {
+            var owner = await _userManager.GetUserAsync(User);
+            var restaurant = await _context.GetRepository<Restaurant>().GetOneAsync(r=>r.OwnerId==owner.Id);
             var reviews = await _context.GetRepository<Review>()
-                .GetAllAsync(r => r.RestaurantId == 3, i => i.Include(o => o.Restaurant).Include(c => c.Customer));
+                .GetAllAsync(r => r.RestaurantId == restaurant.Id, i => i.Include(o => o.Restaurant).Include(c => c.Customer));
             return (View(reviews));
         }
 
@@ -385,14 +394,14 @@ namespace OrderFood.PL.Areas.Resturant.Controllers
                 return NotFound();
             }
 
-            //check if the image file is included
+            // Check if image is uploaded
             if (model.ImageFile != null && model.ImageFile.Length > 0)
             {
-                // Ensure wwwroot/images exists
-                var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/restaurant");
-                Directory.CreateDirectory(uploadsFolder); // Creates it if not exists
+                // Path: wwwroot/images/Restaurant
+                var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "Restaurant");
+                Directory.CreateDirectory(uploadsFolder); // Create folder if not exists
 
-                // Unique file name (to prevent collisions)
+                // Unique file name to avoid conflicts
                 var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(model.ImageFile.FileName);
                 var filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
@@ -402,36 +411,38 @@ namespace OrderFood.PL.Areas.Resturant.Controllers
                     await model.ImageFile.CopyToAsync(stream);
                 }
 
-                //copy the path of created file into the Logo field to save to database
-                model.Restaurant.Logo = "/images/restaurant/" + uniqueFileName;
+                // Save only the file name in DB
+                model.Restaurant.Logo = uniqueFileName;
             }
 
-            //check the validation restaurant info that included into the model
+            // Validate model and update
             if (ModelState.IsValid)
             {
                 _context.GetRepository<Restaurant>().Update(model.Restaurant);
                 await _context.SaveChangesAsync();
-                
+
                 return RedirectToAction("Settings");
             }
-            else
-            {
-                return View(model);
 
-            }
+            return View(model);
         }
+
+
 
         //***************************************************************************************************************
         //get all restaurant orders
-        public async Task<IActionResult> GetRestOrders(int id)
+        public async Task<IActionResult> GetRestOrders()
         {
-            var rest = await _context.GetRepository<Restaurant>().GetOneAsync(r => r.Id == id, q => q.Include(o => o.Orders)!.ThenInclude(o => o.OrderMeals)!.ThenInclude(m => m.Meal));
+            var Ownerid = _userManager.GetUserId(User);
+
+            var rest = await _context.GetRepository<Restaurant>().GetOneAsync(r => r.OwnerId == Ownerid, q => q.Include(o => o.Orders)!.ThenInclude(o => o.OrderMeals)!.ThenInclude(m => m.Meal));
             if (rest == null)
                 return NotFound();
             var restOrders = rest.Orders!.ToList();
 
             return View(restOrders);
         }
+
 
 
     }

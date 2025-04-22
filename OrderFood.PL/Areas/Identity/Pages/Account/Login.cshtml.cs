@@ -132,6 +132,25 @@ namespace OrderFood.PL.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
+                    //var user = await _usermanager.getuserasync(user);
+                    //var roles = await _usermanager.getrolesasync(user);
+                    //different redirect views based on it roles
+                    //if (roles[0] == "customer")
+                    //{
+                    //    return localredirect(returnurl);
+                    //}
+                    //if (roles[0] == "admin")
+                    //{
+                    //    return localredirect(returnurl);
+                    //}
+                    //if (roles[0] == "delivery")
+                    //{
+                    //    return localredirect(returnurl);
+                    //}
+                    //if (roles[0] == "owner")
+                    //{
+                    //    return localredirect(returnurl);
+                    //}
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)
@@ -172,22 +191,22 @@ namespace OrderFood.PL.Areas.Identity.Pages.Account
         //            var user = await _userManager.GetUserAsync(User);
         //            var roles = await _userManager.GetRolesAsync(user);
 
-        //            //Different Redirect Views based on it roles
-        //            //if (roles[0]=="Customer") {
-        //            //    return LocalRedirect(returnUrl);
-        //            //}
-        //            //if (roles[0] == "Admin")
-        //            //{
-        //            //    return LocalRedirect(returnUrl);
-        //            //}
-        //            //if (roles[0] == "Delivery")
-        //            //{
-        //            //    return LocalRedirect(returnUrl);
-        //            //}
-        //            //if (roles[0] == "Owner")
-        //            //{
-        //            //    return LocalRedirect(returnUrl);
-        //            //}
+                    //Different Redirect Views based on it roles
+                    //if (roles[0]=="Customer") {
+                    //    return LocalRedirect(returnUrl);
+                    //}
+                    //if (roles[0] == "Admin")
+                    //{
+                    //    return LocalRedirect(returnUrl);
+                    //}
+                    //if (roles[0] == "Delivery")
+                    //{
+                    //    return LocalRedirect(returnUrl);
+                    //}
+                    //if (roles[0] == "Owner")
+                    //{
+                    //    return LocalRedirect(returnUrl);
+                    //}
         //            return LocalRedirect(returnUrl);
         //        }
         //        if (result.RequiresTwoFactor)
