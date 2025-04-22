@@ -43,7 +43,7 @@
                     @if (User.IsInRole("Customer"))
                     {
                         <li class="nav-item dropdown cart-dropdown text-black position-relative">
-                            <a asp-area="Customer" asp-controller="Customer" asp-action="userCart" class="nav-link dropdown-toggle">
+                            <a asp-area="Customer" asp-controller="BasketFavourite" asp-action="GetCustomerCart" class="nav-link dropdown-toggle">
                                 <span class="position-relative ">
                                     <i class="bi bi-cart fs-5 text-light fw-bold "></i>
                                     <span class="text-black position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"></span>
@@ -51,9 +51,9 @@
                             </a>
 
                             <div class="dropdown-menu dropdown-menu-right end-50">
-                                <h6 class="dropdown-header text-center mb-2">Your Cart (2 items)</h6>
+                                @*   <h6 class="dropdown-header text-center mb-2">Your Cart (2 items)</h6>
 
-                                <!-- Cart Item -->
+                                 <!-- Cart Item -->
                                 <div class="mini-cart-item d-flex border-bottom pb-3 mb-3">
                                     <img src="image/burger.jpg" alt="Product">
                                     <div class="flex-grow-1">
@@ -104,15 +104,17 @@
                                         </div>
                                     </div>
                                 </div>
+ 
+
 
                                 <!-- Total -->
                                 <div class="d-flex justify-content-between cart-total mb-3">
                                     <span>Subtotal:</span><span>$198</span>
                                 </div>
-
+*@
                                 <!-- Buttons -->
                                 <div class="d-grid gap-2">
-                                    <a asp-area="Customer" asp-controller="Customer" asp-action="userCart" class="btn btn-danger">View Cart</a>
+                                    <a asp-area="Customer" asp-controller="BasketFavourite" asp-action="GetCustomerCart" class="btn btn-danger">View Cart</a>
                                     
                                 </div>
                             </div>
@@ -120,14 +122,14 @@
 
 
                         <li class="nav-item dropdown cart-dropdown text-black position-relative">
-                            <a asp-area="Customer" asp-controller="Customer" asp-action="userWishlist" class="nav-link dropdown-toggle">
+                            <a asp-area="Customer" asp-controller="BasketFavourite" asp-action="GetCustomerFavourite" class="nav-link dropdown-toggle">
                                 <span class="position-relative ">
                                     <i class="bi bi-heart fs-5 text-light fw-bold"></i>
                                 </span>
                             </a>
 
                             <div class="dropdown-menu dropdown-menu-right end-50">
-                                <h6 class="dropdown-header text-center mb-2">Your Cart (2 items)</h6>
+                        @*         <h6 class="dropdown-header text-center mb-2">Your Cart (2 items)</h6>
 
 
                                 <!-- Wishlist Item 1 -->
@@ -142,10 +144,10 @@
                             </a>
                         </div>
 
-
+ *@
                                 <!-- Buttons -->
                                 <div class="d-grid gap-2">
-                                    <a asp-area="Customer" asp-controller="Customer" asp-action="userWishlist" class="btn btn-danger ">View Wishlist</a>
+                                    <a asp-area="Customer" asp-controller="BasketFavourite" asp-action="GetCustomerFavourite" class="btn btn-danger ">View Wishlist</a>
                                     
                                 </div>
                             </div>

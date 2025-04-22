@@ -19,8 +19,8 @@ namespace OrderFood.DAL.Entities.Models
             // 5 is the delivery fee
         }
 
-        public decimal Lat { get; set; }
-        public decimal Long { get; set; }
+        public decimal? Lat { get; set; }
+        public decimal? Long { get; set; }
         public DateTime CreatedOrder { get; set; } = DateTime.Now;
         public OrderStatus OrderStatus { get; set; } = OrderStatus.Pending;
 

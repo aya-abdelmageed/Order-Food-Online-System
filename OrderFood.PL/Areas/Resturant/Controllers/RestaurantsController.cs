@@ -12,6 +12,7 @@ using OrderFood.DAL.Context;
 using OrderFood.DAL.Entities.Models;
 using OrderFood.DAL.Entities.User;
 using OrderFood.PL.Areas.Delivery.ViewModel;
+using OrderFood.DAL.Entities.User;
 using OrderFood.PL.Areas.Resturant.ViewModel;
 
 namespace OrderFood.PL.Areas.Resturant.Controllers
@@ -20,12 +21,12 @@ namespace OrderFood.PL.Areas.Resturant.Controllers
     public class RestaurantsController : Controller
     {
         private readonly IUnitOfWork _context;
-        private readonly UserManager<ApplicationUser> _UserManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public RestaurantsController(IUnitOfWork context , UserManager<ApplicationUser> UserManager)
+        public RestaurantsController(IUnitOfWork context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
-            _UserManager = UserManager;
+            _userManager = userManager;
         }
         //----------------------------------------------------------------
         // GET: Resturant/Restaurants
@@ -364,8 +365,9 @@ namespace OrderFood.PL.Areas.Resturant.Controllers
         //Get the Restaurant info to Edit
         public async Task<IActionResult> Settings()
         {
+            var user = await _userManager.GetUserAsync(User);
             var restuarant = await _context.GetRepository<Restaurant>().GetOneAsync(
-                criteria: c => c.Id == 5
+                criteria: c => c.OwnerId == user.Id
                 );
             var model = new UpdateRestaurantViewModel
             {
