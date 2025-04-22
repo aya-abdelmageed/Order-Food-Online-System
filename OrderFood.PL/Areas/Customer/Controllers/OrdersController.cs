@@ -32,13 +32,12 @@ namespace OrderFood.PL.Areas.Customer.Controllers
         public async Task<IActionResult> GetCustomerOrder()
         {
 
-            //var custid = _userManager.GetUserId(User);
-            var custid = "a91aa43f-4d7d-4649-9a44-67cbd667119f";
+            var custid = _userManager.GetUserId(User);
+            
             var custorder = await _context.GetRepository<Order>().GetAllAsync(
                 o => o.CustomerId == custid, query => query.Include(o => o.OrderMeals)!.ThenInclude(i => i.Meal)
                 );
             if (custorder == null) return NotFound();
-
 
             return View(custorder);
         }

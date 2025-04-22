@@ -115,12 +115,15 @@
     </div>
      
     @* fiiiiiiiiiiinalllllllllllllllllllllllllllllllllll *@
+
+        <span class="section-title fs-3  header-design ">Order History</span>
+
         <div class="my-4">
             <div class="card rounded-4 shadow-sm p-4">
                 <div class="accordion accordion-flush" id="accordionFlushExample">
                     @foreach (var item in Model)
                     {
-                        if (item.OrderStatus == OrderStatus.Completed)
+                        if (item.OrderStatus == OrderStatus.Completed || item.OrderStatus == OrderStatus.Shipping)
                         {
                             var collapseId = $"collapse-{item.Id}";
                             var headingId = $"heading-{item.Id}";
@@ -131,13 +134,20 @@
                                             aria-expanded="false" aria-controls="@collapseId">
                                         <div class="w-100 d-flex flex-wrap align-items-center justify-content-between p-3">
                                             <div>
-                                                <div class="fw-bold">@item.Id</div>
-                                                <small class="text-muted">@item.CreatedOrder</small>
+                                                <div>
+                                                    <div class="fw-bold">Order ID</div>
+                                                    <small class="text-muted">@item.Id</small>
+                                                </div>
+                                                <div class="fw-bold"></div>
+                                                @* <small class="text-muted">@item.CreatedOrder</small> *@
                                             </div>
                                             <div class="d-flex align-items-center gap-2">
                                                 <div>
                                                     <div class="fw-bold">Customer Name</div>
-                                                    <small class="text-muted">@item.Customer.UserName</small>
+                                                    @{
+                                                        string name = @item.Customer.UserName.Split('@')[0];
+                                                    }
+                                                    <small class="text-muted">@name</small>
                                                 </div>
                                             </div>
                                             <div class="text-start">
@@ -154,7 +164,16 @@
                                                 <span class="fw-bold">@item.ShippingAddress</span>
                                             </div>
                                             <div>
-                                                <span class="badge rounded-pill border border-success text-success px-3  py-2">@item.OrderStatus</span>
+                                                @if (item.OrderStatus == OrderStatus.Completed)
+                                                {
+
+                                                    <span class="badge rounded-pill border border-success text-success px-3  py-2">@item.OrderStatus</span>
+                                                }
+                                                @if (item.OrderStatus == OrderStatus.Shipping)
+                                                {
+
+                                                    <span class="badge rounded-pill border border-warning text-warning px-3  py-2" onclick="updateShippingtoComplete(@item.Id)">@item.OrderStatus</span>
+                                                }
                                             </div>
                                         </div>
                                         @* onclick='GetOrderHistory(@Html.Raw(JsonSerializer.Serialize(item)))' *@
@@ -195,7 +214,35 @@
                 prevEl: '.brand-carousel-prev',
             },
         });
-        function Acceptshipping(orderId){
+
+        function GetOrderDetails(order) {
+
+             fetch('/delivery/delivery/GetOrderDetails', {
+                 method: 'POST',
+                 headers: { 'Content-Type': 'application/json' },
+                 body: JSON.stringify(order)
+             })
+             .then(res => res.text())
+             .then(html => {
+                 document.getElementById("orderDetailsContainer").innerHTML = html;
+             });
+         }
+        function updateShippingtoComplete(orderId){
+                 fetch(`/delivery/delivery/updateShippingtoComplete/${orderId}`, {
+            method: 'POST'
+        })
+            .then(response => {
+                if (response.ok) {
+                     alert("Order delivered Successfully!");
+                    location.reload();
+                } else {
+                    alert("Failed to delivere order.");
+                }
+            });
+        }
+
+
+         function Acceptshipping(orderId){
                  fetch(`/delivery/delivery/Acceptshipping/${orderId}`, {
             method: 'POST'
         })
@@ -208,19 +255,7 @@
                 }
             });
         }
-
-        function GetOrderDetails(order) {
-            fetch('/delivery/delivery/GetOrderDetails', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(order)
-            })
-            .then(res => res.text())
-            .then(html => {
-                document.getElementById("orderDetailsContainer").innerHTML = html;
-            });
-        }
-
+        
         function GetOrderHistory(order) {
             fetch('/delivery/delivery/GetOrderDetails', {
                 method: 'POST',
@@ -237,137 +272,4 @@
 </body>
 </html>
 
-
-@* ////////////////////////////////////////////////////// ///////////////////////////////////////////////////////////////////*@
-@* @section Styles {
-<link rel="stylesheet" href="~/css/Delivery/style.css" />
-<link rel="stylesheet" href="~/css/Delivery/vendor.css" />
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
-
-}
-
-<section class="p-5 overflow-hidden">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-12">
-
-                <div class="section-header d-flex flex-wrap justify-content-between mb-5">
-                    <h2 class="section-title header-design p-3">Waiting To Deliver</h2>
-                    <div class="d-flex align-items-center">
-                        <div class="swiper-buttons">
-                            <button class="swiper-prev category-carousel-prev btn btn-yellow">❮</button>
-                            <button class="swiper-next category-carousel-next btn btn-yellow">❯</button>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-12">
-                <div class="category-carousel swiper">
-                    <div class="swiper-wrapper" style="height: 310px;">
-                        @foreach (var item in Model)
-                        {
-                            <a id="@item.Id"
-                               class="nav-link category-item swiper-slide order-card"
-                               onclick='GetOrderDetails(@Html.Raw(JsonSerializer.Serialize(item)))'>
-
-                                <div class="d-flex align-items-center gap-3 p-2 bg-light rounded shadow-sm">
-                                    <img src="~/images/Icons/add-cart.png" alt="N/A" width="50" height="50" class="flex-shrink-0" style="object-fit: contain;">
-                                    <h6 class="mb-0 text-dark">@item.Restaurant.Name</h6>
-                                    <h6 class="mb-0 text-dark">@item.Restaurant.Address</h6>
-                                </div>
-
-                            </a>
-                        }
-                    </div>
-                </div>
-            </div>
-        </div>
-     
-
-
-
-
-        @* <div class="container py-5">
-            <div class=" row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-
-                @foreach (var item in Model)
-                {
-                    <a id="@item.Id" class="nav-link category-item swiper-slide order-card">
-                        <div>
-                            <img src="~/images/Icons/add-cart.png" alt="" width="50px" height="50px">
-                        </div>
-                        <h3 class="category-title">@item.Id</h3>
-                        <h5 class="category-title">Restaurant Name</h5>
-                        <h5 class="category-title">Restaurant Location</h5>
-                    </a>
-                }
-            </div>
-        </div> 
-
-
-
-
-     </div> 
-
-    <!-- =============================================== Partial View ============================================ -->
-    <div id="orderDetailsContainer""> 
-
-     </div> 
-
-
-
-</section>
-
-
-
-
-
-@section Scripts {
-    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
-    <script src="~/js/Delivery/jquery-1.11.0.min.js"></script>
-    <script> 
-          function GetOrderDetails(order) { 
-
-             fetch('/delivery/delivery/GetOrderDetails', { 
-                 method: 'POST', 
-                 headers: { 'Content-Type': 'application/json' }, 
-                 body: JSON.stringify(order) 
-             }) 
-             .then(res => res.text())
-             .then(html => { 
-                 document.getElementById("orderDetailsContainer").innerHTML = html; 
-             }); 
-         } 
-     </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            new Swiper('.category-carousel', {
-                slidesPerView: 3,
-                spaceBetween: 20,
-                navigation: {
-                    nextEl: '.category-carousel-next',
-                    prevEl: '.category-carousel-prev',
-                },
-                breakpoints: {
-                    768: {
-                        slidesPerView: 2,
-                    },
-                    992: {
-                        slidesPerView: 3,
-                    },
-                    1200: {
-                        slidesPerView: 4,
-                    },
-                },
-            });
-        });
-    </script>
-
-    <script src="~/js/delivery/script.js"></script>
-
-}  
-  *@
+ 

@@ -8,14 +8,17 @@
       <ul class="nav-links">
 
             <li>
-                <a asp-area="Customer" asp-action="CustomerHomeAllResturant" asp-controller="Customer">
+                <a asp-area="Customer" asp-action="CustomerHomeAllResturant" asp-controller="Customer">  
+                    @* <a asp-area="Customer" asp-action="index" asp-controller="Customer"> *@
+
                     <i class="bx bx-home-alt-2"></i>
                     <span class="title">Home</span>
                 </a>
                 <span class="tooltip">Home</span>
             </li>
             <li>
-                <a>
+                <a asp-area="Customer" asp-action="GetCustomerOrder" asp-controller="Orders">
+
                     <i class="bi bi-card-list"></i>
                     <span class="title">Food Order</span>
                 </a>
@@ -29,7 +32,8 @@
                 <span class="tooltip">Bills</span>
             </li>
             <li>
-                <a href="#">
+                <a asp-area="Customer" asp-action="OrderTracking" asp-controller="Orders">
+
                     <i class="bi bi-truck"></i>
                     <span class="title">Order Tracking</span>
                 </a>
@@ -68,14 +72,16 @@
             </li>
             
             <li>
-                <a href="#">
+                <a asp-area="Resturant" asp-action="GetRestOrders" asp-controller="Restaurants">
+
                     <i class="bi bi-card-list"></i>
                     <span class="title">Orders</span>
                 </a>
                 <span class="tooltip">Orders</span>
             </li>
             <li>
-                <a href="#">
+                <a asp-area="Resturant" asp-action="GetReviews" asp-controller="Restaurants">
+
                     <i class="bi bi-star"></i>
                     <span class="title">Reviews</span>
                 </a>
@@ -106,7 +112,8 @@
                 <span class="tooltip">Home</span>
             </li>
             <li>
-                <a href="#">
+                <a asp-area="Delivery" asp-action="PreparedOrders" asp-controller="Delivery">
+
                     <i class="bi bi-truck"></i>
                     <span class="title">Orders</span>
                 </a>

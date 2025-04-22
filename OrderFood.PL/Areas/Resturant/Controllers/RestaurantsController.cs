@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +10,7 @@ using OrderFood.BLL.Interfaces;
 using OrderFood.BLL.Repositories;
 using OrderFood.DAL.Context;
 using OrderFood.DAL.Entities.Models;
+using OrderFood.DAL.Entities.User;
 using OrderFood.PL.Areas.Delivery.ViewModel;
 using OrderFood.PL.Areas.Resturant.ViewModel;
 
@@ -18,15 +20,18 @@ namespace OrderFood.PL.Areas.Resturant.Controllers
     public class RestaurantsController : Controller
     {
         private readonly IUnitOfWork _context;
+        private readonly UserManager<ApplicationUser> _UserManager;
 
-        public RestaurantsController(IUnitOfWork context)
+        public RestaurantsController(IUnitOfWork context , UserManager<ApplicationUser> UserManager)
         {
             _context = context;
+            _UserManager = UserManager;
         }
         //----------------------------------------------------------------
         // GET: Resturant/Restaurants
         public async Task<IActionResult> GetMenu(int id)
         {
+
             var foodDbContext = await _context.GetRepository<Restaurant>().GetOneAsync(i => i.Id == id, query => query.Include(p => p.Categories).ThenInclude(m => m.Meals));
 
             if (foodDbContext == null)
@@ -423,9 +428,11 @@ namespace OrderFood.PL.Areas.Resturant.Controllers
 
         //***************************************************************************************************************
         //get all restaurant orders
-        public async Task<IActionResult> GetRestOrders(int id)
+        public async Task<IActionResult> GetRestOrders()
         {
-            var rest = await _context.GetRepository<Restaurant>().GetOneAsync(r => r.Id == id, q => q.Include(o => o.Orders)!.ThenInclude(o => o.OrderMeals)!.ThenInclude(m => m.Meal));
+            var Ownerid = _UserManager.GetUserId(User);
+
+            var rest = await _context.GetRepository<Restaurant>().GetOneAsync(r => r.OwnerId == Ownerid, q => q.Include(o => o.Orders)!.ThenInclude(o => o.OrderMeals)!.ThenInclude(m => m.Meal));
             if (rest == null)
                 return NotFound();
             var restOrders = rest.Orders!.ToList();
