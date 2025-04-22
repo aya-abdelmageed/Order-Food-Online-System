@@ -1,0 +1,212 @@
+﻿
+/* Document
+   ========================================================================== */
+
+/**
+ * 1. Correct the line height in all browsers.
+ * 2. Prevent adjustments of font size after orientation changes in iOS.
+ */
+
+html {
+    line-height: 1.15; /* 1 */
+    -webkit-text-size-adjust: 100%; /* 2 */
+}
+
+/* Sections
+   ========================================================================== */
+
+/**
+ * Remove the margin in all browsers.
+ */
+
+body {
+    margin: 0;
+}
+
+/**
+ * Render the `main` element consistently in IE.
+ */
+
+main {
+    display: block;
+}
+
+/**
+ * Correct the font size and margin on `h1` elements within `section` and
+ * `article` contexts in Chrome, Firefox, and Safari.
+ */
+
+h1 {
+    font-size: 2em;
+    margin: 0.67em 0;
+}
+
+/* Grouping content
+   ========================================================================== */
+
+/**
+ * 1. Add the correct box sizing in Firefox.
+ * 2. Show the overflow in Edge and IE.
+ */
+
+
+
+
+
+/* category carousel */
+.category-carousel .category-item {
+    background: #FFFFFF;
+    border: 1px solid #FBFBFB;
+    box-shadow: 0px 5px 22px rgba(0, 0, 0, 0.04);
+    border-radius: 16px;
+    text-align: center;
+    padding: 60px 20px;
+    margin: 20px 0;
+    transition: box-shadow 0.3s ease-out, transform 0.3s ease-out;
+}
+
+    .category-carousel .category-item:hover {
+        transform: translate3d(0,-10px,0);
+        box-shadow: 0px 21px 44px rgba(0, 0, 0, 0.08);
+    }
+
+    .category-carousel .category-item .category-title {
+        font-weight: 600;
+        font-size: 20px;
+        line-height: 27px;
+        letter-spacing: 0.02em;
+        text-transform: capitalize;
+        color: #222222;
+        margin-top: 20px;
+    }
+
+/* General Styles */
+.category-item {
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+    .category-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+    }
+
+.category-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 10px;
+    background-color: #fff;
+    width: 100%;
+    height: 250px; /* Reduced height */
+    border-radius: 12px;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.category-image {
+    width: 100%;
+    height: 120px; /* Reduced image height */
+    object-fit: contain; /* Ensures the image fits inside the box without stretching */
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+}
+
+    .category-image:hover {
+        transform: scale(1.1);
+    }
+
+.category-title {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #333;
+    margin: 10px 0;
+}
+
+.category-btn {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+    .category-btn:hover {
+        background-color: #0056b3;
+    }
+
+
+    .featured-product-card {
+     border: 1px solid #ddd;
+     border-radius: 8px;
+     overflow: hidden;
+ }
+
+ .featured-product-image {
+     height: 200px;
+     background-color: #f1f1f1;
+     background-size: cover;
+     background-position: center;
+ }
+
+ .featured-product-details {
+     padding: 20px;
+ }
+
+
+.product-card {
+    background-color: #fff;
+    border: none;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+    .product-card:hover {
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        transform: translateY(-5px);
+    }
+
+.card-img-top {
+    height: 200px;
+    object-fit: cover;
+}
+
+.product-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.product-price {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #28a745;
+}
+
+.rating {
+    color: #ffc107;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border: none;
+}
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+

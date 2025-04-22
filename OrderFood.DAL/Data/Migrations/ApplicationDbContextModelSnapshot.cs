@@ -290,10 +290,10 @@ namespace OrderFood.Pl.Migrations
                     b.Property<bool>("IsDelete")
                         .HasColumnType("bit");
 
-                    b.Property<decimal>("Lat")
+                    b.Property<decimal?>("Lat")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal>("Long")
+                    b.Property<decimal?>("Long")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("OrderStatus")

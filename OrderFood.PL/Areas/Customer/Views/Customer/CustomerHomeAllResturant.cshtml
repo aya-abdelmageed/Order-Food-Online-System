@@ -1,0 +1,97 @@
+﻿@* @model OrderFood.PL.Areas.Customer.Models.CategoryViewModel; *@
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@inject IConfiguration Configuration;
+@{
+    ViewData["Title"] = "Index";
+    var restaurant = ViewData["Restaurants"] as List<OrderFood.DAL.Entities.Models.Restaurant>; ;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div class="container">
+    <section class="py-5 overflow-hidden">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+
+                    <div class="section-header d-flex flex-wrap justify-content-between mb-5">
+                        <h2 class="section-title p-3 bg-success text-light rounded-2">Our Category</h2>
+
+                        <div class="d-flex align-items-center">
+                            @* <a href="#" class="btn-link text-decoration-none p-2 bg-secondary rounded-2 text-light me-2">View All Categories →</a> *@
+                            <div class="swiper-buttons">
+                                <button class="swiper-prev category-carousel-prev btn btn-yellow border-1 bg-warning">❮</button>
+                                <button class="swiper-next category-carousel-next btn btn-yellow border-1 bg-warning">❯</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+
+                    <div class="category-carousel swiper">
+                        <div class="swiper-wrapper">
+                            @foreach (var item in Model)
+                            {
+                                <a asp-area="Customer" asp-action="CustomerHomeAllResturant" asp-route-name="@item.CategoryName" class="nav-link category-item swiper-slide">
+                                    <img class="rounded-circle" width="70" height="70" src="@Configuration["BaseURL"]@item.Image" alt="Category Thumbnail">
+                                    <h3 class="category-title">@item.CategoryName </h3>
+
+                                </a>
+                            }
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <section class="">
+        <div class="mt-4">
+            <h3 class=" text-center p-2 bg-success rounded-2 text-light">Discover Our Categories</h3>
+            
+        </div>
+
+        <div class="container my-5">
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 justify-content-center">
+                @foreach (var i in restaurant)
+                {
+                    <div class="col">
+                        <div class="card h-100 d-flex flex-column product-card">
+                            <div class="image-container">
+                                <img src="@i.Logo" alt="@i.Name" class="card-img-top w-100">
+                            </div>
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title product-title">@i.Name</h5>
+                                <p class="card-text text-secondary">@i.Address</p>
+                                <div class="mt-auto">
+                                    <a asp-area="Resturant" asp-action="GetMenu" asp-controller="Restaurants" asp-route-id="@i.Id"  class="btn btn-primary w-100">Visit Restaurant</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+
+</div>
+
+
+@section Styles{
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css">
+
+	<link href="~/css/customer/customerhomeallresturant.css" rel="stylesheet" />
+}
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+    <script src="~/js/Customer/customerhomeallresturant.js"></script>
+}

@@ -14,9 +14,9 @@
     <!-- bg-body-tertiary -->
     <nav class="navbar  navbar-expand-md bg-success  bsb-navbar-3 ">
         <div class="container">
-            <a class="navbar-brand" href="#!">
+            <a href="@Url.Action("OnboardingPage", "Home", new { area = "" })" class="navbar-brand">
                 <img src="~/images/HomePageImages/logo (1).png" class="img-fluid rounded" alt="BootstrapBrain Logo" width="150"
-                     height="80">
+                   height="80">
             </a>
             <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse"
                     data-bs-target="#bsbNavbar" aria-controls="bsbNavbar" aria-label="Toggle Navigation">
@@ -43,17 +43,17 @@
                     @if (User.IsInRole("Customer"))
                     {
                         <li class="nav-item dropdown cart-dropdown text-black position-relative">
-                            <a class="nav-link dropdown-toggle" href="#">
+                            <a asp-area="Customer" asp-controller="BasketFavourite" asp-action="GetCustomerCart" class="nav-link dropdown-toggle">
                                 <span class="position-relative ">
-                                    <i class="bi bi-cart fs-5 "></i>
-                                    <span class="text-black position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">2</span>
+                                    <i class="bi bi-cart fs-5 text-light fw-bold "></i>
+                                    <span class="text-black position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"></span>
                                 </span>
                             </a>
 
                             <div class="dropdown-menu dropdown-menu-right end-50">
-                                <h6 class="dropdown-header text-center mb-2">Your Cart (2 items)</h6>
+                                @*   <h6 class="dropdown-header text-center mb-2">Your Cart (2 items)</h6>
 
-                                <!-- Cart Item -->
+                                 <!-- Cart Item -->
                                 <div class="mini-cart-item d-flex border-bottom pb-3 mb-3">
                                     <img src="image/burger.jpg" alt="Product">
                                     <div class="flex-grow-1">
@@ -104,91 +104,55 @@
                                         </div>
                                     </div>
                                 </div>
+ 
+
 
                                 <!-- Total -->
                                 <div class="d-flex justify-content-between cart-total mb-3">
                                     <span>Subtotal:</span><span>$198</span>
                                 </div>
-
+*@
                                 <!-- Buttons -->
                                 <div class="d-grid gap-2">
-                                    <a href="#" class="btn btn-danger">View Cart</a>
-                                    <a href="#" class="btn btn-outline-secondary">Checkout</a>
+                                    <a asp-area="Customer" asp-controller="BasketFavourite" asp-action="GetCustomerCart" class="btn btn-danger">View Cart</a>
+                                    
                                 </div>
                             </div>
                         </li>
 
 
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle bsb-dropdown-toggle-caret-disable" href="#"
-                               role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <span class="position-relative pt-1">
-                                    <i class="bi bi-heart fs-5"></i>
-                                    <span class="p-1 bg-danger border border-light rounded-circle position-absolute top-0 start-100 translate-middle">
-                                        <span class="visually-hidden">New Wishlist Items</span>
-                                    </span>
+                        <li class="nav-item dropdown cart-dropdown text-black position-relative">
+                            <a asp-area="Customer" asp-controller="BasketFavourite" asp-action="GetCustomerFavourite" class="nav-link dropdown-toggle">
+                                <span class="position-relative ">
+                                    <i class="bi bi-heart fs-5 text-light fw-bold"></i>
                                 </span>
                             </a>
-                            <ul class="dropdown-menu dropdown-menu-md-end bsb-dropdown-animation end-0 ">
-                                <li>
-                                    <h6 class="dropdown-header fs-7 text-center">Your Wishlist (3 items)</h6>
-                                </li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
+
+                            <div class="dropdown-menu dropdown-menu-right end-50">
+                        @*         <h6 class="dropdown-header text-center mb-2">Your Cart (2 items)</h6>
+
+
                                 <!-- Wishlist Item 1 -->
-                                <li class="wishlist-item">
-                                    <a class="dropdown-item d-flex align-items-center" href="#!">
-                                        <img src="~/images/pizza.avif" alt="Product 1"
-                                             class="img-fluid rounded-2 me-2" style="width: 40px;">
-                                        <span class="fs-7">PIZZA</span>
-                                        <button class="btn btn-link ms-auto text-danger remove-item"
-                                                aria-label="Remove">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </a>
-                                </li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-                                <!-- Wishlist Item 2 -->
-                                <li class="wishlist-item">
-                                    <a class="dropdown-item d-flex align-items-center" href="#!">
-                                        <img src="~/images/pizza.avif" alt="Product 2"
-                                             class="img-fluid rounded-2 me-2" style="width: 40px;">
-                                        <span class="fs-7">PIZZA</span>
-                                        <button class="btn btn-link ms-auto text-danger remove-item"
-                                                aria-label="Remove">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </a>
-                                </li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-                                <!-- Wishlist Item 3 -->
-                                <li class="wishlist-item">
-                                    <a class="dropdown-item d-flex align-items-center" href="#!">
-                                        <img src="~/images/pizza.avif" alt="Product 3"
-                                             class="img-fluid rounded-2 me-2" style="width: 40px;">
-                                        <span class="fs-7">PIZZA</span>
-                                        <button class="btn btn-link ms-auto text-danger remove-item"
-                                                aria-label="Remove">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </a>
-                                </li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-                                <li>
-                                    <a class="dropdown-item fs-7 text-center" href="#">
-                                        See All Wishlist
-                                        Items
-                                    </a>
-                                </li>
-                            </ul>
+                        <div class="wishlist-item">
+                            <a class="dropdown-item d-flex align-items-center" href="#!">
+                                <img src="~/images/pizza.avif" alt="Product 1"
+                                     class="img-fluid rounded-2 me-2" style="width: 40px;">
+                                <span class="fs-7">PIZZA</span>
+                                <button class="btn btn-link ms-auto text-danger remove-item" aria-label="Remove">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </a>
+                        </div>
+
+ *@
+                                <!-- Buttons -->
+                                <div class="d-grid gap-2">
+                                    <a asp-area="Customer" asp-controller="BasketFavourite" asp-action="GetCustomerFavourite" class="btn btn-danger ">View Wishlist</a>
+                                    
+                                </div>
+                            </div>
                         </li>
+
                     }
 
 

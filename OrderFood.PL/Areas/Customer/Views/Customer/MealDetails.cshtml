@@ -1,0 +1,73 @@
+﻿@model OrderFood.DAL.Entities.Models.Meal
+@{
+    ViewData["Title"] = "MealDetails";
+}
+<head>
+
+    <style>
+        .product-image {
+            max-height: 400px;
+            object-fit: cover;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="container mt-5">
+        <div class="row">
+            <!-- Product Images -->
+            <div class="col-md-6 mb-4">
+                <img src=" @Model.Image" alt="Product" class="img-fluid rounded mb-3 product-image" id="mainImage">
+            </div>
+
+            <!-- Product Details -->
+            <div class="col-md-6">
+                <h2 class="mb-3">@Model.Name</h2>
+                <div class="mb-3">
+                    <span class="h4 me-2">$@Model.Price</span>
+                </div>
+                 <p class="mb-4">  
+                     @Model.Description
+                  </p> 
+                <div class="mb-4">
+                    <label for="quantity" class="form-label ">Quantity:</label>
+                    <input type="number" class="form-control fs-3" id="quantity" value="1" min="1" style="width: 80px;">
+                </div>
+                <button class="btn btn-primary btn-lg mb-3 me-2">
+                    <i class="bi bi-cart-plus"></i> Add to Cart
+                </button>
+                <button class="btn btn-outline-secondary btn-lg mb-3">
+                    <i class="bi bi-heart"></i> Add to Wishlist
+                </button>
+            </div>
+        </div>
+    </div>
+</body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 

@@ -12,6 +12,7 @@ using OrderFood.DAL.Context;
 using OrderFood.DAL.Entities.Models;
 using OrderFood.DAL.Entities.User;
 using OrderFood.PL.Areas.Delivery.ViewModel;
+using OrderFood.DAL.Entities.User;
 using OrderFood.PL.Areas.Resturant.ViewModel;
 
 namespace OrderFood.PL.Areas.Resturant.Controllers
@@ -22,16 +23,19 @@ namespace OrderFood.PL.Areas.Resturant.Controllers
         private readonly IUnitOfWork _context;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public RestaurantsController(IUnitOfWork context, UserManager<ApplicationUser> userManager)
+        public RestaurantsController(IUnitOfWork context , UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _userManager = userManager;
         }
         //----------------------------------------------------------------
+
         // GET: Resturant/Restaurants
-        public async Task<IActionResult> GetMenu(int id)
+        public async Task<IActionResult> GetMenu()
         {
-            var foodDbContext = await _context.GetRepository<Restaurant>().GetOneAsync(i => i.Id == id, query => query.Include(p => p.Categories).ThenInclude(m => m.Meals));
+            var owner =await _userManager.GetUserAsync(User);
+            
+            var foodDbContext = await _context.GetRepository<Restaurant>().GetOneAsync(i => i.OwnerId == owner.Id, query => query.Include(p => p.Categories).ThenInclude(m => m.Meals));
 
             if (foodDbContext == null)
                 return NotFound();
@@ -350,10 +354,12 @@ namespace OrderFood.PL.Areas.Resturant.Controllers
 
         //----------------------------------------------------------------------------------------
         //Get restaurant reviews
-        public async Task<IActionResult> GetReviews(int restaurantID)
+        public async Task<IActionResult> GetReviews()
         {
+            var owner = await _userManager.GetUserAsync(User);
+            var restaurant = await _context.GetRepository<Restaurant>().GetOneAsync(r=>r.OwnerId==owner.Id);
             var reviews = await _context.GetRepository<Review>()
-                .GetAllAsync(r => r.RestaurantId == 3, i => i.Include(o => o.Restaurant).Include(c => c.Customer));
+                .GetAllAsync(r => r.RestaurantId == restaurant.Id, i => i.Include(o => o.Restaurant).Include(c => c.Customer));
             return (View(reviews));
         }
         //----------------------------------------------------------------------
@@ -507,15 +513,18 @@ namespace OrderFood.PL.Areas.Resturant.Controllers
 
         //***************************************************************************************************************
         //get all restaurant orders
-        public async Task<IActionResult> GetRestOrders(int id)
+        public async Task<IActionResult> GetRestOrders()
         {
-            var rest = await _context.GetRepository<Restaurant>().GetOneAsync(r => r.Id == id, q => q.Include(o => o.Orders)!.ThenInclude(o => o.OrderMeals)!.ThenInclude(m => m.Meal));
+            var Ownerid = _userManager.GetUserId(User);
+
+            var rest = await _context.GetRepository<Restaurant>().GetOneAsync(r => r.OwnerId == Ownerid, q => q.Include(o => o.Orders)!.ThenInclude(o => o.OrderMeals)!.ThenInclude(m => m.Meal));
             if (rest == null)
                 return NotFound();
             var restOrders = rest.Orders!.ToList();
 
             return View(restOrders);
         }
+
 
 
     }

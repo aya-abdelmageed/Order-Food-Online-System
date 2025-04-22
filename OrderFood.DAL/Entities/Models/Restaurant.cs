@@ -28,5 +28,9 @@ namespace OrderFood.DAL.Entities.Models
 
         // Navigation Properties For Orders
         public ICollection<Order>? Orders { get; set; } = new HashSet<Order>();
+
+       
+
+
     }
 }
