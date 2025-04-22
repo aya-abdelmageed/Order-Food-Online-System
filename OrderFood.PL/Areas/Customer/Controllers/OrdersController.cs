@@ -212,18 +212,38 @@ namespace OrderFood.PL.Areas.Customer.Controllers
 
 
             var coupon = await _unitOfWork.GetRepository<Coupon>().GetOneAsync(c => c.Code == createOrder.CouponId);
-            var FinalOrder = new Order()
+
+
+            var FinalOrder = new Order();
+            if (coupon.Id == 0)
             {
-                ShippingAddress = createOrder.ShippingAddress,
-                SubTotal = createOrder.Total??0,
-                TransactionId = createOrder.TransactionId,
-                PaymentMethod = createOrder.PaymentMethod,
-                PayDate = createOrder.PayDate,
-                RestaurantId = createOrder.RestaurantId,
-                CustomerId = createOrder.CustomerId,
-                CouponId = coupon?.Id,
-                OrderMeals = mealsBasket
-            };
+                FinalOrder = new Order()
+                {
+                    ShippingAddress = createOrder.ShippingAddress,
+                    SubTotal = createOrder.Total ?? 0,
+                    TransactionId = createOrder.TransactionId,
+                    PaymentMethod = createOrder.PaymentMethod,
+                    PayDate = createOrder.PayDate,
+                    RestaurantId = createOrder.RestaurantId,
+                    CustomerId = createOrder.CustomerId,
+                    OrderMeals = mealsBasket
+                };
+            }
+            else
+            {
+                FinalOrder = new Order()
+                {
+                    ShippingAddress = createOrder.ShippingAddress,
+                    SubTotal = createOrder.Total ?? 0,
+                    TransactionId = createOrder.TransactionId,
+                    PaymentMethod = createOrder.PaymentMethod,
+                    PayDate = createOrder.PayDate,
+                    RestaurantId = createOrder.RestaurantId,
+                    CustomerId = createOrder.CustomerId,
+                    CouponId = coupon?.Id,
+                    OrderMeals = mealsBasket
+                };
+            }            
 
             // Add Order to DB
             _unitOfWork.GetRepository<Order>().AddAsync(FinalOrder);
