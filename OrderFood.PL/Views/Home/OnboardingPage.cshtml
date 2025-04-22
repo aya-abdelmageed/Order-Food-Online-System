@@ -1,4 +1,5 @@
-﻿<div class=" bg-light p-0">
+﻿
+<div class=" bg-light p-0">
     <!-- Spinner Start -->
     <div id="spinner"
          class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
@@ -6,92 +7,15 @@
             <span class="sr-only">Loading...</span>
         </div>
     </div>
+
     <!-- Spinner End -->
     <!-- Navbar & Hero Start -->
-    <section class="container-xxl position-relative p-0">
-        <div id="myCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
-            <div class="carousel-inner">
-                <div class="carousel-item active">
-                    <div class="mask d-flex align-items-center px-5">
-                        <div class="container">
-                            <div class="row align-items-center">
-                                <div class="col-md-7 col-12 order-md-1 order-2">
-                                    <h4 class="fs-1 mb-3 text-white lh-1 fw-bold letter-spacing-1">
-                                        Present your <br />awesome product
-                                    </h4>
-                                    <p>
-                                        Lorem ipsum dolor sit amet. Reprehenderit, qui
-                                        blanditiis quidem rerum <br />necessitatibus praesentium
-                                        voluptatum deleniti atque corrupti.
-                                    </p>
-                                    <a href="#">BUY NOW</a>
-                                </div>
-                                <div class="col-md-5 col-12 order-md-2 order-1">
-                                    <img src="~/images/OnboardingImage/pic1.jpg" class="mx-auto" alt="slide" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    @* <section class="container-xxl position-relative p-0 mt-5"> *@
+    @*     @Html.Partial("_CouponsView", ViewBag.Coupons as List<OrderFood.DAL.Entities.Models.Coupon>) *@
+    @* </section> *@
+    <div id="Coupons">
 
-                <div class="carousel-item active">
-                    <div class="mask d-flex align-items-center w-100 px-5">
-                        <div class="container">
-                            <div class="row align-items-center">
-                                <div class="col-md-7 col-12 order-md-1 order-2">
-                                    <h4 class="fs-1 mb-3 text-white lh-1 fw-bold letter-spacing-1">
-                                        Present your <br />awesome product
-                                    </h4>
-                                    <p>
-                                        Lorem ipsum dolor sit amet. Reprehenderit, qui
-                                        blanditiis quidem rerum <br />necessitatibus praesentium
-                                        voluptatum deleniti atque corrupti.
-                                    </p>
-                                    <a href="#">BUY NOW</a>
-                                </div>
-                                <div class="col-md-5 col-12 order-md-2 order-1">
-                                    <img src="~/images/OnboardingImage/pic-2.jpg" class="mx-auto" alt="slide" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="carousel-item active">
-                    <div class="mask d-flex align-items-center w-100 px-5">
-                        <div class="container">
-                            <div class="row align-items-center">
-                                <div class="col-md-7 col-12 order-md-1 order-2">
-                                    <h4 class="fs-1 mb-3 text-white lh-1 fw-bold letter-spacing-1">
-                                        Present your <br />awesome product
-                                    </h4>
-                                    <p>
-                                        Lorem ipsum dolor sit amet. Reprehenderit, qui
-                                        blanditiis quidem rerum <br />necessitatibus praesentium
-                                        voluptatum deleniti atque corrupti.
-                                    </p>
-                                    <a href="#">BUY NOW</a>
-                                </div>
-                                <div class="col-md-5 col-12 order-md-2 order-1">
-                                    <img src="~/images/OnboardingImage/pic-4.jpg" class="mx-auto" alt="slide" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Carousel Controls -->
-            <a class="carousel-control-prev rounded-circle" href="#myCarousel" role="button" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </a>
-            <a class="carousel-control-next rounded-circle" href="#myCarousel" role="button" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </a>
-        </div>
-    </section>
+    </div>
     <!-- Navbar & Hero End -->
     <!-- Service Start -->
     <section class="container-xxl py-5">
@@ -665,151 +589,13 @@
         </div>
     </section>
     <!-- Menu End -->
-    <!-- gallery -->
-    <section class="container py-5 mt-4">
-        <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
-            <h5 class="section-title ff-secondary text-center text-primary fw-normal">
-                Food Menu
-            </h5>
-            <h1 class="mb-5">Most Popular Categories</h1>
+        <div id="popularMealsContainer">
+            <div class="text-center">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
         </div>
-
-        <div class="row row-cols-2 row-cols-md-4 g-4">
-
-            <!-- Column 1 -->
-            <div class="col">
-                <div class="d-flex flex-column gap-3">
-                    <a href="https://example.com/1" class="hover-wrapper">
-                        <img src="~/images/OnboardingImage/foodone.jpg" class="img-fluid rounded" alt="">
-                        <div class="overlay-info">
-                            <div class="info-content">
-                                <h6>Image 1</h6>
-                                <p>Description here</p>
-                            </div>
-                        </div>
-                    </a>
-                    <a href="https://example.com/2" class="hover-wrapper">
-                        <img src="~/images/OnboardingImage/foodtwo.jpg" class="img-fluid rounded" alt="">
-                        <div class="overlay-info">
-                            <div class="info-content">
-                                <h6>Image 2</h6>
-                                <p>Description here</p>
-                            </div>
-                        </div>
-                    </a>
-                    <a href="https://example.com/3" class="hover-wrapper">
-                        <img src="~/images/OnboardingImage/foodthree.jpg" class="img-fluid rounded" alt="">
-                        <div class="overlay-info">
-                            <div class="info-content">
-                                <h6>Image 3</h6>
-                                <p>Description here</p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            </div>
-
-            <!-- Column 2 -->
-            <div class="col">
-                <div class="d-flex flex-column gap-3">
-                    <a href="https://example.com/4" class="hover-wrapper">
-                        <img src="~/images/OnboardingImage/foodthree.jpg" class="img-fluid rounded" alt="">
-                        <div class="overlay-info">
-                            <div class="info-content">
-                                <h6>Image 4</h6>
-                                <p>Description here</p>
-                            </div>
-                        </div>
-                    </a>
-                    <a href="https://example.com/5" class="hover-wrapper">
-                        <img src="~/images/OnboardingImage/foodtwo.jpg" class="img-fluid rounded" alt="">
-                        <div class="overlay-info">
-                            <div class="info-content">
-                                <h6>Image 5</h6>
-                                <p>Description here</p>
-                            </div>
-                        </div>
-                    </a>
-                    <a href="https://example.com/6" class="hover-wrapper">
-                        <img src="~/images/OnboardingImage/foodone.jpg" class="img-fluid rounded" alt="">
-                        <div class="overlay-info">
-                            <div class="info-content">
-                                <h6>Image 6</h6>
-                                <p>Description here</p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            </div>
-
-            <!-- Column 3 -->
-            <div class="col">
-                <div class="d-flex flex-column gap-3">
-                    <a href="https://example.com/4" class="hover-wrapper">
-                        <img src="~/images/OnboardingImage/foodthree.jpg" class="img-fluid rounded" alt="">
-                        <div class="overlay-info">
-                            <div class="info-content">
-                                <h6>Image 4</h6>
-                                <p>Description here</p>
-                            </div>
-                        </div>
-                    </a>
-                    <a href="https://example.com/5" class="hover-wrapper">
-                        <img src="~/images/OnboardingImage/foodtwo.jpg" class="img-fluid rounded" alt="">
-                        <div class="overlay-info">
-                            <div class="info-content">
-                                <h6>Image 5</h6>
-                                <p>Description here</p>
-                            </div>
-                        </div>
-                    </a>
-                    <a href="https://example.com/6" class="hover-wrapper">
-                        <img src="~/images/OnboardingImage/foodone.jpg" class="img-fluid rounded" alt="">
-                        <div class="overlay-info">
-                            <div class="info-content">
-                                <h6>Image 6</h6>
-                                <p>Description here</p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            </div>
-
-            <!-- Column 4 -->
-            <div class="col">
-                <div class="d-flex flex-column gap-3">
-                    <a href="https://example.com/1" class="hover-wrapper">
-                        <img src="~/images/OnboardingImage/foodone.jpg" class="img-fluid rounded" alt="">
-                        <div class="overlay-info">
-                            <div class="info-content">
-                                <h6>Image 1</h6>
-                                <p>Description here</p>
-                            </div>
-                        </div>
-                    </a>
-                    <a href="https://example.com/2" class="hover-wrapper">
-                        <img src="~/images/OnboardingImage/foodtwo.jpg" class="img-fluid rounded" alt="">
-                        <div class="overlay-info">
-                            <div class="info-content">
-                                <h6>Image 2</h6>
-                                <p>Description here</p>
-                            </div>
-                        </div>
-                    </a>
-                    <a href="https://example.com/3" class="hover-wrapper">
-                        <img src="~/images/OnboardingImage/foodthree.jpg" class="img-fluid rounded" alt="">
-                        <div class="overlay-info">
-                            <div class="info-content">
-                                <h6>Image 3</h6>
-                                <p>Description here</p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            </div>
-
-        </div>
-    </section>
 
     <!-- Back to Top -->
     <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
@@ -830,4 +616,14 @@
 
 	<script src="~/js/onboarding/onboarding.js"></script>
 
+    <script>
+                $(document).ready(function () {
+            $("#popularMealsContainer").load("/Home/GetMostPopularMeals");
+                });
+
+           window.onload = function() {
+               $("#Coupons").load("/Home/ViewValidCoupons");
+            document.getElementById('spinner').style.display = 'none';
+        };
+    </script>
 }
