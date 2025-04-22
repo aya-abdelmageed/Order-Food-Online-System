@@ -115,5 +115,15 @@ namespace OrderFood.PL.Areas.Delivery.Controllers
 
         }
 
+        public async Task<IActionResult> updateShippingtoComplete(int id)
+        {
+            var order = await _unitOfWork.GetRepository<Order>().GetOneAsync(O => O.Id == id, q => q.Include(o => o.OrderMeals)!.ThenInclude(i => i.Meal));
+
+            order.OrderStatus = OrderStatus.Completed;
+            await _unitOfWork.SaveChangesAsync();
+            return Ok();
+
+        }
+
     }
 }

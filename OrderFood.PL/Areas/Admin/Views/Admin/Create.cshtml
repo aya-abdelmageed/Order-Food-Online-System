@@ -1,0 +1,92 @@
+﻿@model OrderFood.PL.Areas.Admin.Models.NewUserViewModel
+@{
+    ViewData["Title"] = "Create New User";
+}
+
+<div class="container py-4">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h3 class="card-title"><i class="fas fa-user-plus"></i> @ViewData["Title"]</h3>
+        </div>
+        <div class="card-body">
+            <form asp-action="Create" class="needs-validation" novalidate>
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                
+                @if (TempData["Success"] != null)
+                {
+                    <div class="alert alert-success">@TempData["Success"]</div>
+                }
+                
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label asp-for="FirstName" class="form-label"></label>
+                        <input asp-for="FirstName" class="form-control" />
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label asp-for="LastName" class="form-label"></label>
+                        <input asp-for="LastName" class="form-control" />
+                        <span asp-validation-for="LastName" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="col-12">
+                        <label asp-for="Address" class="form-label"></label>
+                        <input asp-for="Address" class="form-control" />
+                        <span asp-validation-for="Address" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label asp-for="DateOfBirth" class="form-label"></label>
+                        <input asp-for="DateOfBirth" type="date" class="form-control" />
+                        <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label asp-for="Email" class="form-label"></label>
+                        <input asp-for="Email" type="email" value="" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label asp-for="Password" class="form-label"></label>
+                        <input asp-for="Password" value="" type="password" class="form-control" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label asp-for="Role" class="form-label"></label>
+                        <select asp-for="Role" class="form-select" asp-items="ViewBag.Roles">
+                            <option value="">-- Select Role --</option>
+                        </select>
+                        <span asp-validation-for="Role" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="col-12 mt-4">
+                        <button type="submit" class="btn btn-primary px-4">
+                            <i class="fas fa-save"></i> Create User
+                        </button>
+                        <a asp-action="GetAll" class="btn btn-outline-secondary ms-2">
+                            <i class="fas fa-arrow-left"></i> Back to List
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .card {
+            border-radius: 0.5rem;
+        }
+        .form-control, .form-select {
+            border-radius: 0.25rem;
+        }
+    </style>
+}
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
