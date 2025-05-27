@@ -1,0 +1,98 @@
+﻿@model IEnumerable<OrderFood.DAL.Entities.Models.Review>
+@inject IConfiguration Configuration;
+
+<div class="reviews-section" style="max-height: 600px; overflow-y: auto;">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="text-success mb-0">
+            <i class="bi bi-chat-square-quote"></i> What Our Clients Say
+        </h3>
+        <a asp-action="Create" asp-controller="Reviews"
+           asp-route-restaurantId="@ViewContext.RouteData.Values["id"]"
+           class="btn btn-outline-success btn-sm">
+            <i class="bi bi-pencil-square"></i> Write Review
+        </a>
+    </div>
+
+    <div class="reviews-container">
+        <div class="row flex-nowrap pb-3" style="overflow-x: auto;">
+            @foreach (var rev in Model)
+            {
+                <div class="col-12 col-sm-8 col-md-6 col-lg-4 mb-4 flex-shrink-0">
+                    <div class="card h-100 shadow-sm border-0">
+                        <div class="card-body text-center d-flex flex-column">
+                            <div class="mb-3">
+                                <img src="@($"{Configuration["BaseURL"]}{rev.Customer.Image}")"
+                                     class="rounded-circle"
+                                     alt="@rev.Customer.FirstName's avatar"
+                                     style="width: 60px; height: 60px; object-fit: cover;">
+                            </div>
+
+                            <h5 class="card-title mb-1">@rev.Customer.FirstName @rev.Customer.LastName</h5>
+
+                            <div class="text-warning mb-2">
+                                @for (var i = 0; i < rev.Rate; i++)
+                                {
+                                    <i class="bi bi-star-fill"></i>
+                                }
+                                @for (var i = rev.Rate; i < 5; i++)
+                                {
+                                    <i class="bi bi-star"></i>
+                                }
+                            </div>
+
+                            <div class="card-text mb-3 flex-grow-1" style="overflow-y: auto; max-height: 100px;">
+                                @rev.Comment
+                            </div>
+
+                            <div class="text-muted small mt-auto">
+                                <i class="bi bi-calendar"></i> @rev.ReviewDate.ToString("MMM dd, yyyy")
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+    .reviews-section {
+        scrollbar-width: thin;
+        scrollbar-color: #28a745 #f1f1f1;
+        padding: 15px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+        .reviews-section::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .reviews-section::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .reviews-section::-webkit-scrollbar-thumb {
+            background-color: #28a745;
+            border-radius: 4px;
+        }
+
+    .reviews-container .row {
+        scrollbar-width: thin;
+        scrollbar-color: #28a745 #f8f9fa;
+    }
+
+        .reviews-container .row::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .reviews-container .row::-webkit-scrollbar-track {
+            background: #f8f9fa;
+        }
+
+        .reviews-container .row::-webkit-scrollbar-thumb {
+            background-color: #28a745;
+            border-radius: 3px;
+        }
+</style>

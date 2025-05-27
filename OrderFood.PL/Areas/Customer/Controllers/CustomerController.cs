@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OrderFood.BLL.Interfaces;
+using OrderFood.BLL.Repositories;
 using OrderFood.DAL.Entities.Models;
 using OrderFood.DAL.Entities.User;
 using OrderFood.PL.Areas.Customer.Models;
@@ -87,6 +88,12 @@ namespace OrderFood.PL.Areas.Customer.Controllers
         {
 
             var foodDbContext = await UnitOfWork.GetRepository<Restaurant>().GetOneAsync(i => i.Id == id, query => query.Include(p => p.Categories).ThenInclude(m => m.Meals));
+
+            //get the restaurant reviews
+            var reviews = await UnitOfWork.GetRepository<Review>().GetAllAsync(i => i.RestaurantId == id && i.IsDelete == false, i => i.Include(r => r.Customer)
+            );
+
+            ViewData["Reviews"] = reviews;
 
             if (foodDbContext == null)
                 return NotFound();

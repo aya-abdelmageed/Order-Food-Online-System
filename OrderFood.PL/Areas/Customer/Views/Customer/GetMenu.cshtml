@@ -24,6 +24,19 @@
 
 <body>
     <section class="container py-5 overflow-hidden">
+        @if (TempData["AlertMessage"] != null)
+        {
+            <div class="alert alert-@(TempData["AlertType"] ?? "warning") alert-dismissible fade show" role="alert">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                @TempData["AlertMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+        <div class="m-3">
+            @{
+                await Html.RenderPartialAsync("_RestaurantReviewsPartial", ViewData["Reviews"]);
+            }
+        </div>
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-12">
@@ -39,6 +52,8 @@
                                     <button class="swiper-next category-carousel-next btn btn-yellow">❯</button>
                                 </div>
                             </div>
+                           
+                            
                             @if (User.IsInRole("Owner"))
                             {
                                 <div class="mt-2">
