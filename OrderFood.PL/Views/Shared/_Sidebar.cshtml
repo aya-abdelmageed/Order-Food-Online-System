@@ -10,14 +10,22 @@
       <ul class="nav-links">
 
             <li>
-                <a asp-area="Customer" asp-action="CustomerHomeAllResturant" asp-controller="Customer">  
-                    @* <a asp-area="Customer" asp-action="index" asp-controller="Customer"> *@
+                <a asp-area="" asp-action="OnboardingPage" asp-controller="Home">
 
                     <i class="bx bx-home-alt-2"></i>
                     <span class="title">Home</span>
                 </a>
                 <span class="tooltip">Home</span>
             </li>
+
+            <li>
+                <a asp-area="Customer" asp-action="CustomerHomeAllResturant" asp-controller="Customer">
+                    <i class="bi bi-shop"></i>  
+                    <span class="title">Restaurants</span>
+                </a>
+               <span class="tooltip">Restaurants</span>
+            </li>
+
             <li>
                 <a asp-area="Customer" asp-action="GetCustomerOrder" asp-controller="Orders">
                     <i class="bi bi-card-list"></i>
@@ -25,13 +33,13 @@
                 </a>
                 <span class="tooltip">Food Order</span>
             </li>
-            <li>
-                <a asp-area="Customer" asp-controller="Customer" asp-action="OrdersListDetails">
-                    <i class="bi bi-clock-history"></i>
-                    <span class="title">Bills</span>
-                </a>
-                <span class="tooltip">Bills</span>
-            </li>
+            @* <li> *@
+            @*     <a asp-area="Customer" asp-controller="Customer" asp-action="OrdersListDetails"> *@
+            @*         <i class="bi bi-clock-history"></i> *@
+            @*         <span class="title">Bills</span> *@
+            @*     </a> *@
+            @*     <span class="tooltip">Bills</span> *@
+            @* </li> *@
 
             <li>
                 <a asp-area="Identity" asp-page="/Account/Manage/Index">

@@ -26,33 +26,63 @@ namespace OrderFood.PL.Areas.Customer.Controllers
         // GET: CustomerController
 
         //the customer main page
-        public async Task<ActionResult> CustomerHomeAllResturant(string? name)
+        //public async Task<ActionResult> CustomerHomeAllResturant(string? name)
+        //{
+        //    //get the categories data to view
+        //    var categories = await UnitOfWork.GetRepository<Category>().GetAllAsync(includes: m => m.Include(t => t.Meals));
+        //    //get the distinct categories name
+        //    var distinctCategories = categories.GroupBy(c => c.Name).Select(g => new CategoryViewModel()
+        //    {
+        //        CategoryName = g.Key,
+        //        Image = g.First().Image,
+        //    }
+        //    ).ToList();
+        //    //get restarant info to view
+        //    var restaurants = await UnitOfWork.GetRepository<Restaurant>().GetAllAsync(
+        //        includes: i => i.Include(c => c.Categories));
+
+        //    //
+        //    if (name != null)
+        //    {
+        //        restaurants = restaurants.Where(r => r.Categories.Any(c => c.Name == name)).ToList();
+        //    }
+        //    ViewData["Restaurants"] = restaurants;
+
+        //    return View(distinctCategories);
+        //}
+        //-----------------------------------------------------------------------
+        public async Task<ActionResult> CustomerHomeAllResturant(string? name, string? address, string? categoryName)
         {
-            //get the categories data to view
             var categories = await UnitOfWork.GetRepository<Category>().GetAllAsync(includes: m => m.Include(t => t.Meals));
-            //get the distinct categories name
             var distinctCategories = categories.GroupBy(c => c.Name).Select(g => new CategoryViewModel()
             {
                 CategoryName = g.Key,
                 Image = g.First().Image,
-            }
-            ).ToList();
-            //get restarant info to view
+            }).ToList();
+
             var restaurants = await UnitOfWork.GetRepository<Restaurant>().GetAllAsync(
                 includes: i => i.Include(c => c.Categories));
 
-            //
-            if (name != null)
+            if (!string.IsNullOrEmpty(categoryName))
             {
-                restaurants = restaurants.Where(r => r.Categories.Any(c => c.Name == name)).ToList();
+                restaurants = restaurants.Where(r => r.Categories.Any(c => c.Name == categoryName)).ToList();
             }
-            ViewData["Restaurants"] = restaurants;
 
+            if (!string.IsNullOrEmpty(name))
+            {
+                restaurants = restaurants.Where(r => r.Name.ToLower().Contains(name.ToLower())).ToList();
+            }
+
+            if (!string.IsNullOrEmpty(address))
+            {
+                restaurants = restaurants.Where(r => r.Address.ToLower().Contains(address.ToLower())).ToList();
+            }
+
+            ViewData["Restaurants"] = restaurants;
             return View(distinctCategories);
         }
 
-
-
+       //-----------------------------------------------------------------------
         public async Task<IActionResult> GetMenu(int id)
         {
 
@@ -119,7 +149,7 @@ namespace OrderFood.PL.Areas.Customer.Controllers
         {
             var user = await _userManager.GetUserAsync(User);
             var query = await UnitOfWork.GetRepository<Order>()
-                .GetAllAsync(query => query.CustomerId == user.Id, 
+                .GetAllAsync(query => query.CustomerId == user.Id,
                 o => o.Include(c => c.Customer)
                 .Include(r => r.Restaurant)
                 .Include(p => p.Coupon)
@@ -145,7 +175,8 @@ namespace OrderFood.PL.Areas.Customer.Controllers
         //----------------------Cusotmer Cart------------------------------
 
 
-        public async Task<IActionResult> userCart() {
+        public async Task<IActionResult> userCart()
+        {
 
             return View();
         }
@@ -168,9 +199,51 @@ namespace OrderFood.PL.Areas.Customer.Controllers
 
         public async Task<IActionResult> MealDetails(int id)
         {
-            var meal =await UnitOfWork.GetRepository<Meal>().GetOneAsync(m => m.Id == id);
-            
+            var meal = await UnitOfWork.GetRepository<Meal>().GetOneAsync(m => m.Id == id);
+
             return View(meal);
         }
+
+
+        [HttpGet]
+        public async Task<IActionResult> FilterRestaurantsByCategory(string categoryName)
+        {
+            var restaurants = await UnitOfWork.GetRepository<Restaurant>().GetAllAsync(
+                includes: r => r.Include(c => c.Categories));
+
+            if (!string.IsNullOrEmpty(categoryName))
+            {
+                restaurants = restaurants
+                    .Where(r => r.Categories.Any(c => c.Name == categoryName))
+                    .ToList();
+            }
+
+            return PartialView("_RestaurantCards", restaurants);
+        }
+        //---------------------------------------------------------------------
+        [HttpGet]
+        public async Task<IActionResult> FilterRestaurants(string? name, string? address, string? categoryName)
+        {
+            var restaurants = await UnitOfWork.GetRepository<Restaurant>().GetAllAsync(
+                includes: r => r.Include(c => c.Categories));
+
+            if (!string.IsNullOrEmpty(categoryName))
+            {
+                restaurants = restaurants.Where(r => r.Categories.Any(c => c.Name == categoryName)).ToList();
+            }
+
+            if (!string.IsNullOrEmpty(name))
+            {
+                restaurants = restaurants.Where(r => r.Name.ToLower().Contains(name.ToLower())).ToList();
+            }
+
+            if (!string.IsNullOrEmpty(address))
+            {
+                restaurants = restaurants.Where(r => r.Address.ToLower().Contains(address.ToLower())).ToList();
+            }
+
+            return PartialView("_RestaurantCards", restaurants);
+        }
+
     }
 }

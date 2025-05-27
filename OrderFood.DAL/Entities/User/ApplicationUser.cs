@@ -17,5 +17,7 @@ namespace OrderFood.DAL.Entities.User
         public bool IsActive { get; set; } = true;
         public bool IsDeleted { get; set; } = false;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public string? EmailOTP { get; set; }
+        public DateTime? OTPExpiryTime { get; set; }
     }
 }

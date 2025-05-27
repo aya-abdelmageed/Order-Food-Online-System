@@ -1,0 +1,21 @@
+﻿@model List<OrderFood.DAL.Entities.Models.Restaurant>
+
+@foreach (var restaurant in Model)
+{
+    <div class="col">
+        <div class="card h-100 d-flex flex-column product-card">
+            <div class="image-container">
+                <img src="@restaurant.Logo" alt="@restaurant.Name" class="card-img-top w-100" />
+            </div>
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title product-title">@restaurant.Name</h5>
+                <p class="card-text text-secondary">@restaurant.Address</p>
+                <div class="mt-auto">
+                    <a asp-area="Customer" asp-controller="Customer" asp-action="GetMenu" asp-route-id="@restaurant.Id" class="btn btn-primary w-100">
+                        Visit Restaurant
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+}

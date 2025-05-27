@@ -64,14 +64,7 @@ namespace OrderFood.PL.Areas.Admin.Controllers
             return View(UsersInRoles);
         }
 
-        //// GET: AdminController/Details/5
-        //public ActionResult Details(int id)
-        //{
-        //    return View();
-        //}
 
-        // GET: AdminController/Create
-        // //create Delivery of Admin
         [HttpGet]
         public async Task<IActionResult> Create()
         {
@@ -233,9 +226,6 @@ namespace OrderFood.PL.Areas.Admin.Controllers
             return RedirectToAction(nameof(GetRestaurants));
         }
         //-----------------------------------------------------------------------------
-
-
-
         // GET: Restaurant/Add
         public async Task<IActionResult> AddRestaurant()
         {
@@ -299,12 +289,6 @@ namespace OrderFood.PL.Areas.Admin.Controllers
 
         }
         //--------------------------------------------------------------------------
-
-
-
-
-
-
         public async Task<IActionResult> SearchRestaurants(string nameSearch = "", string ownerSearch = "", string addressSearch = "", int PageNo = 1)
         {
             var restaurant = await _unitOfWork.GetRepository<Restaurant>().GetAllAsync(r =>

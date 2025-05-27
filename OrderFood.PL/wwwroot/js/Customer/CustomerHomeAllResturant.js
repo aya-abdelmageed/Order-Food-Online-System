@@ -102,5 +102,77 @@ document.addEventListener("DOMContentLoaded", function () {
             keepImg: true,
         });
     }
+
+    //---------------------------------------------------------
+    $(document).ready(function () {
+        function filterRestaurants() {
+            const name = $('input[name="restaurantName"]').val();
+            const address = $('input[name="restaurantAddress"]').val();
+
+            $.ajax({
+                url: '/Customer/Customer/FilterRestaurants',
+                type: 'GET',
+                data: {
+                    name: name,
+                    address: address
+                },
+                success: function (result) {
+                    $('#restaurantContainer').html(result);
+                },
+                error: function () {
+                    alert("Error loading restaurants.");
+                }
+            });
+        }
+
+        // Hook up inputs
+        $(document).ready(function () {
+            function filterRestaurants() {
+                const name = $('input[name="restaurantName"]').val();
+                const address = $('input[name="restaurantAddress"]').val();
+
+                $.ajax({
+                    url: '/Customer/Customer/CustomerHomeAllResturant',
+                    type: 'GET',
+                    data: {
+                        name: name,
+                        address: address
+                    },
+                    success: function (result) {
+                        const html = $(result);
+                        const updatedRestaurants = html.find('#restaurantContainer').html();
+                        $('#restaurantContainer').html(updatedRestaurants);
+                    },
+                    error: function () {
+                        alert("Error loading restaurants.");
+                    }
+                });
+            }
+
+            $('input[name="restaurantName"], input[name="restaurantAddress"]').on('keyup', function () {
+                filterRestaurants();
+            });
+        });
+
+
+        $('.category-card').on('click', function () {
+            const category = $(this).data('category');
+
+            $.ajax({
+                url: '/Customer/Customer/FilterRestaurants',
+                type: 'GET',
+                data: {
+                    categoryName: category
+                },
+                success: function (result) {
+                    $('#restaurantContainer').html(result);
+                },
+                error: function () {
+                    alert("Error filtering by category.");
+                }
+            });
+        });
+    });
+
 });
 

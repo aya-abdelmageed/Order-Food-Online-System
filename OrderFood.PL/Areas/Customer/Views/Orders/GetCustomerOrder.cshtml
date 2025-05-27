@@ -1,6 +1,6 @@
-﻿@* @model IEnumerable<OrderFood.DAL.Entities.Models.Order> *@
+﻿@model List<Order>
 @using OrderFood.DAL.Entities.Models
-@model List<Order>
+
 <head>
     <link href="~/css/Customer/GetCustomerOrder.css" type="text/css" rel="stylesheet" />
 </head>
@@ -8,107 +8,85 @@
 <div class="container">
     <div class="row">
 
-        @foreach (var item in Model)
+        @if (!Model.Any())
         {
-            <div class="col-md-4 col-sm-6 d-flex col-12 mb-4">
-                <div class="card order-card shadow">
-                    <div class="card-body">
-                        <h4 class="card-title text-center">Order #@item.Id</h4>
-                        @* <p class="text-center text-muted">@item.Id</p> *@
+            <div class="col-12 text-center mt-5">
+                <h4 class="text-muted">🛒 You have no orders yet.</h4>
+                <p class="text-secondary">Start shopping and place your first order!</p>
+            </div>
+        }
+        else
+        {
+            @foreach (var item in Model)
+            {
+                <div class="col-md-4 col-sm-6 d-flex col-12 mb-4">
+                    <div class="card order-card shadow">
+                        <div class="card-body">
+                            <h4 class="card-title text-center">Order #@item.Id</h4>
 
-                    <div>
-                        <h5 class="mb-2"><strong>Fast Food Resto</strong></h5>
+                            <div>
+                                <h5 class="mb-2"><strong>Fast Food Resto</strong></h5>
 
-                            <div class="d-flex justify-content-between mb-2">
-                                <span class="text-muted">Order Time</span>
-                                <span class="fw-bold">@item.CreatedOrder.Date</span>
-                            </div>
-                            <div class="d-flex justify-content-between">
-                                <span class="text-muted">Shipping Address</span>
-                                <span class="fw-bold shipping-address"> @item.ShippingAddress</span>
-                            </div>
-                        </div>
-
-                        <div class="divider-line"><hr /></div>
-
-                        <div>
-                            <div class="d-flex justify-content-between fs-5">
-                                <strong>Order Menu</strong>
-                            </div>
-
-                            @foreach (var ordermeal in item.OrderMeals)
-                            {
-                                <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <div class="d-flex align-items-center">
-                                        <img src="@ordermeal.Meal.Image" class="order-img me-3"
-                                             alt="">
-                                        <span>@ordermeal.Meal.Name ×@ordermeal.Quantity</span>
-                                    </div>
-                                    <span class="text-danger fw-semibold">+$@ordermeal.Meal.Price ×@ordermeal.Quantity</span>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span class="text-muted">Order Time</span>
+                                    <span class="fw-bold">@item.CreatedOrder.Date</span>
                                 </div>
+                                <div class="d-flex justify-content-between">
+                                    <span class="text-muted">Shipping Address</span>
+                                    <span class="fw-bold shipping-address">@item.ShippingAddress</span>
+                                </div>
+                            </div>
+
+                            <div class="divider-line"><hr /></div>
+
+                            <div>
+                                <div class="d-flex justify-content-between fs-5">
+                                    <strong>Order Menu</strong>
+                                </div>
+
+                                @foreach (var ordermeal in item.OrderMeals)
+                                {
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <div class="d-flex align-items-center">
+                                            <img src="@ordermeal.Meal.Image" class="order-img me-3" alt="">
+                                            <span>@ordermeal.Meal.Name ×@ordermeal.Quantity</span>
+                                        </div>
+                                        <span class="text-danger fw-semibold">
+                                            +$@ordermeal.Meal.Price ×@ordermeal.Quantity
+                                        </span>
+                                    </div>
+                                }
+                            </div>
+                            <div class="divider-line"><hr /></div>
+
+                            <div class="d-flex justify-content-between fs-5">
+                                <strong>Total</strong>
+                                <strong class="text-warning">@item.getTotal().ToString("C")</strong>
+                            </div>
+
+                            @{
+                                string statusClass = item.OrderStatus switch
+                                {
+                                    OrderStatus.Pending => "status-Pending",
+                                    OrderStatus.Preparing => "status-preparing",
+                                    OrderStatus.Prepared => "status-prepared",
+                                    OrderStatus.Shipping => "status-shipping",
+                                    OrderStatus.Completed => "status-completed",
+                                    OrderStatus.Cancelled => "status-Cancelled",
+                                    _ => "status-default"
+                                };
                             }
+
+                            <div class="@statusClass order-btn" onclick="ViewOrderTracking(@item.Id)">Track Your Order</div>
                         </div>
-                        <div class="divider-line"><hr /></div>
-
-                        <div class="d-flex justify-content-between fs-5">
-                            <strong>Total</strong>
-                            <strong class="text-warning">@item.getTotal().ToString("C")</strong>
-                        </div>
-                        @{
-                            string statusClass = string.Empty;
-                            switch (item.OrderStatus)
-                            {
-                                case OrderStatus.Pending:
-                                    statusClass = "status-Pending";
-                                    break;
-                                case OrderStatus.Preparing:
-                                    statusClass = "status-preparing";
-                                    break;
-                                case OrderStatus.Prepared:
-                                    statusClass = "status-prepared";
-                                    break;
-                                case OrderStatus.Shipping:
-                                    statusClass = "status-shipping";
-                                    break;
-                                case OrderStatus.Completed:
-                                    statusClass = "status-completed";
-                                    break;
-                                case OrderStatus.Cancelled:
-                                    statusClass = "status-Cancelled";
-                                    break;
-                                default:
-                                    statusClass = "status-default";
-                                    break;
-                            }
-                        }
-
-
-                        <div class="@statusClass order-btn " onclick="ViewOrderTracking(@item.Id)">Track Your Order</div>
                     </div>
                 </div>
-            </div>
+            }
         }
 
     </div>
-
 </div>
- @section Scripts{
+
+@section Scripts {
     <script src="~/js/Customer/GetCustomerOrder.js"></script>
-
- }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+}

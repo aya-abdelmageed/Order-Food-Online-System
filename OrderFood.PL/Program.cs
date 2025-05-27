@@ -12,139 +12,126 @@ using OrderFood.DAL.Entities.User;
 using OrderFood.PL.Helper;
 using OrderFood.Service;
 using StackExchange.Redis;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using System;
 using System.Threading.Tasks;
 
-namespace OrderFood.PL;
 
-public class Program
+namespace OrderFood.PL
 {
-    public static async Task Main(string[] args)
+    public class Program
     {
-        var builder = WebApplication.CreateBuilder(args);
+        public static async Task Main(string[] args)
+        {
+            var builder = WebApplication.CreateBuilder(args);
 
-        // Add services to the container.
-        builder.Services.AddDbContext<FoodDbContext>(options =>
-            options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+            // Configure database context
+            builder.Services.AddDbContext<FoodDbContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-        builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+            builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-        builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
-            .AddRoles<IdentityRole>()
-            .AddEntityFrameworkStores<FoodDbContext>();
+            // Configure Identity
+            builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<FoodDbContext>();
 
-        builder.Services.AddControllersWithViews();
+            builder.Services.AddControllersWithViews();
 
-        //--Google Authintication
+            // Google Authentication
+            builder.Services.AddAuthentication()
+                .AddGoogle(options =>
+                {
+                    options.ClientId = "99950342398-k1lib9ust9o852cfnoirnf4f6t3u7nkb.apps.googleusercontent.com";
+                    options.ClientSecret = "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";
+                });
 
-        builder.Services.AddAuthentication()
-            .AddGoogle(options =>
+            // Register business services
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddScoped<IPaymentService, PaymentService>();
+            builder.Services.AddScoped(typeof(IBasketRepository<>), typeof(BasketRepository<>));
+
+            // Configure Redis connection
+            builder.Services.AddScoped<IConnectionMultiplexer>(sp =>
             {
-               options.ClientId = "99950342398-k1lib9ust9o852cfnoirnf4f6t3u7nkb.apps.googleusercontent.com";
-               options.ClientSecret = "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";
+                return ConnectionMultiplexer.Connect(new ConfigurationOptions
+                {
+                    EndPoints = { { builder.Configuration.GetConnectionString("RedisConnection")!, int.Parse(builder.Configuration.GetConnectionString("RedisPort")!) } },
+                    User = builder.Configuration.GetConnectionString("RedisUserName"),
+                    Password = builder.Configuration.GetConnectionString("RedisPassword")
+                });
             });
-        // Add Unit Of Work To The Container
-        builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-        builder.Services.AddScoped<IPaymentService, PaymentService>();
 
-        builder.Services.AddScoped(typeof(IBasketRepository<>), typeof (BasketRepository<>));
+            // Add AutoMapper
+            builder.Services.AddAutoMapper(typeof(MappingProfiles));
 
-        builder.Services.AddScoped<IConnectionMultiplexer>(sp =>
-        {
-            return ConnectionMultiplexer.Connect(new ConfigurationOptions
+            // ? Register EmailSender service
+            builder.Services.AddSingleton<IEmailSender, EmailSender>();
+
+            var app = builder.Build();
+
+            // ? Seed roles, users, and data
+            using var scope = app.Services.CreateScope();
+            var service = scope.ServiceProvider;
+            var loggerFactory = service.GetRequiredService<ILoggerFactory>();
+
+            try
             {
-                EndPoints = { { builder.Configuration.GetConnectionString("RedisConnection")!, int.Parse(builder.Configuration.GetConnectionString("RedisPort")!) } },
+                var dbContext = service.GetRequiredService<FoodDbContext>();
+                await dbContext.Database.MigrateAsync();
 
-                User = builder.Configuration.GetConnectionString("RedisUserName"),
-                Password = builder.Configuration.GetConnectionString("RedisPassword")
-            });
-        });
+                var userManager = service.GetRequiredService<UserManager<ApplicationUser>>();
+                var roleManager = service.GetRequiredService<RoleManager<IdentityRole>>();
 
+                await RoleSeed.RolesSeedAsync(roleManager);
+                await IdentitySeed.SeedUserAsync(userManager);
+                await EntityStoreSeed.SeedAsync(dbContext);
+            }
+            catch (Exception ex)
+            {
+                var logger = loggerFactory.CreateLogger<Program>();
+                logger.LogError(ex, "Error during database update or seeding.");
+            }
 
+            // Configure HTTP pipeline
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseMigrationsEndPoint();
+            }
+            else
+            {
+                app.UseExceptionHandler("/Home/Error");
+                app.UseHsts();
+            }
 
-        // Add AutoMapper Service
-        builder.Services.AddAutoMapper(typeof(MappingProfiles));
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
 
+            app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
+            // Area routing
+            app.MapControllerRoute(
+                name: "areas",
+                pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}")
+                .WithStaticAssets();
 
-        var app = builder.Build();
+            app.MapAreaControllerRoute(
+                name: "Identity",
+                areaName: "Identity",
+                pattern: "Identity/{controller=Home}/{action=OnboardingPage}/{id?}")
+                .WithStaticAssets();
 
-        // Seed Data For Database
+            // Default route
+            app.MapControllerRoute(
+                name: "default",
+                pattern: "{controller=Home}/{action=OnboardingPage}/{id?}")
+                .WithStaticAssets();
 
-        using var scope = app.Services.CreateScope();
+            app.MapRazorPages().WithStaticAssets();
 
-        var service = scope.ServiceProvider;
-
-        var LoggerFactory = service.GetRequiredService<ILoggerFactory>();
-
-        try
-        {
-            var DbContext = service.GetRequiredService<FoodDbContext>();
-
-            await DbContext.Database.MigrateAsync();
-
-            var userManager = service.GetRequiredService<UserManager<ApplicationUser>>();
-
-            var roleManager = service.GetRequiredService<RoleManager<IdentityRole>>();
-
-            var dbContext = service.GetRequiredService<FoodDbContext>();
-
-            await RoleSeed.RolesSeedAsync(roleManager);
-
-            await IdentitySeed.SeedUserAsync(userManager);
-
-            await EntityStoreSeed.SeedAsync(dbContext);
-
+            app.Run();
         }
-        catch (Exception ex)
-        {
-
-            var Logger = LoggerFactory.CreateLogger<Program>();
-            Logger.LogError(ex, "Error during update Database");
-        }
-
-
-
-
-        // Configure the HTTP request pipeline.
-        if (app.Environment.IsDevelopment())
-        {
-            app.UseMigrationsEndPoint();
-        }
-        else
-        {
-            app.UseExceptionHandler("/Home/Error");
-            // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-            app.UseHsts();
-        }
-        app.UseStaticFiles();
-        app.UseHttpsRedirection();
-        app.UseRouting();
-
-        app.UseAuthorization();
-        app.UseStaticFiles();
-
-      
-
-        app.MapControllerRoute(
-            name: "areas",
-            pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}")
-            .WithStaticAssets();
-
-
-        app.MapAreaControllerRoute(
-            name: "Identity",
-            areaName: "Identity",
-            pattern: "Identity/{controller=Home}/{action=OnboardingPage}/{id?}")
-            .WithStaticAssets();
-
-        app.MapControllerRoute(
-            name: "default",
-            pattern: "{controller=Home}/{action=OnboardingPage}/{id?}")
-            .WithStaticAssets();
-        app.MapRazorPages()
-           .WithStaticAssets();
-
-        app.Run();
     }
 }

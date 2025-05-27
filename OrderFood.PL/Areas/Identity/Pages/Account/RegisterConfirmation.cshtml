@@ -1,0 +1,64 @@
+﻿@page
+@model RegisterConfirmationModel
+@{
+    ViewData["Title"] = "Register confirmation";
+}
+
+<!-- Background Blur -->
+<div class="bg-blur"></div>
+
+<!-- Styles -->
+<style>
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    .bg-blur {
+        background: url('https://t4.ftcdn.net/jpg/01/81/69/23/360_F_181692318_c2bwRT9lEgfPmIQCcGqIaPmnTDYwBLSe.jpg') no-repeat center center fixed;
+        background-size: cover;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: -1;
+        filter: blur(8px);
+    }
+
+    .confirmation-card {
+        backdrop-filter: blur(10px);
+        background-color: rgba(255, 255, 255, 0.85);
+        border-radius: 15px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+        padding: 40px;
+        max-width: 600px;
+        margin: auto;
+    }
+
+    section {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+    }
+</style>
+
+<section>
+    <div class="confirmation-card text-center">
+        <h2 class="mb-3">Register Confirmation</h2>
+        <p class="fs-5 fw-normal text-secondary">
+            Please check your email to confirm your account.
+        </p>
+
+        @if (!string.IsNullOrEmpty(Model.Email))
+        {
+            <p class="text-muted mt-3">
+                Didn't receive the email? <a asp-page="./ResendEmailConfirmation" class="text-decoration-none">Resend</a>
+            </p>
+        }
+    </div>
+</section>
