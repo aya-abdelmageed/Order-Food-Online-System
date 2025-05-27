@@ -1,0 +1,113 @@
+﻿@model OrderFood.PL.Areas.Customer.Models.ReviewViewModel
+
+@{
+    ViewData["Title"] = "Write a Review";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0">
+                        <i class="bi bi-pencil-square me-2"></i>Write a Review
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Create">
+                        <input type="hidden" asp-for=@Model.RestaurantId />
+
+                        <div class="mb-3">
+                            <label asp-for="Rate" class="form-label">Rating</label>
+                            <div class="rating-input">
+                                @for (int i = 1; i <= 5; i++)
+                                {
+                                    <i class="bi bi-star-fill rating-star" data-value="@i"></i>
+                                }
+                                <input type="hidden" asp-for="Rate" id="ratingValue" />
+                            </div>
+                            <span asp-validation-for="Rate" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Comment" class="form-label">Your Review</label>
+                            <textarea asp-for="Comment" class="form-control" rows="4"
+                                      placeholder="Share your experience..."></textarea>
+                            <span asp-validation-for="Comment" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a asp-action="GetMeal" asp-controller="Restaurant"
+                               asp-route-id=@Model.RestaurantId class="btn btn-outline-secondary me-md-2">
+                                <i class="bi bi-arrow-left"></i> Back to Restaurant
+                            </a>
+                            <button type="submit" class="btn btn-success">
+                                <i class="bi bi-send"></i> Submit Review
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        // Star rating functionality
+        document.querySelectorAll('.rating-star').forEach(star => {
+            star.addEventListener('click', function() {
+                const value = this.getAttribute('data-value');
+                document.getElementById('ratingValue').value = value;
+
+                // Update star display
+                document.querySelectorAll('.rating-star').forEach((s, index) => {
+                    if (index < value) {
+                        s.classList.add('text-warning');
+                    } else {
+                        s.classList.remove('text-warning');
+                    }
+                });
+            });
+
+            // Hover effect
+            star.addEventListener('mouseover', function() {
+                const value = this.getAttribute('data-value');
+                document.querySelectorAll('.rating-star').forEach((s, index) => {
+                    s.classList.toggle('text-warning', index < value);
+                    s.classList.toggle('opacity-75', index < value);
+                });
+            });
+
+            star.addEventListener('mouseout', function() {
+                const currentValue = document.getElementById('ratingValue').value || 0;
+                document.querySelectorAll('.rating-star').forEach((s, index) => {
+                    s.classList.toggle('text-warning', index < currentValue);
+                    s.classList.remove('opacity-75');
+                });
+            });
+        });
+    </script>
+}
+
+<style>
+    .rating-input {
+        font-size: 1.5rem;
+        cursor: pointer;
+    }
+
+    .rating-star {
+        color: #e4e5e9;
+        transition: all 0.2s;
+    }
+
+        .rating-star:hover {
+            transform: scale(1.2);
+        }
+
+    .card {
+        border-radius: 0.5rem;
+    }
+</style>

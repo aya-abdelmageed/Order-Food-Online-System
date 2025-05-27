@@ -1,0 +1,120 @@
+﻿@model IEnumerable<OrderFood.DAL.Entities.Models.Review>
+
+@{
+    ViewData["Title"] = "Customer Reviews";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<body>
+
+
+<section class="container py-4 overflow-hidden">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="display-6 text-success">
+            <i class="bi bi-chat-square-text me-2"></i>My Reviews
+        </h1>
+        @* <a asp-action="Create" class="btn btn-success"> *@
+        @*     <i class="bi bi-plus-circle"></i> Add New Review *@
+        @* </a> *@
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="bg-light">
+                        <tr>
+                            <th class="ps-4">Date</th>
+                            <th>Rating</th>
+                            <th>Comment</th>
+                            <th>Restaurant</th>
+                            <th class="text-end pe-4">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="ps-4">
+                                    @item.ReviewDate.ToString("MMM dd, yyyy")
+                                </td>
+                                <td>
+                                    <div class="text-warning">
+                                        @for (var i = 0; i < item.Rate; i++)
+                                        {
+                                            <i class="bi bi-star-fill"></i>
+                                        }
+                                        @for (var i = item.Rate; i < 5; i++)
+                                        {
+                                            <i class="bi bi-star"></i>
+                                        }
+                                        <span class="text-muted small ms-1">(@item.Rate)</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="text-truncate" style="max-width: 300px;" title="@item.Comment">
+                                        @item.Comment
+                                    </div>
+                                </td>
+                                <td>
+                                    @item.Restaurant?.Name
+                                </td>
+                                <td class="text-end pe-4">
+                                    <div class="btn-group btn-group-sm" role="group">
+                                            <a asp-action="EditReview" asp-route-id="@item.Id"
+                                           class="btn btn-outline-primary" title="Edit">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <a asp-action="ReviewDetails" asp-route-id="@item.Id"
+                                           class="btn btn-outline-info" title="Details">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                            <a asp-action="DeleteReview" asp-route-id="@item.Id"
+                                           class="btn btn-outline-danger" title="Delete">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info mt-4">
+            <i class="bi bi-info-circle"></i> No reviews found.
+        </div>
+    }
+</section>
+</body>
+
+<style>
+    .table-hover tbody tr:hover {
+        background-color: rgba(13, 110, 253, 0.05);
+    }
+
+    .text-truncate {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .card {
+        border-radius: 0.5rem;
+    }
+
+    .table {
+        margin-bottom: 0;
+    }
+
+        .table th {
+            border-top: none;
+            font-weight: 500;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+        }
+</style>
