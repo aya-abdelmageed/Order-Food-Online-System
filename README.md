@@ -34,6 +34,5 @@ A web-based food ordering system built with ASP.NET Core MVC, allowing users to 
 
 1. Clone or download the repository.
 2. Open `OrderFood.sln` in Visual Studio.
-3. Restore NuGet packages.
-4. Update connection string in `appsettings.json`.
-5. Run the project.
+3. Update connection string in `appsettings.json`.
+4. Run the project.
