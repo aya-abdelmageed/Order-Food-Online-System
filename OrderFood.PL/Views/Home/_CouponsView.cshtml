@@ -31,7 +31,7 @@
 
                             <div class="text-center text-white position-relative px-3 px-md-5">
                                 <h1 class="display-4 fw-bold mb-3 text-uppercase" style="letter-spacing: 2px;">
-                                    Up to @coupon.AmountPercentage% Off
+                                    Up to @coupon.AmountPercentage.ToString("F0")% Off
                                 </h1>
                                 <h3 class="fw-semibold mb-2">Code: <span class="text-warning">@coupon.Code</span></h3>
                                 <p class="fs-5 text-white">Valid until: <strong>@coupon.ExpireDate.ToString("dd MMM yyyy")</strong></p>
