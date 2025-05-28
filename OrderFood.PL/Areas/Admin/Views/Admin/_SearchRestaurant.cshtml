@@ -1,4 +1,30 @@
 ﻿@model List<OrderFood.DAL.Entities.Models.Restaurant>
+<head>
+    <style>
+        .pagination .page-link {
+            background-color: #fff;
+            border: 1px solid #FFC107;
+            color: #FFC107;
+            margin: 0 5px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+            .pagination .page-link:hover {
+                background-color: #FFC107;
+                color: white;
+            }
+
+        .pagination .page-item.active .page-link {
+            background-color: #FFC107;
+            border-color: #FFC107;
+            color: white;
+            font-weight: bold;
+        }
+
+
+    </style>
+</head>
 
 <div class="row d-flex flex-wrap justify-content-center gap-4">
     @if (Model.Count == 0)
@@ -32,7 +58,7 @@
                             <div id="map-@restaurant.Id" style="height: 200px;" class="rounded mb-3 shadow-sm"></div>
 
                             <div class="mt-auto d-flex justify-content-between">
-                                <a asp-action="Details" asp-route-id="@restaurant.Id" class="btn btn-outline-info btn-sm">
+                                <a asp-action="Details" asp-route-id="@restaurant.Id" class="btn btn-outline-warning btn-sm">
                                     <i class="bi bi-eye"></i> View
                                 </a>
 

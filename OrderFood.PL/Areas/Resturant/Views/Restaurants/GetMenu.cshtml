@@ -28,7 +28,7 @@
                 <div class="col-md-12">
                     <!-- Section Header -->
                     <div class="section-header d-flex justify-content-between flex-wrap align-items-start mb-4">
-                        <h2 class="section-title">Category</h2>
+                        <h2 class="section-title p-4" style="color: #89c155 ; border-radius:20px">Category</h2>
 
                         <div class="text-end">
                             <div class="d-flex align-items-center">
@@ -41,7 +41,7 @@
                             @if (User.IsInRole("Owner"))
                             {
                                 <div class="mt-2">
-                                    <a asp-action="AddCategory" asp-route-id="@Model.Id" class="btn btn-outline-success btn-sm me-2 bi bi-plus-circle"> Add Category</a>
+                                    <a asp-action="AddCategory" asp-route-id="@Model.Id" class="btn btn-outline-warning btn-sm me-2 bi bi-plus-circle"> Add Category</a>
                                     <button type="button" class="btn btn-outline-danger btn-sm bi bi-trash" onclick="toggleDeleteIcons()"> Delete Category</button>
                                 </div>
                             }
@@ -94,7 +94,7 @@
                     </div>
                     <!-- Meals Section -->
                     <div id="mealsSection" class="container mt-5">
-                        <h2 class="text-center mb-4">Meals</h2>
+                        <h2 class="text-center   mb-4 p-4  " style=" color: #89c155;border-radius:20px">Meals</h2>
                         <div id="mealsContent" class="row justify-content-center">
                             <div class="text-muted text-center p-2  rounded-2 text-light">Select a category to view its meals.</div>
                         </div>
