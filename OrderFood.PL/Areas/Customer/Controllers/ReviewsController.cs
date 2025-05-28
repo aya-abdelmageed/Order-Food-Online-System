@@ -127,37 +127,23 @@ namespace OrderFood.PL.Areas.Customer.Controllers
         }
 
         // GET: ReviewsController/Delete/5
-        public async Task <IActionResult> DeleteReview(int id)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteReview(int id)
         {
-            var review = await unitOfWork.GetRepository<Review>().GetOneAsync(i => i.Id == id, query => query.Include(r => r.Restaurant));
-            if(review == null)
+            var reviewToDelete = await unitOfWork.GetRepository<Review>().GetOneAsync(i => i.Id == id);
+            if (reviewToDelete == null)
             {
                 return NotFound();
             }
-            return View(review);
+
+            reviewToDelete.IsDelete = true;
+            unitOfWork.GetRepository<Review>().Update(reviewToDelete);
+            await unitOfWork.SaveChangesAsync();
+
+            return Ok(); 
         }
 
-        // POST: ReviewsController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task <IActionResult> DeleteReview(int id, Review review)
-        {
-            try
-            {
-                var reviewToDelete = await unitOfWork.GetRepository<Review>().GetOneAsync(i => i.Id == id);
-                if (reviewToDelete == null)
-                {
-                    return NotFound();
-                }
-                reviewToDelete.IsDelete = true;
-                unitOfWork.GetRepository<Review>().Update(reviewToDelete);
-                await unitOfWork.SaveChangesAsync();
-                return RedirectToAction("GetCustomerReviews", "Reviews", new { area = "Customer" });
-            }
-            catch
-            {
-                return View(review);
-            }
-        }
+
     }
 }

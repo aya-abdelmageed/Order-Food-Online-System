@@ -3,11 +3,153 @@
 
 <head>
     <link href="~/css/Customer/GetCustomerOrder.css" type="text/css" rel="stylesheet" />
+    <style>
+        .order-card {
+            border-radius: 16px;
+            border: none;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background: linear-gradient(145deg, #ffffff, #f1f1f1);
+            width: 100%;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            padding: 20px;
+            animation: fadeInUp 0.5s ease;
+        }
+
+
+        .order-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-title {
+            color: #2c3e50;
+            font-weight: 600;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #f1f1f1;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            text-shadow: 0 1px 1px rgba(0,0,0,0.05);
+        }
+
+        .order-img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 2px solid #ddd;
+        }
+
+        /* .divider-line hr { */
+        /*     margin: 15px 0; */
+        /*     border: 0; */
+        /*     height: 3px; */
+        /*     background-image: linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,0.1), rgba(0,0,0,0)); */
+        /* } */
+
+        .coupon-badge .badge {
+            font-size: 0.8rem;
+            padding: 5px 10px;
+            border-radius: 50px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background-color: #d4edda;
+            color: #155724;
+            margin-bottom: 10px;
+        }
+
+        .order-summary {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+            .order-summary > div {
+                margin-bottom: 5px;
+                font-size: 0.9rem;
+            }
+
+        .discount-amount {
+            color: #28a745;
+            font-weight: 500;
+        }
+
+        .order-btn {
+            display: block;
+            text-align: center;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: 500;
+            margin-top: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+            .order-btn:hover {
+                filter: brightness(1.05);
+            }
+
+        .status-Pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .status-preparing {
+            background-color: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .status-prepared {
+            background-color: #cce5ff;
+            color: #004085;
+        }
+
+        .status-shipping {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .status-completed {
+            background-color: #e2e3e5;
+            color: #383d41;
+        }
+
+        .status-Cancelled {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        @@media (max-width: 768px) {
+            .col-md-4 {
+                flex: 0 0 100%;
+                max-width: 100%;
+            }
+        }
+
+        .text-warning {
+            color: #ff6b35 !important;
+            font-size: 1.1rem;
+        }
+
+        .card-body h5 strong {
+            color: #2c3e50;
+            font-size: 1.1rem;
+        }
+
+        .shipping-address {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 150px;
+            display: inline-block;
+        }
+    </style>
 </head>
 
 <div class="container">
     <div class="row">
-
         @if (!Model.Any())
         {
             <div class="col-12 text-center mt-5">
@@ -24,12 +166,21 @@
                         <div class="card-body">
                             <h4 class="card-title text-center">Order #@item.Id</h4>
 
+                            @if (item.Coupon != null)
+                            {
+                                <div class="coupon-badge">
+                                    <span class="badge">
+                                        🎉 Used Coupon: @item.Coupon.Code (-@item.Coupon.AmountPercentage%)
+                                    </span>
+                                </div>
+                            }
+
                             <div>
-                                <h5 class="mb-2"><strong>Fast Food Resto</strong></h5>
+                                <h5 class="mb-2 text-center"><strong>@item.Restaurant.Name</strong></h5>
 
                                 <div class="d-flex justify-content-between mb-2">
                                     <span class="text-muted">Order Time</span>
-                                    <span class="fw-bold">@item.CreatedOrder.Date</span>
+                                    <span class="fw-bold">@item.CreatedOrder.ToString("MMM dd, yyyy hh:mm tt")</span>
                                 </div>
                                 <div class="d-flex justify-content-between">
                                     <span class="text-muted">Shipping Address</span>
@@ -40,28 +191,46 @@
                             <div class="divider-line"><hr /></div>
 
                             <div>
-                                <div class="d-flex justify-content-between fs-5">
-                                    <strong>Order Menu</strong>
+                                <div class="d-flex justify-content-between fs-5 mb-3">
+                                    <strong>Order Items</strong>
                                 </div>
 
                                 @foreach (var ordermeal in item.OrderMeals)
                                 {
                                     <div class="d-flex justify-content-between align-items-center mb-3">
                                         <div class="d-flex align-items-center">
-                                            <img src="@ordermeal.Meal.Image" class="order-img me-3" alt="">
-                                            <span>@ordermeal.Meal.Name ×@ordermeal.Quantity</span>
+                                            <img src="@ordermeal.Meal.Image" class="order-img me-3" alt="@ordermeal.Meal.Name">
+                                            <div>
+                                                <div>@ordermeal.Meal.Name</div>
+                                                <small class="text-muted">Qty: @ordermeal.Quantity</small>
+                                            </div>
                                         </div>
                                         <span class="text-danger fw-semibold">
-                                            +$@ordermeal.Meal.Price ×@ordermeal.Quantity
+                                            @((ordermeal.Meal.Price * ordermeal.Quantity).ToString("C"))
                                         </span>
                                     </div>
                                 }
                             </div>
+
                             <div class="divider-line"><hr /></div>
 
-                            <div class="d-flex justify-content-between fs-5">
-                                <strong>Total</strong>
-                                <strong class="text-warning">@item.getTotal().ToString("C")</strong>
+                            <div class="order-summary">
+                                @if (item.Coupon != null)
+                                {
+                                    <div class="d-flex justify-content-between">
+                                        <span>Subtotal:</span>
+                                        <span>@item.SubTotal.ToString("C")</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between discount-amount">
+                                        <span>Discount (@item.Coupon.AmountPercentage%):</span>
+                                        <span>-@((item.SubTotal * item.Coupon.AmountPercentage / 100).ToString("C"))</span>
+                                    </div>
+                                    <div class="divider-line"><hr /></div>
+                                }
+                                <div class="d-flex justify-content-between fs-5">
+                                    <strong>Total</strong>
+                                    <strong class="text-warning">@item.getTotal().ToString("C")</strong>
+                                </div>
                             </div>
 
                             @{
@@ -77,13 +246,29 @@
                                 };
                             }
 
-                            <div class="@statusClass order-btn" onclick="ViewOrderTracking(@item.Id)">Track Your Order</div>
+                            <div class="order-btn @statusClass @(item.OrderStatus == OrderStatus.Pending || item.OrderStatus == OrderStatus.Cancelled ? "disabled" : "")"
+                                 style="pointer-events:@(item.OrderStatus == OrderStatus.Pending || item.OrderStatus == OrderStatus.Cancelled ? "none" : "auto"); opacity:@(item.OrderStatus == OrderStatus.Pending || item.OrderStatus == OrderStatus.Cancelled ? "0.6" : "1");"
+                                 title="@(item.OrderStatus == OrderStatus.Pending ? "Order is pending and cannot be tracked yet." : item.OrderStatus == OrderStatus.Cancelled ? "Order has been cancelled and cannot be tracked." : "")"
+                                 onclick="@(item.OrderStatus == OrderStatus.Pending || item.OrderStatus == OrderStatus.Cancelled ? "" : $"ViewOrderTracking({item.Id})")">
+
+                                @if (item.OrderStatus == OrderStatus.Pending)
+                                {
+                                    <span>⏳ Waiting for Confirmation</span>
+                                }
+                                else if (item.OrderStatus == OrderStatus.Cancelled)
+                                {
+                                    <span>❌ Order Cancelled</span>
+                                }
+                                else
+                                {
+                                    <span>🚚 Track Your Order</span>
+                                }
+                            </div>
                         </div>
                     </div>
                 </div>
             }
         }
-
     </div>
 </div>
 
