@@ -52,8 +52,8 @@
                                     <button class="swiper-next category-carousel-next btn btn-yellow">❯</button>
                                 </div>
                             </div>
-                           
-                            
+
+
                             @if (User.IsInRole("Owner"))
                             {
                                 <div class="mt-2">
@@ -134,41 +134,41 @@
     <script src="~/js/Restaurant/script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script>
-        //  function updateFavourite(id, name, image, price, description) {
-        //     const data = {
-        //         Id: id,
-        //         Name: name,
-        //         Image: image,
-        //         Price: price,
-        //         Description: description
-        //     };
+         function updateFavourite(id, name, image, price, description) {
+            const data = {
+                Id: id,
+                Name: name,
+                Image: image,
+                Price: price,
+                Description: description
+            };
 
-        //     $.ajax({
-        //         url: '/Customer/BasketFavourite/UpdateCustomerFavourite',
-        //         type: 'POST',
-        //         data: JSON.stringify(data),
-        //         contentType: 'application/json',
-        //         success: function (response) {
-        //             if (response.success) {
-        //                 location.reload();
-        //                   Toastify({
-        //             text: "Item added to watchlist!",
-        //             duration: 3000,
-        //             close: true,
-        //             gravity: "top",
-        //             position: "right",
-        //             backgroundColor: "green",
-        //         }).showToast();
-        //             } else {
-        //                 alert("Failed to update favourite.");
-        //             }
-        //         },
-        //         error: function (xhr, status, error) {
-        //             console.error("Error updating favourite:", error);
-        //             alert("Something went wrong!");
-        //         }
-        //     });
-        // }
+            $.ajax({
+                url: '/Customer/BasketFavourite/UpdateCustomerFavourite',
+                type: 'POST',
+                data: JSON.stringify(data),
+                contentType: 'application/json',
+                success: function (response) {
+                    if (response.success) {
+                        // location.reload();
+                          Toastify({
+                    text: "Item added to watchlist!",
+                    duration: 3000,
+                    close: true,
+                    gravity: "top",
+                    position: "right",
+                    backgroundColor: "green",
+                }).showToast();
+                    } else {
+                        alert("Failed to update favourite.");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error updating favourite:", error);
+                    alert("Something went wrong!");
+                }
+            });
+        }
 
         function addToCart(id, name, image, price, description, quantity) {
            // let quantity = document.getElementById("Quntity").value;
@@ -207,9 +207,9 @@
                 }
             });
         }
-        
 
-            
+
+
 
 
         function choose(element) {
@@ -344,171 +344,7 @@
 
         //------------------------------
 
-        function checkWatchlistStatus() {
-            Get current user's watchlist from server
-            $.ajax({
-                url: '/Customer/BasketFavourite/GetCustomerFavouriteJson',
-                type: 'GET',
-                success: function (response) {
-                    Reset all hearts to empty first
-                    $('.bi-heart-fill').removeClass('bi-heart-fill').addClass('bi-heart');
 
-                    If response contains watchlist data, fill hearts for items in watchlist
-                    if (response && response.favouriteItems) {
-                        response.favouriteItems.forEach(function(item) {
-                            Find heart icon for this item and fill it
-                            $(`[data-meal-id="${item.id}"] .bi-heart`).removeClass('bi-heart').addClass('bi-heart-fill');
-                        });
-                    }
-                },
-                error: function (xhr, status, error) {
-                    console.error("Error checking watchlist status:", error);
-                }
-            });
-        }
-
-        // Enhanced updateFavourite function with toggle functionality
-        function updateFavourite(id, name, image, price, description) {
-            const heartIcon = $(`[data-meal-id="${id}"] .bi-heart, [data-meal-id="${id}"] .bi-heart-fill`);
-            const isCurrentlyInWatchlist = heartIcon.hasClass('bi-heart-fill');
-
-            if (isCurrentlyInWatchlist) {
-                // Remove from watchlist
-                removeFromWatchlist(id, heartIcon);
-            } else {
-                // Add to watchlist
-                addToWatchlist(id, name, image, price, description, heartIcon);
-            }
-        }
-
-        // Function to add item to watchlist
-        function addToWatchlist(id, name, image, price, description, heartIcon) {
-            const data = {
-                Id: id,
-                Name: name,
-                Image: image,
-                Price: price,
-                Description: description
-            };
-
-            $.ajax({
-                url: '/Customer/BasketFavourite/UpdateCustomerFavourite',
-                type: 'POST',
-                data: JSON.stringify(data),
-                contentType: 'application/json',
-                success: function (response) {
-                    if (response.success) {
-                        // Update heart icon to filled
-                        heartIcon.removeClass('bi-heart').addClass('bi-heart-fill');
-
-                        Toastify({
-                            text: "Item added to watchlist!",
-                            duration: 3000,
-                            close: true,
-                            gravity: "top",
-                            position: "right",
-                            backgroundColor: "green",
-                        }).showToast();
-                    } else {
-                        alert("Failed to add to watchlist.");
-                    }
-                },
-                error: function (xhr, status, error) {
-                    console.error("Error adding to watchlist:", error);
-                    alert("Something went wrong!");
-                }
-            });
-        }
-
-        // Function to remove item from watchlist
-        function removeFromWatchlist(id, heartIcon) {
-            $.ajax({
-                url: '/Customer/BasketFavourite/DeleteFavourite',
-                type: 'POST',
-                data: { Id: id },
-                success: function (response) {
-                    if (response.success) {
-                        // Update heart icon to empty
-                        heartIcon.removeClass('bi-heart-fill').addClass('bi-heart');
-
-                        Toastify({
-                            text: "Item removed from watchlist!",
-                            duration: 3000,
-                            close: true,
-                            gravity: "top",
-                            position: "right",
-                            backgroundColor: "orange",
-                        }).showToast();
-                    } else {
-                        alert("Failed to remove from watchlist.");
-                    }
-                },
-                error: function (xhr, status, error) {
-                    console.error("Error removing from watchlist:", error);
-                    alert("Something went wrong!");
-                }
-            });
-        }
-
-        // Call this function when page loads and after loading meals
-        $(document).ready(function() {
-            checkWatchlistStatus();
-        });
-
-        // Also call after loading category meals
-        function choose(element) {
-            var categoryId = $(element).data('category-id');
-            var restaurantId = @Model.Id;
-
-            $('.category-item').removeClass('active-category');
-            $(element).addClass('active-category');
-
-            fetch('@Url.Action("GetCategoryMeals", "Customer")' + `?restaurantId=${restaurantId}&categoryId=${categoryId}`)
-                .then(response => {
-                    if (!response.ok) throw new Error("Failed to load meals");
-                    return response.text();
-                })
-                .then(html => {
-                    document.getElementById("mealsContent").innerHTML = html;
-                    // Check watchlist status for newly loaded meals
-                    setTimeout(checkWatchlistStatus, 100);
-                })
-                .catch(error => {
-                    document.getElementById("mealsContent").innerHTML =
-                        `<div class="text-danger text-center">${error.message}</div>`;
-                });
-        }
-
-        // Enhanced search function to maintain watchlist status
-        function searchMeals() {
-            clearTimeout(debounceTimer);
-            debounceTimer = setTimeout(() => {
-                const form = document.getElementById("searchForm");
-                const formData = new FormData(form);
-                const query = new URLSearchParams(formData).toString();
-
-                if (!query || (!formData.get('maxPrice') && !formData.get('searchTerm') && !formData.get('categoryId'))) {
-                    document.getElementById("mealsContent").innerHTML =
-                        `<div class="text-muted text-center">Select a category to view its meals.</div>`;
-                    return;
-                }
-
-                fetch(`@Url.Action("SearchMeals", "Restaurants")?restaurantId=@Model.Id&${query}`)
-                    .then(res => {
-                        if (!res.ok) throw new Error("Search failed");
-                        return res.text();
-                    })
-                    .then(html => {
-                        document.getElementById("mealsContent").innerHTML = html;
-                        // Check watchlist status for search results
-                        setTimeout(checkWatchlistStatus, 100);
-                    })
-                    .catch(err => {
-                        document.getElementById("mealsContent").innerHTML =
-                            `<div class="text-danger text-center">${err.message}</div>`;
-                    });
-            }, 300);
-        }
 
 
     </script>
