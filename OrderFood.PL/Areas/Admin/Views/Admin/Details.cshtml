@@ -39,10 +39,11 @@
         }
 
         .card-header {
-            background-color: #0062cc;
-            color: white;
+            color: #89c155;
             border-top-left-radius: 10px;
             border-top-right-radius: 10px;
+            align-items:center;
+            text-align:center;
         }
 
         .restaurant-name {
@@ -162,7 +163,7 @@
 
                             <!-- Back Button -->
                             <div class="text-center">
-                                <a href="@Url.Action("GetRestaurants", "Admin", new { area = "Resturant" })" class="btn btn-secondary back-btn">
+                                <a href="@Url.Action("GetRestaurants", "Admin", new { area = "Resturant" })" class="btn btn-outline-warning back-btn">
                                     <i class="bi bi-arrow-left"></i> Back to List
                                 </a>
                             </div>
