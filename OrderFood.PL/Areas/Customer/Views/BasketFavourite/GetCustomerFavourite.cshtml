@@ -1,71 +1,60 @@
 ﻿@using OrderFood.DAL.Entities.Basket
 @model CustomerFavourite
 
+<style>
+    .object-fit-cover {
+        object-fit: cover;
+    }
+</style>
 
-<section style="background-color: #eee; min-height:100vh;">
-    <div class="container py-5">
-        <div class="row justify-content-center mb-3">
-            <div class="row row-cols-1 row-cols-md-2 g-3">
+<section class="bg-light min-vh-100 py-5">
+    <div class="container">
+        <div class="row justify-content-center mb-4">
+            <div class="col text-center">
+                <h2 class="fw-bold">Your Watchlist</h2>
+                <p class="text-muted">Manage your favorite items here</p>
+            </div>
+        </div>
 
-                @foreach (var item in Model.FavouriteItems)
-                {
-                    <div class="col">
-                        <div class="card shadow-0 border rounded-3">
-                            <div class="card-body">
-                                <div class="d-flex flex-column flex-lg-row align-items-stretch justify-content-between gap-3 w-100">
-                                    <!-- Product Image -->
-                                    <div class="col-lg-3">
-                                        <div class="bg-image hover-zoom ripple rounded rounded-4 ripple-surface">
-                                            <img src="@item.Image" class="w-100" />
-                                            <a href="#!">
-                                                <div class="hover-overlay">
-                                                    <div class="mask" style="background-color: rgba(253, 253, 253, 0.15);"></div>
-                                                </div>
-                                            </a>
-                                        </div>
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            @foreach (var item in Model.FavouriteItems)
+            {
+                <div class="col">
+                    <div class="card h-100 shadow-sm border-0 rounded-4">
+                        <div class="row g-0 h-100">
+                            <!-- Product Image -->
+                            <div class="col-md-4 d-flex align-items-center">
+                                <img src="@item.Image" class="img-fluid rounded-start object-fit-cover w-100 h-100" style="max-height: 200px;" alt="@item.Name" />
+                            </div>
+
+                            <!-- Product Details -->
+                            <div class="col-md-8">
+                                <div class="card-body d-flex flex-column justify-content-between h-100">
+                                    <div>
+                                        <h5 class="card-title">@item.Name</h5>
+                                        <p class="card-text text-muted mb-2">@item.Description</p>
+
                                     </div>
-                                    <!-- Product Description -->
-                                    <div class="flex-grow-1">
-                                        <h5>@item.Name</h5>
 
-                                    </div>
-                                    <!-- Price & Shipping -->
-                                    <div class="text-end text-lg-start">
-                                        <div class="d-flex flex-column align-items-lg-start">
-                                            <div class="d-flex align-items-center mb-2">
-                                                <h4 class="mb-0 me-2">$@item.Price</h4>
-
-
-                                                <button class="p-2 bg-danger rounded-circle border-0 text-light" onclick="deleteFavourite(@item.Id)">
-                                                    <i class="bi bi-trash"></i>
-                                                </button>
-
-                                            
-                                            
-                                            
-                                            </div>
-                                        </div>
+                                    <!-- Price and Delete Button on same line -->
+                                    <div class="d-flex justify-content-between align-items-center mt-3">
+                                        <span class="fw-bold fs-5 text-dark mb-0">$@item.Price</span>
+                                        <button class="btn btn-outline-danger btn-sm rounded-circle" onclick="deleteFavourite(@item.Id)" title="Remove from Watchlist">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
                                     </div>
                                 </div>
-                                <!-- Bio / Description -->
-                                <div class="mt-3">
-                                    <p>@item.Description</p>
-                                </div>
-                                <!-- Buttons -->
                             </div>
                         </div>
-
                     </div>
-                }
-
-            </div>
+                </div>
+            }
         </div>
     </div>
 </section>
 
 @section Scripts {
     <script>
-
         function deleteFavourite(id) {
             fetch(`/Customer/BasketFavourite/DeleteFavourite/${id}`, {
                 method: 'POST',
@@ -77,7 +66,7 @@
             .then(res => res.ok ? res.json() : Promise.reject(res))
             .then(response => {
                 if (response.success) {
-                    location.reload(); // reload current page
+                    location.reload();
                 } else {
                     alert("Failed to delete favourite.");
                 }
@@ -87,7 +76,27 @@
                 alert("Something went wrong.");
             });
         }
+
+        function addToCart(id) {
+            fetch(`/Customer/Basket/AddToCart/${id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value
+                }
+            })
+            .then(res => res.ok ? res.json() : Promise.reject(res))
+            .then(response => {
+                if (response.success) {
+                    alert("Item added to cart.");
+                } else {
+                    alert("Failed to add to cart.");
+                }
+            })
+            .catch(error => {
+                console.error("AJAX error:", error);
+                alert("Something went wrong.");
+            });
+        }
     </script>
-
-
 }

@@ -108,33 +108,67 @@ namespace OrderFood.PL.Areas.Customer.Controllers
             }
         }
 
+        //[HttpPost]
+        //public async Task<IActionResult> UpdateCustomerFavourite([FromBody]FavouriteItem customerFavourite)
+        //{
+        //    string userId = $"Favourite-{_userManager.GetUserId(User)}";
+        //    var UserFavourite = await _fvourite.GetBasketAsync(userId);
+
+        //    if (UserFavourite is null)
+        //        UserFavourite = new CustomerFavourite(userId);
+
+        //    // check if item is exists in the favourite
+        //    var existingItem = UserFavourite.FavouriteItems.FirstOrDefault(x => x.Id == customerFavourite.Id);
+
+        //    if (existingItem is null)
+        //        UserFavourite.FavouriteItems.Add(customerFavourite);
+
+
+        //    var UpdateOrCreateBasket = await _fvourite.UpdateBasketAsync(UserFavourite);
+
+        //    if (UpdateOrCreateBasket is null)
+        //    {
+        //        TempData["Error"] = "Failed to update the favourite.";
+        //    }
+        //    else
+        //    {
+        //        TempData["Success"] = "Favourite updated successfully.";
+        //    }
+        //    return Json(new { success = true });
+        //}
+
         [HttpPost]
-        public async Task<IActionResult> UpdateCustomerFavourite([FromBody]FavouriteItem customerFavourite)
+        public async Task<IActionResult> UpdateCustomerFavourite([FromBody] FavouriteItem customerFavourite)
         {
             string userId = $"Favourite-{_userManager.GetUserId(User)}";
             var UserFavourite = await _fvourite.GetBasketAsync(userId);
 
-            if (UserFavourite is null)
+            if (UserFavourite == null)
                 UserFavourite = new CustomerFavourite(userId);
 
-            // check if item is exists in the favourite
+            // Check if item exists in the favourite
             var existingItem = UserFavourite.FavouriteItems.FirstOrDefault(x => x.Id == customerFavourite.Id);
 
-            if (existingItem is null)
-                UserFavourite.FavouriteItems.Add(customerFavourite);
-
-
-            var UpdateOrCreateBasket = await _fvourite.UpdateBasketAsync(UserFavourite);
-
-            if (UpdateOrCreateBasket is null)
+            if (existingItem != null)
             {
-                TempData["Error"] = "Failed to update the favourite.";
+                // Item exists, remove it (toggle off)
+                UserFavourite.FavouriteItems.Remove(existingItem);
             }
             else
             {
-                TempData["Success"] = "Favourite updated successfully.";
+                // Item doesn't exist, add it (toggle on)
+                UserFavourite.FavouriteItems.Add(customerFavourite);
             }
-            return Json(new { success = true });
+
+            var updateOrCreateBasket = await _fvourite.UpdateBasketAsync(UserFavourite);
+
+            if (updateOrCreateBasket == null)
+            {
+                return Json(new { success = false, message = "Failed to update the favourite." });
+            }
+
+            bool isAdded = existingItem == null; // true if item was added, false if removed
+            return Json(new { success = true, isAdded = isAdded });
         }
 
         [HttpPost]
@@ -152,7 +186,8 @@ namespace OrderFood.PL.Areas.Customer.Controllers
 
             return Json(new { success = true });
         }
-
+        //---------------------------------------------------------
+        
 
     }
 }
