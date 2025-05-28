@@ -15,8 +15,8 @@ namespace OrderFood.DAL.Entities.Models
 
         public decimal getTotal()
         {
-            return SubTotal - (SubTotal * (Coupon?.AmountPercentage ?? 0) / 100) + 5;
-            // 5 is the delivery fee
+           var Total = SubTotal - (SubTotal * ((Coupon?.AmountPercentage ?? 0) / 100m));
+            return  Total;
         }
 
         public decimal? Lat { get; set; }

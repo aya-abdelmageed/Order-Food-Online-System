@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -50,6 +49,7 @@ namespace OrderFood.PL.Areas.Identity.Pages.Account
         public InputModel Input { get; set; }
 
         public string ReturnUrl { get; set; }
+
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
 
         public class InputModel
@@ -67,7 +67,7 @@ namespace OrderFood.PL.Areas.Identity.Pages.Account
             public string Address { get; set; }
 
             [Display(Name = "Profile Image")]
-            public IFormFile? Image { get; set; }
+            public IFormFile Image { get; set; }
 
             [Required]
             [EmailAddress]
@@ -99,12 +99,12 @@ namespace OrderFood.PL.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
-                string imageFileName = "DefaultUserImage.png"; // Default image if no image is uploaded
+                string imageFileName = "DefaultUserImage.png";
 
                 if (Input.Image != null)
                 {
                     var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images", "users");
-                    Directory.CreateDirectory(uploadsFolder); // Ensure folder exists
+                    Directory.CreateDirectory(uploadsFolder);
 
                     var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(Input.Image.FileName);
                     var filePath = Path.Combine(uploadsFolder, uniqueFileName);
@@ -114,7 +114,7 @@ namespace OrderFood.PL.Areas.Identity.Pages.Account
                         await Input.Image.CopyToAsync(fileStream);
                     }
 
-                    imageFileName = uniqueFileName; // Save only the unique file name in the database
+                    imageFileName = uniqueFileName;
                 }
 
                 var user = new ApplicationUser
@@ -122,7 +122,7 @@ namespace OrderFood.PL.Areas.Identity.Pages.Account
                     FirstName = Input.FirstName,
                     LastName = Input.LastName,
                     Address = Input.Address,
-                    Image = imageFileName, // Store only the unique file name here
+                    Image = imageFileName,
                     UserName = Input.Email,
                     Email = Input.Email
                 };
@@ -135,7 +135,9 @@ namespace OrderFood.PL.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
+
                     await _userManager.AddToRoleAsync(user, "Customer");
+
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));

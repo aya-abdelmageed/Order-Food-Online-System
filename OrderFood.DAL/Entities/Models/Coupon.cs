@@ -11,7 +11,7 @@ namespace OrderFood.DAL.Entities.Models
 {
     public class Coupon : BaseEntity
     {
-        public int AmountPercentage { get; set; }
+        public decimal AmountPercentage { get; set; }
         public string Code { get; set; }
         public string? Image {  get; set; }
         public DateTime ExpireDate { get; set; }

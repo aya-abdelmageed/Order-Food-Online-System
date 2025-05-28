@@ -5,10 +5,11 @@
 
 
 <style>
-    *{
+    * {
         font-size: 0.875rem;
     }
-    .card{
+
+    .card {
         display: flex;
         direction: column;
         word-wrap: break-word;
@@ -16,10 +17,9 @@
         border-radius: 0.5rem;
         border: 1px solid rgba(0,0,0,0.3);
         background-clip: border-box;
-
     }
 
-    .card-header{
+    .card-header {
         border-color: #DBDBDB;
         position: relative;
         background: transparent;
@@ -29,34 +29,36 @@
         align-items: center;
         border-bottom: 1px solid rgba(0, 0, 0, 0.125);
     }
-    .card-body{
+
+    .card-body {
         flex: 1 1 auto;
         overflow: hidden !important;
         padding: 0 !important;
     }
+
     .font-w600 {
         font-weight: 600;
     }
-    
-
 </style>
 <div class="container py-4">
     <h2 class="d-flex justify-content-center mb-4">Order History</h2>
 
     @await Html.PartialAsync("_OrderFilterPartial")
-    
+
     <div class="card h-auto ">
-        <div>
-            <div class="card-header flex-wrap d-none d-sm-flex">
-                <div class="font-w600 scol-md-2"><strong>Order #</strong></div>
-                <div class="font-w600 scol-md-2">Status</div>
-                <div class="font-w600 scol-md-2">Date</div>
-                <div class="font-w600 scol-md-3">Shipping Address</div>
-                <div class="font-w600 scol-md-2">Payment Method</div>
-                <div class="font-w600 scol-md-1 text-danger">Total</div>
-                <span class="accordion-header-indicator"></span>
+
+        <div class="card-header d-none d-sm-flex bg-white fw-bold px-3">
+            <div class="row w-100">
+                <div class="col-md-2">Order #</div>
+                <div class="col-md-2">Status</div>
+                <div class="col-md-2">Date</div>
+                <div class="col-md-3">Shipping Address</div>
+                <div class="col-md-2">Payment Method</div>
+                <div class="col-md-1 text-danger">Total</div>
             </div>
         </div>
+
+
         <div class="card-body">
             <div id="orders-list">
                 @await Html.PartialAsync("_OrdersListPartial", Model)
@@ -86,4 +88,3 @@
         });
     </script>
 }
-

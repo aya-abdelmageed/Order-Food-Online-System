@@ -1,4 +1,30 @@
 ﻿@model List<OrderFood.DAL.Entities.Models.Restaurant>
+<head>
+    <style>
+        .pagination .page-link {
+            background-color: #fff;
+            border: 1px solid #FFC107;
+            color: #FFC107;
+            margin: 0 5px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+            .pagination .page-link:hover {
+                background-color: #FFC107;
+                color: white;
+            }
+
+        .pagination .page-item.active .page-link {
+            background-color: #FFC107;
+            border-color: #FFC107;
+            color: white;
+            font-weight: bold;
+        }
+
+
+    </style>
+</head>
 
 <div class="row d-flex flex-wrap justify-content-center gap-4">
     @if (Model.Count == 0)

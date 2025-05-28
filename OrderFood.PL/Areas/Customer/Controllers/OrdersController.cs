@@ -38,16 +38,21 @@ namespace OrderFood.PL.Areas.Customer.Controllers
 
         public async Task<IActionResult> GetCustomerOrder()
         {
-
             var custid = _userManager.GetUserId(User);
-            //var custid = "a91aa43f-4d7d-4649-9a44-67cbd667119f";
             var custorder = await _unitOfWork.GetRepository<Order>().GetAllAsync(
-                o => o.CustomerId == custid, query => query.Include(o => o.OrderMeals)!.ThenInclude(i => i.Meal)
-                );
+                o => o.CustomerId == custid,
+                query => query
+                            .Include(o => o.OrderMeals)!
+                                .ThenInclude(om => om.Meal)
+                            .Include(o => o.Restaurant)
+                            .Include(o => o.Coupon) 
+            );
+
             if (custorder == null) return NotFound();
 
             return View(custorder);
         }
+
 
         [HttpGet]
         public async Task<IActionResult> OrderTracking(int id)
@@ -76,13 +81,17 @@ namespace OrderFood.PL.Areas.Customer.Controllers
         // checkout form
         public async Task<IActionResult> userCheckout(string? couponCode)
         {
-            int CouponAmount = 0;
+            // Get current user
+            var user = await _userManager.GetUserAsync(User);
+
+            // Coupon validation
+            decimal CouponAmount = 0m;
             int? CouponId = null;
             bool SameRestaurant = true;
+
             if (!string.IsNullOrEmpty(couponCode))
             {
                 var coupon = await _unitOfWork.GetRepository<Coupon>().GetOneAsync(c => c.Code == couponCode);
-
                 if (!(coupon == null || coupon.ExpireDate < DateTime.Now))
                 {
                     CouponAmount = coupon.AmountPercentage;
@@ -90,55 +99,77 @@ namespace OrderFood.PL.Areas.Customer.Controllers
                 }
             }
 
-
+            // Basket processing
             var BasketId = $"Cart-{_userManager.GetUserId(User)}";
             var UserBasket = await _basket.GetBasketAsync(BasketId);
             var SubTotal = 0M;
-            var MealList = new List<Meal>();
+            var CartItems = new List<CartItemVM>();
             int firstRestaurantId = 0;
-
 
             // Calculate Total Cost
             if (UserBasket!.basketItems.Count > 0)
             {
-                foreach (var item in UserBasket.basketItems)
+                foreach (var basketItem in UserBasket.basketItems)
                 {
-                    var Meal = await _unitOfWork.GetRepository<Meal>().GetOneAsync(m => m.Id == item.Id, q=>q.Include(m=>m.Category));
+                    var Meal = await _unitOfWork.GetRepository<Meal>().GetOneAsync(m => m.Id == basketItem.Id, q => q.Include(m => m.Category));
 
                     if (Meal != null)
                     {
                         // Check if all meals belong to the same restaurant
                         if (firstRestaurantId == 0)
                         {
-                            firstRestaurantId = Meal.Category!.RestaurantId; // Assuming Meal -> Category -> RestaurantId
+                            firstRestaurantId = Meal.Category!.RestaurantId;
                         }
                         else if (Meal.Category?.RestaurantId != firstRestaurantId)
                         {
                             SameRestaurant = false;
                         }
 
-                        SubTotal += Meal.Price * item.Quantity;
-                        MealList.Add(Meal);
+                        SubTotal += Meal.Price * basketItem.Quantity;
+                        CartItems.Add(new CartItemVM
+                        {
+                            Meal = Meal,
+                            Quantity = basketItem.Quantity
+                        });
                     }
                 }
             }
-            var Descount = SubTotal * CouponAmount / 100;
-            var TotalCost = SubTotal - Descount + 5; // Add delivery fee
-            var checkout = new CheckoutVM
-            {
-                Total = TotalCost,
-                Descount = Descount,
-                Meals = MealList,
-                CouponId = CouponId
-            };
 
             if (!SameRestaurant)
             {
-                // Handle the case where meals belong to different restaurants
                 ModelState.AddModelError("", "All meals in the basket must belong to the same restaurant.");
-                return View(checkout); // Redirect to an error page or show a message
+                var errorCheckout = new CheckoutVM
+                {
+                    Total = 0,
+                    Discount = 0,
+                    CartItems = new List<CartItemVM>(),
+                    CouponId = null,
+                    RestaurantId = 0,
+                    FirstName = user?.FirstName,
+                    LastName = user?.LastName,
+                    UserName = user?.UserName,
+                    Email = user?.Email,
+                    Address = user?.Address
+                };
+                return View(errorCheckout);
             }
-            checkout.RestaurantId = firstRestaurantId;
+
+            var Discount = SubTotal * (CouponAmount / 100m);
+            var TotalCost = SubTotal - Discount + 5; // Add delivery fee
+
+            var checkout = new CheckoutVM
+            {
+                Total = TotalCost,
+                Discount = Discount,
+                CartItems = CartItems,  
+                CouponId = CouponId,
+                RestaurantId = firstRestaurantId,
+                FirstName = user?.FirstName,
+                LastName = user?.LastName,
+                UserName = user?.UserName,
+                Email = user?.Email,
+                Address = user?.Address
+            };
 
             return View(checkout);
         }
@@ -264,7 +295,7 @@ namespace OrderFood.PL.Areas.Customer.Controllers
         [HttpGet]
         public async Task<IActionResult> GetCheckoutSummary(string? couponCode)
         {
-            int couponAmount = 0;
+            decimal couponAmount = 0m;
             decimal discount = 0;
             int? couponId = null;
 
@@ -296,7 +327,7 @@ namespace OrderFood.PL.Areas.Customer.Controllers
                 }
             }
 
-            discount = subTotal * couponAmount / 100;
+            discount = subTotal * (couponAmount / 100m);
             decimal total = subTotal - discount + 5; // +5 for delivery
 
             return Json(new
