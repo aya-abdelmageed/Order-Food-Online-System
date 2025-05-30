@@ -4,20 +4,40 @@
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
 }
 
+<style>
+    .nav-link-custom {
+        color: #000 !important; 
+    }
 
+        .nav-link-custom:hover {
+            color: #000 !important;
+        }
+
+    .active-warning {
+        background-color: #ffc107 !important; 
+        color: #000 !important; 
+        border-radius: 0.375rem; 
+    }
+
+</style>
 
 <ul class="nav nav-pills flex-column">
-    <li class="nav-item"><a class="nav-link @ManageNavPages.IndexNavClass(ViewContext)" id="profile" asp-page="./Index">Profile</a></li>
-    @* <li class="nav-item"><a class="nav-link @ManageNavPages.EmailNavClass(ViewContext)" id="email" asp-page="./Email">Email</a></li> *@
-    <li class="nav-item"><a class="nav-link @ManageNavPages.ChangePasswordNavClass(ViewContext)" id="change-password" asp-page="./ChangePassword">Password</a></li>
+    <li class="nav-item">
+        <a class="nav-link nav-link-custom @(ManageNavPages.IndexNavClass(ViewContext) == "active" ? "active-warning" : "")"
+           id="profile" asp-page="./Index">Profile</a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link nav-link-custom @(ManageNavPages.ChangePasswordNavClass(ViewContext) == "active" ? "active-warning" : "")"
+           id="change-password" asp-page="./ChangePassword">Password</a>
+    </li>
+
     @if (hasExternalLogins)
     {
-        @* <li id="external-logins" class="nav-item"><a id="external-login" class="nav-link @ManageNavPages.ExternalLoginsNavClass(ViewContext)" asp-page="./ExternalLogins">External logins</a></li> *@
+        @* External login can be added the same way if needed *@
     }
-    @* <li class="nav-item"><a class="nav-link @ManageNavPages.TwoFactorAuthenticationNavClass(ViewContext)" id="two-factor" asp-page="./TwoFactorAuthentication">Two-factor authentication</a></li> *@
-    @* <li class="nav-item"><a class="nav-link @ManageNavPages.PersonalDataNavClass(ViewContext)" id="personal-data" asp-page="./PersonalData">Personal data</a></li> *@
 </ul>
 
 @section Styles {
-	<link href="~/css/usersetting/usersetting.css" rel="stylesheet" />
+    <link href="~/css/usersetting/usersetting.css" rel="stylesheet" />
 }
