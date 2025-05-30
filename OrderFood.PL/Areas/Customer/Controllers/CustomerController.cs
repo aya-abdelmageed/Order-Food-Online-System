@@ -24,33 +24,7 @@ namespace OrderFood.PL.Areas.Customer.Controllers
             this.UnitOfWork = unitOfWork;
             _userManager = userManager;
         }
-        // GET: CustomerController
 
-        //the customer main page
-        //public async Task<ActionResult> CustomerHomeAllResturant(string? name)
-        //{
-        //    //get the categories data to view
-        //    var categories = await UnitOfWork.GetRepository<Category>().GetAllAsync(includes: m => m.Include(t => t.Meals));
-        //    //get the distinct categories name
-        //    var distinctCategories = categories.GroupBy(c => c.Name).Select(g => new CategoryViewModel()
-        //    {
-        //        CategoryName = g.Key,
-        //        Image = g.First().Image,
-        //    }
-        //    ).ToList();
-        //    //get restarant info to view
-        //    var restaurants = await UnitOfWork.GetRepository<Restaurant>().GetAllAsync(
-        //        includes: i => i.Include(c => c.Categories));
-
-        //    //
-        //    if (name != null)
-        //    {
-        //        restaurants = restaurants.Where(r => r.Categories.Any(c => c.Name == name)).ToList();
-        //    }
-        //    ViewData["Restaurants"] = restaurants;
-
-        //    return View(distinctCategories);
-        //}
         //-----------------------------------------------------------------------
         public async Task<ActionResult> CustomerHomeAllResturant(string? name, string? address, string? categoryName)
         {
@@ -250,6 +224,45 @@ namespace OrderFood.PL.Areas.Customer.Controllers
             }
 
             return PartialView("_RestaurantCards", restaurants);
+        }
+        //-----------------------------------------------------------
+        [HttpGet]
+        public async Task<IActionResult> SearchMeals(int restaurantId, string searchTerm = "", int? categoryId = null, decimal? maxPrice = null)
+        {
+            var restaurant = await UnitOfWork.GetRepository<Restaurant>()
+                .GetOneAsync(r => r.Id == restaurantId,
+                query => query.Include(r => r.Categories)
+                              .ThenInclude(c => c.Meals));
+
+            if (restaurant == null)
+                return NotFound();
+
+            // Filter meals based on search criteria
+            var meals = restaurant.Categories
+                .SelectMany(c => c.Meals)
+                .Where(m => !m.IsDelete);
+
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                // Case-insensitive "starts with" search
+                meals = meals.Where(m => m.Name.StartsWith(searchTerm, StringComparison.OrdinalIgnoreCase));
+            }
+
+            if (maxPrice.HasValue)
+            {
+                meals = meals.Where(m => m.Price <= maxPrice.Value);
+            }
+
+            if (categoryId.HasValue)
+            {
+                meals = meals.Where(m => m.CategoryId == categoryId.Value);
+            }
+
+            return PartialView("_MealsPartial", new Category
+            {
+                Meals = meals.ToList(),
+                Name = "Search Results"
+            });
         }
 
     }

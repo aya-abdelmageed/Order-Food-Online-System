@@ -343,10 +343,44 @@
         }
 
         //------------------------------
+                    function searchMeals() {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+                const form = document.getElementById("searchForm");
+                const formData = new FormData(form);
 
+                // Get values from form
+                const searchTerm = encodeURIComponent(formData.get('searchTerm') || '');
+                const maxPrice = formData.get('maxPrice') || '';
+                const categoryId = formData.get('categoryId') || '';
+                const restaurantId = @Model.Id;
 
+                // If all inputs are empty, show default message
+                if (!searchTerm && !maxPrice && !categoryId) {
+                    document.getElementById("mealsContent").innerHTML =
+                        `<div class="text-muted text-center p-2 rounded-2 text-light">Select a category to view its meals.</div>`;
+                    return;
+                }
 
+                // Show loading indicator
+                document.getElementById("mealsContent").innerHTML =
+                    `<div class="text-center"><i class="fas fa-spinner fa-spin"></i> Searching...</div>`;
 
+                // Call the endpoint
+                fetch(`@Url.Action("SearchMeals", "Customer")?restaurantId=${restaurantId}&searchTerm=${searchTerm}&maxPrice=${maxPrice}&categoryId=${categoryId}`)
+                    .then(response => {
+                        if (!response.ok) throw new Error("Search failed");
+                        return response.text();
+                    })
+                    .then(html => {
+                        document.getElementById("mealsContent").innerHTML = html;
+                    })
+                    .catch(err => {
+                        document.getElementById("mealsContent").innerHTML =
+                            `<div class="text-danger text-center">${err.message}</div>`;
+                    });
+            }, 300);
+        }
     </script>
 </body>
 </html>
