@@ -11,155 +11,46 @@
 }
 
 <header id="header-demo" class="fixed-top">
- 
-    <!-- bg-body-tertiary -->
-    <nav class="navbar  navbar-expand-md bsb-navbar-3 " style="background-color:#89c155">
+    <nav class="navbar navbar-expand-md bsb-navbar-3" style="background-color:#89c155">
         <div class="container">
-
-                <a href="#" class="navbar-brand">
-                <img src="~/images/HomePageImages/logo (1).png" class="img-fluid rounded" alt="BootstrapBrain Logo" width="150"
-                   height="80">
+            <a href="#" class="navbar-brand">
+                <img src="~/images/HomePageImages/logo (1).png" class="img-fluid rounded" alt="Logo" width="150" height="80">
             </a>
 
             <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse"
                     data-bs-target="#bsbNavbar" aria-controls="bsbNavbar" aria-label="Toggle Navigation">
                 <i class="bi bi-three-dots"></i>
             </button>
+
             <div class="collapse navbar-collapse" id="bsbNavbar">
                 <ul class="navbar-nav d-flex flex-row align-items-center ms-auto gap-3">
 
                     <partial name="_LoginPartial" />
-                    @* -- Dark Mode Validation-- *@
+
                     @if (User.Identity.IsAuthenticated)
                     {
-
                         <li class="theme-wrapper d-flex gap-3">
                             <i class="bx bxs-moon theme-icon"></i>
-
                             <div class="theme-btn">
                                 <span class="theme-ball"></span>
                             </div>
                         </li>
                     }
-                    
-                    
+
                     @if (User.IsInRole("Customer"))
                     {
-                        <li class="nav-item dropdown cart-dropdown text-black position-relative">
-                            <a asp-area="Customer" asp-controller="BasketFavourite" asp-action="GetCustomerCart" class="nav-link dropdown-toggle">
-                                <span class="position-relative ">
-                                    <i class="bi bi-cart fs-5 text-light fw-bold "></i>
-                                    <span class="text-black position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"></span>
-                                </span>
+                        <li class="nav-item">
+                            <a asp-area="Customer" asp-controller="BasketFavourite" asp-action="GetCustomerCart" class="nav-link icon-hover">
+                                <i class="bi bi-cart fs-5 fw-bold"></i>
                             </a>
-
-                            <div class="dropdown-menu dropdown-menu-right end-50">
-                                @*   <h6 class="dropdown-header text-center mb-2">Your Cart (2 items)</h6>
-
-                                 <!-- Cart Item -->
-                                <div class="mini-cart-item d-flex border-bottom pb-3 mb-3">
-                                    <img src="image/burger.jpg" alt="Product">
-                                    <div class="flex-grow-1">
-                                        <div class="d-flex justify-content-between align-items-start">
-                                            <span class="product-title">Burger  Ranch</span>
-                                            <a href="#"><i class="bi bi-x text-danger"></i></a>
-                                        </div>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div class="quantity-control">
-                                                <button class="btn btn-outline-secondary btn-sm"
-                                                        onclick="changeQty(this, -1)">
-                                                    −
-                                                </button>
-                                                <input type="text" value="1"
-                                                       class="form-control form-control-sm qty-input">
-                                                <button class="btn btn-outline-secondary btn-sm"
-                                                        onclick="changeQty(this, 1)">
-                                                    +
-                                                </button>
-                                            </div>
-                                            <span>$99</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Another item -->
-                                <div class="mini-cart-item d-flex border-bottom pb-3 mb-3">
-                                    <img src="~/images/burger.jpg" alt="Product">
-                                    <div class="flex-grow-1">
-                                        <div class="d-flex justify-content-between align-items-start">
-                                            <span class="product-title">Burger Ranch</span>
-                                            <a href="#"><i class="bi bi-x text-danger"></i></a>
-                                        </div>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div class="quantity-control">
-                                                <button class="btn btn-outline-secondary btn-sm"
-                                                        onclick="changeQty(this, -1)">
-                                                    −
-                                                </button>
-                                                <input type="text" value="1"
-                                                       class="form-control form-control-sm qty-input">
-                                                <button class="btn btn-outline-secondary btn-sm"
-                                                        onclick="changeQty(this, 1)">
-                                                    +
-                                                </button>
-                                            </div>
-                                            <span>$99</span>
-                                        </div>
-                                    </div>
-                                </div>
- 
-
-
-                                <!-- Total -->
-                                <div class="d-flex justify-content-between cart-total mb-3">
-                                    <span>Subtotal:</span><span>$198</span>
-                                </div>
-*@
-                                <!-- Buttons -->
-                                <div class="d-grid gap-2">
-                                    <a asp-area="Customer" asp-controller="BasketFavourite" asp-action="GetCustomerCart" class="btn btn-danger">View Cart</a>
-                                    
-                                </div>
-                            </div>
-                      
                         </li>
 
-
-                        <li class="nav-item dropdown cart-dropdown text-black position-relative">
-                            <a asp-area="Customer" asp-controller="BasketFavourite" asp-action="GetCustomerFavourite" class="nav-link dropdown-toggle">
-                                <span class="position-relative ">
-                                    <i class="bi bi-heart fs-5 text-light fw-bold"></i>
-                                </span>
+                        <li class="nav-item">
+                            <a asp-area="Customer" asp-controller="BasketFavourite" asp-action="GetCustomerFavourite" class="nav-link icon-hover">
+                                <i class="bi bi-heart fs-5 fw-bold"></i>
                             </a>
-
-                            <div class="dropdown-menu dropdown-menu-right end-50">
-                        @*         <h6 class="dropdown-header text-center mb-2">Your Cart (2 items)</h6>
-
-
-                                <!-- Wishlist Item 1 -->
-                        <div class="wishlist-item">
-                            <a class="dropdown-item d-flex align-items-center" href="#!">
-                                <img src="~/images/pizza.avif" alt="Product 1"
-                                     class="img-fluid rounded-2 me-2" style="width: 40px;">
-                                <span class="fs-7">PIZZA</span>
-                                <button class="btn btn-link ms-auto text-danger remove-item" aria-label="Remove">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </a>
-                        </div>
-
- *@
-                                <!-- Buttons -->
-                                <div class="d-grid gap-2">
-                                    <a asp-area="Customer" asp-controller="BasketFavourite" asp-action="GetCustomerFavourite" class="btn btn-danger ">View Wishlist</a>
-                                    
-                                </div>
-                            </div>
                         </li>
-
                     }
-
-
 
                     @if (User.Identity.IsAuthenticated)
                     {
@@ -174,7 +65,6 @@
 
                             <ul class="dropdown-menu dropdown-menu-md-end bsb-dropdown-animation end-0"
                                 style="min-width: max-content;" data-bs-popper="static">
-
                                 <li>
                                     <h6 class="dropdown-header fs-7 text-center">Welcome, @firstName @lastName</h6>
                                 </li>
@@ -186,27 +76,6 @@
                                         <span class="fs-7">View Profile</span>
                                     </a>
                                 </li>
-                                @* <li> *@
-                                @*     <a class="dropdown-item" href="#!"> *@
-                                @*         <i class="bi bi-envelope-open me-2"></i> *@
-                                @*         <span class="fs-7">@User.FindFirst(ClaimTypes.Email)?.Value</span> *@
-                                @*     </a> *@
-                                @* </li> *@
-
-                                @* <li><hr class="dropdown-divider"></li> *@
-
-                                @* <li> *@
-                                @*     <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index"> *@
-                                @*         <i class="bi bi-gear-fill me-2"></i> *@
-                                @*         <span class="fs-7">Settings & Privacy</span> *@
-                                @*     </a> *@
-                                @* </li> *@
-                                @* <li> *@
-                                @*     <a class="dropdown-item" href="#!"> *@
-                                @*         <i class="bi bi-question-circle-fill me-2"></i> *@
-                                @*         <span class="fs-7">Help Center</span> *@
-                                @*     </a> *@
-                                @* </li> *@
 
                                 <li><hr class="dropdown-divider"></li>
 
@@ -225,12 +94,27 @@
                     }
 
                 </ul>
-
-
             </div>
         </div>
     </nav>
 </header>
+
+<!-- Hover effect styles -->
+<style>
+    .icon-hover {
+        color: white;
+        transition: all 0.3s ease;
+        padding: 8px;
+        border-radius: 50%;
+    }
+
+        .icon-hover:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+            color: #000;
+        }
+</style>
+
 
 
 <style>

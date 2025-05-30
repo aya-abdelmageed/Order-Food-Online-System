@@ -32,9 +32,9 @@
 
     <div class="row d-flex flex-wrap justify-content-center gap-4">
         @if (Model.Meals.Where(m => !m.IsDelete).Any())
-    {
-            @foreach (var meal in Model.Meals.Where(m => !m.IsDelete))
         {
+            @foreach (var meal in Model.Meals.Where(m => !m.IsDelete))
+            {
                 <div class="product-card p-3 shadow rounded-4 position-relative bg-white" style="width: 250px; height:460px">
 
                     @if (User.IsInRole("Customer"))
@@ -92,14 +92,14 @@
 
                         </div>
                     }
-            </div>
+                </div>
+            }
         }
-    }
-    else
-    {
-        <div class="text-center text-muted">No meals available in this category.</div>
-    }
-</div>
+        else
+        {
+            <div class="text-center text-muted">No meals available in this category.</div>
+        }
+    </div>
 
 
     <script src="~/js/Restaurant/jquery-1.11.0.min.js"></script>

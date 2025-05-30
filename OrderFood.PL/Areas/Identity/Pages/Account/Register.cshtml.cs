@@ -67,7 +67,7 @@ namespace OrderFood.PL.Areas.Identity.Pages.Account
             public string Address { get; set; }
 
             [Display(Name = "Profile Image")]
-            public IFormFile Image { get; set; }
+            public IFormFile? Image { get; set; }
 
             [Required]
             [EmailAddress]
