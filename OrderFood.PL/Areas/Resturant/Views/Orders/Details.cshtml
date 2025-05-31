@@ -19,39 +19,57 @@
             </div>
         </div>
 
-        <div class="order-menu">
+        <div class="order-menu mb-4">
             @foreach (var item in Model.OrderMeals)
             {
                 <div class="menu-item d-flex justify-content-between align-items-center mb-3">
                     <div class="d-flex align-items-center gap-3">
                         <img src="@item.Meal!.Image" alt="" style="width:50px; height:50px; object-fit:cover;" />
                         <div>
-                            <strong>@item.Meal?.Name</strong><br />@item.Quantity
+                            <strong>@item.Meal?.Name</strong><br />
+                            <small class="text-muted">Qty: @item.Quantity</small>
                         </div>
                     </div>
-                    <div>+@((item.Meal?.Price ?? 0 * item.Quantity).ToString("C"))</div>
+                    <div>+@((item.Meal?.Price * item.Quantity))</div>
                 </div>
             }
         </div>
 
         <hr />
 
-        <div class="d-flex justify-content-between align-items-center">
-            <h5><strong>Total</strong></h5>
-            <h5>@Model.getTotal().ToString("C")</h5>
+        <!-- (Subtotal + Fees + Discount + Total) -->
+        <div class="order-summary bg-light rounded p-3">
+            <div class="d-flex justify-content-between">
+                <span>Subtotal:</span>
+                <span>@((Model.SubTotal - 5).ToString("C"))</span>
+            </div>
+            <div class="d-flex justify-content-between text-danger">
+                <span>Fees:</span>
+                <span>+@("$5.00")</span>
+            </div>
+            @if (Model.Coupon != null)
+            {
+                <div class="d-flex justify-content-between text-success">
+                    <span>Discount (@Model.Coupon.AmountPercentage%):</span>
+                    <span>-@((Model.SubTotal * Model.Coupon.AmountPercentage / 100).ToString("C"))</span>
+                </div>
+            }
+            <hr />
+            <div class="d-flex justify-content-between fs-5">
+                <strong>Total</strong>
+                <strong class="text-warning">@Model.getTotal().ToString("C")</strong>
+            </div>
         </div>
+
+        <!-- Order Status Action Buttons -->
         @if ((int)Model.OrderStatus == 0)
         {
             <div class="mt-3 d-flex justify-content-end gap-2" id="actionButtons">
-                <button id="rejectBtn" onclick="rejectOrder(@Model.Id)" class="btn btn-outline-danger">
-                    Reject Order
-                </button>
-
-                <button id="acceptBtn" onclick="acceptOrder(@Model.Id)" class="btn text-white" style="background-color: #FFC107;">
-                    Accept Order
-                </button>
+                <button id="rejectBtn" onclick="rejectOrder(@Model.Id)" class="btn btn-outline-danger">Reject Order</button>
+                <button id="acceptBtn" onclick="acceptOrder(@Model.Id)" class="btn text-white" style="background-color: #FFC107;">Accept Order</button>
             </div>
         }
+
         @if ((int)Model.OrderStatus == 1)
         {
             <div class="mt-3 d-flex justify-content-end" id="doneButtonContainer">
@@ -60,10 +78,5 @@
                 </button>
             </div>
         }
-        <div class="mt-3 d-flex justify-content-end" id="doneButtonContainer" style="visibility: hidden;">
-            <button class="btn btn-outline-success text-white btn-success btn-lg" onclick="OrderDone(@Model.Id)">
-                Done
-            </button>
-        </div>
     </div>
 </div>

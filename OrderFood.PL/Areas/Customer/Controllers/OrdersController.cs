@@ -57,13 +57,22 @@ namespace OrderFood.PL.Areas.Customer.Controllers
         [HttpGet]
         public async Task<IActionResult> OrderTracking(int id)
         {
+            var OrderTracking = await _unitOfWork.GetRepository<Order>().GetOneAsync(
+                o => o.Id == id,
+                query => query
+                    .Include(o => o.Driver)
+                    .Include(o => o.Coupon)             
+                    .Include(o => o.OrderMeals)
+                        .ThenInclude(om => om.Meal)
+                    .Include(o => o.Restaurant)         
+            );
 
-            var OrderTracking = await _unitOfWork.GetRepository<Order>().GetOneAsync(o => o.Id == id, query => query.Include(dr => dr.Driver));
             if (OrderTracking == null)
                 return NotFound();
 
             return View(OrderTracking);
         }
+
 
 
 

@@ -520,13 +520,23 @@ namespace OrderFood.PL.Areas.Resturant.Controllers
         {
             var Ownerid = _userManager.GetUserId(User);
 
-            var rest = await _context.GetRepository<Restaurant>().GetOneAsync(r => r.OwnerId == Ownerid, q => q.Include(o => o.Orders)!.ThenInclude(o => o.OrderMeals)!.ThenInclude(m => m.Meal));
+            var rest = await _context.GetRepository<Restaurant>().GetOneAsync(
+                r => r.OwnerId == Ownerid,
+                q => q.Include(r => r.Orders)!
+                      .ThenInclude(o => o.OrderMeals)!
+                          .ThenInclude(om => om.Meal)
+                      .Include(r => r.Orders)!
+                      .ThenInclude(o => o.Coupon) 
+            );
+
             if (rest == null)
                 return NotFound();
+
             var restOrders = rest.Orders!.ToList();
 
             return View(restOrders);
         }
+
 
 
 

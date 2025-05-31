@@ -7,7 +7,6 @@ using OrderFood.DAL.Entities.Models;
 using OrderFood.DAL.Entities.User;
 using OrderFood.PL.Areas.Delivery.ViewModel;
 using System.Threading.Tasks;
-using static NuGet.Packaging.PackagingConstants;
 
 namespace OrderFood.PL.Areas.Delivery.Controllers
 {
@@ -25,17 +24,17 @@ namespace OrderFood.PL.Areas.Delivery.Controllers
             _userManager = userManager;
         }
 
-
         public async Task<IActionResult> PreparedOrders()
         {
             var orders = await _unitOfWork.GetRepository<Order>().GetAllAsync(
-             // criteria: O => O.OrderStatus == OrderStatus.Prepared,
-                includes: O => O.Include(or => or.Restaurant).Include(or => or.Customer).Include(or => or.Coupon).Include(or => or.OrderMeals)!.ThenInclude(om => om.Meal)
-                );
+                includes: o => o.Include(or => or.Restaurant)
+                                .Include(or => or.Customer)
+                                .Include(or => or.Coupon)
+                                .Include(or => or.OrderMeals)!.ThenInclude(om => om.Meal)
+            );
 
-            var OrderMapped = _mapper.Map<List<DeliveryOrderDetailsVM>>(orders);
-
-            return View(OrderMapped);
+            var orderMapped = _mapper.Map<List<DeliveryOrderDetailsVM>>(orders);
+            return View(orderMapped);
         }
 
         [HttpPost]
@@ -47,23 +46,26 @@ namespace OrderFood.PL.Areas.Delivery.Controllers
         // Get Recent Orders That are Completed
         public async Task<IActionResult> DeliveredOrders()
         {
-            var UserId = _userManager.GetUserId(User);
+            var userId = _userManager.GetUserId(User);
             var allOrders = await _unitOfWork.GetRepository<Order>().GetAllAsync(
-                criteria: o=>o.DriverId == UserId && o.OrderStatus == OrderStatus.Completed,
-                includes: O => O.Include(or => or.Restaurant).Include(or => or.Customer).Include(or => or.Coupon)
+                criteria: o => o.DriverId == userId && o.OrderStatus == OrderStatus.Completed,
+                includes: o => o.Include(or => or.Restaurant)
+                                .Include(or => or.Customer)
+                                .Include(or => or.Coupon)
                                 .Include(or => or.OrderMeals)!.ThenInclude(om => om.Meal)
             );
 
-            var OrderMapped = _mapper.Map<List<DeliveryOrderDetailsVM>>(allOrders);
-
-            return View(OrderMapped);
-
+            var orderMapped = _mapper.Map<List<DeliveryOrderDetailsVM>>(allOrders);
+            return View(orderMapped);
         }
 
         // Accept Prepared Orders
         public async Task<IActionResult> AcceptOrder(int orderId)
         {
-            var order = await _unitOfWork.GetRepository<Order>().GetOneAsync(o => o.Id == orderId);
+            var order = await _unitOfWork.GetRepository<Order>().GetOneAsync(
+                o => o.Id == orderId,
+                q => q.Include(o => o.Coupon) // Include coupon here
+            );
 
             if (order == null)
                 return NotFound();
@@ -75,20 +77,21 @@ namespace OrderFood.PL.Areas.Delivery.Controllers
             return RedirectToAction(nameof(CurrentShippingOrder));
         }
 
-
         // Get All Orders That are in Shipping
         public async Task<IActionResult> CurrentShippingOrder()
         {
-            var UserId = _userManager.GetUserId(User);
+            var userId = _userManager.GetUserId(User);
             var allOrders = await _unitOfWork.GetRepository<Order>().GetAllAsync(
-                criteria: o => o.DriverId == UserId && o.OrderStatus == OrderStatus.Shipping,
-                includes: O => O.Include(or => or.Restaurant).Include(or => or.Customer).Include(or => or.Coupon)
+                criteria: o => o.DriverId == userId && o.OrderStatus == OrderStatus.Shipping,
+                includes: o => o.Include(or => or.Restaurant)
+                                .Include(or => or.Customer)
+                                .Include(or => or.Coupon)
                                 .Include(or => or.OrderMeals)!.ThenInclude(om => om.Meal)
             );
-            var OrderMapped = _mapper.Map<List<DeliveryOrderDetailsVM>>(allOrders);
-            return View(OrderMapped);
-        }
 
+            var orderMapped = _mapper.Map<List<DeliveryOrderDetailsVM>>(allOrders);
+            return View(orderMapped);
+        }
 
         // Get Order Details That are in Completed (DONE)
         public async Task<IActionResult> CompleteOrder(int orderId)
@@ -103,27 +106,32 @@ namespace OrderFood.PL.Areas.Delivery.Controllers
             return RedirectToAction(nameof(PreparedOrders));
         }
 
-        //Accept Order for shipping
-
-        public async Task<IActionResult> Acceptshipping (int id)
+        // Accept Order for shipping
+        public async Task<IActionResult> Acceptshipping(int id)
         {
-            var order = await _unitOfWork.GetRepository<Order>().GetOneAsync(O => O.Id == id, q => q.Include(o => o.OrderMeals)!.ThenInclude(i => i.Meal));
+            var order = await _unitOfWork.GetRepository<Order>().GetOneAsync(
+                o => o.Id == id,
+                q => q.Include(o => o.OrderMeals)!.ThenInclude(i => i.Meal)
+                      .Include(o => o.Coupon) // Include coupon here
+            );
 
             order.OrderStatus = OrderStatus.Shipping;
             await _unitOfWork.SaveChangesAsync();
             return Ok();
-
         }
 
+        // Update order from shipping to complete
         public async Task<IActionResult> updateShippingtoComplete(int id)
         {
-            var order = await _unitOfWork.GetRepository<Order>().GetOneAsync(O => O.Id == id, q => q.Include(o => o.OrderMeals)!.ThenInclude(i => i.Meal));
+            var order = await _unitOfWork.GetRepository<Order>().GetOneAsync(
+                o => o.Id == id,
+                q => q.Include(o => o.OrderMeals)!.ThenInclude(i => i.Meal)
+                      .Include(o => o.Coupon) // Include coupon here
+            );
 
             order.OrderStatus = OrderStatus.Completed;
             await _unitOfWork.SaveChangesAsync();
             return Ok();
-
         }
-
     }
 }

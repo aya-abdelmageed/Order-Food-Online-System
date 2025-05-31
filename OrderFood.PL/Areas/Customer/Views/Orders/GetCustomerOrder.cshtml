@@ -16,11 +16,10 @@
             animation: fadeInUp 0.5s ease;
         }
 
-
-        .order-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
-        }
+            .order-card:hover {
+                transform: translateY(-6px);
+                box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+            }
 
         .card-title {
             color: #2c3e50;
@@ -39,13 +38,6 @@
             border-radius: 50%;
             border: 2px solid #ddd;
         }
-
-        /* .divider-line hr { */
-        /*     margin: 15px 0; */
-        /*     border: 0; */
-        /*     height: 3px; */
-        /*     background-image: linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,0.1), rgba(0,0,0,0)); */
-        /* } */
 
         .coupon-badge .badge {
             font-size: 0.8rem;
@@ -215,18 +207,23 @@
                             <div class="divider-line"><hr /></div>
 
                             <div class="order-summary">
+                                <div class="d-flex justify-content-between">
+                                    <span>Subtotal:</span>
+                                    <span>@((item.SubTotal - 5).ToString("C"))</span>
+                                </div>
+                                <div class="d-flex justify-content-between text-danger">
+                                    <span>Fees:</span>
+                                    <span>+@("$5.00")</span>
+                                </div>
                                 @if (item.Coupon != null)
                                 {
-                                    <div class="d-flex justify-content-between">
-                                        <span>Subtotal:</span>
-                                        <span>@item.SubTotal.ToString("C")</span>
-                                    </div>
                                     <div class="d-flex justify-content-between discount-amount">
                                         <span>Discount (@item.Coupon.AmountPercentage%):</span>
                                         <span>-@((item.SubTotal * item.Coupon.AmountPercentage / 100).ToString("C"))</span>
                                     </div>
-                                    <div class="divider-line"><hr /></div>
                                 }
+                                <div class="divider-line"><hr /></div>
+
                                 <div class="d-flex justify-content-between fs-5">
                                     <strong>Total</strong>
                                     <strong class="text-warning">@item.getTotal().ToString("C")</strong>

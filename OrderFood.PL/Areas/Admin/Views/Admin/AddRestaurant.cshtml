@@ -104,7 +104,8 @@
                             <div class="mb-3 d-flex justify-content-between align-items-end">
                                 <div class="w-100 me-2">
                                     <label asp-for="OwnerId" class="form-label">Owner</label>
-                                    <select asp-for="OwnerId" class="form-control custom-select-width" asp-items="@(new SelectList(owners, "Id", "UserName"))">
+                                    <select asp-for="OwnerId" class="form-control custom-select-width"
+                                            asp-items="@(new SelectList(owners, "Id", "UserName", TempData["NewOwnerId"]))">
                                         <option disabled selected>-- Select Owner --</option>
                                     </select>
                                     <span asp-validation-for="OwnerId" class="text-danger"></span>

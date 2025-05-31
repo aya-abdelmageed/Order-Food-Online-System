@@ -14,7 +14,7 @@ using OrderFood.PL.Areas.Resturant.ViewModel;
 namespace OrderFood.PL.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles= "Admin")]
+    [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -31,7 +31,7 @@ namespace OrderFood.PL.Areas.Admin.Controllers
         public async Task<IActionResult> GetAll()
         {
             //create list of roles i want to get tyhe user with it
-            List<string>roles = new List<string>([
+            List<string> roles = new List<string>([
                 "Admin",
                 "Owner",
                 "Delivery"
@@ -47,9 +47,9 @@ namespace OrderFood.PL.Areas.Admin.Controllers
                 {
                     var x = await _userManager.GetUsersInRoleAsync(role);
                     //add the users to the list with thier roles
-                    foreach(var i in x)
+                    foreach (var i in x)
                     {
-                        if (i != AuthorizedAdmin && !i.IsDeleted )
+                        if (i != AuthorizedAdmin && !i.IsDeleted)
                         {
                             UsersInRoles.Add(new UserRoleViewModel
                             {
@@ -116,7 +116,7 @@ namespace OrderFood.PL.Areas.Admin.Controllers
         }
 
 
-        
+
         // GET: AdminController/Delete/5
         public async Task<IActionResult> Delete(string id)
         {
@@ -147,7 +147,7 @@ namespace OrderFood.PL.Areas.Admin.Controllers
 
                 return RedirectToAction(nameof(GetAll));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 TempData["Error"] = "Error deleting user: " + ex.Message;
                 return RedirectToAction(nameof(GetAll));
@@ -227,15 +227,25 @@ namespace OrderFood.PL.Areas.Admin.Controllers
         }
         //-----------------------------------------------------------------------------
         // GET: Restaurant/Add
+        //public async Task<IActionResult> AddRestaurant()
+        //{
+        //    var owners = await _userManager.GetUsersInRoleAsync("Owner");
+
+        //    var model = new RestaurantViewModel();
+        //    ViewData["Owners"] = owners;
+
+        //    return View(model);
+        //}
+        [HttpGet]
         public async Task<IActionResult> AddRestaurant()
         {
             var owners = await _userManager.GetUsersInRoleAsync("Owner");
 
-            var model = new RestaurantViewModel();
             ViewData["Owners"] = owners;
 
-            return View(model);
+            return View(new RestaurantViewModel());
         }
+
 
         // POST: Restaurant/Add
         [HttpPost]
@@ -397,41 +407,82 @@ namespace OrderFood.PL.Areas.Admin.Controllers
             return RedirectToAction("ViewAllCoupons");
         }
         //--------------------------------------------------------------------------------
+        //[HttpPost]
+        //public async Task<IActionResult> RegisterOwner(RegisterOwnerViewModel model)
+        //{
+        //    if (!ModelState.IsValid)
+        //        return RedirectToAction("AddRestaurant", "Admin");
+
+        //    var user = new ApplicationUser
+        //    {
+        //        UserName = model.UserName,
+        //        Email = model.Email,
+        //    };
+
+        //    var result = await _userManager.CreateAsync(user, model.Password);
+        //    if (result.Succeeded)
+        //    {
+        //        var roleExists = await _roleManager.RoleExistsAsync("Owner");
+        //        if (!roleExists)
+        //        {
+        //            await _roleManager.CreateAsync(new IdentityRole("Owner"));
+        //        }
+
+        //        await _userManager.AddToRoleAsync(user, "Owner");
+
+        //        TempData["Success"] = "Owner registered and role assigned successfully!";
+        //        TempData["OwnerCreated"] = true;
+        //        return RedirectToAction("AddRestaurant", "Admin");
+        //    }
+
+        //    foreach (var error in result.Errors)
+        //    {
+        //        TempData["Error"] += error.Description + " ";
+        //    }
+
+        //    return RedirectToAction("AddRestaurant", "Admin");
+        //}
         [HttpPost]
         public async Task<IActionResult> RegisterOwner(RegisterOwnerViewModel model)
         {
             if (!ModelState.IsValid)
                 return RedirectToAction("AddRestaurant", "Admin");
 
-            var user = new ApplicationUser
+            if (ModelState.IsValid)
             {
-                UserName = model.UserName,
-                Email = model.Email,
-            };
-
-            var result = await _userManager.CreateAsync(user, model.Password);
-            if (result.Succeeded)
-            {
-                var roleExists = await _roleManager.RoleExistsAsync("Owner");
-                if (!roleExists)
+                var user = new ApplicationUser
                 {
-                    await _roleManager.CreateAsync(new IdentityRole("Owner"));
+                    UserName = model.UserName,
+                    Email = model.Email,
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    EmailConfirmed = true
+                };
+
+                var result = await _userManager.CreateAsync(user, model.Password);
+                if (result.Succeeded)
+                {
+                    // Assign owner role if needed
+                    await _userManager.AddToRoleAsync(user, "Owner");
+
+                    // Store TempData to notify the AddRestaurant view
+                    TempData["Success"] = "Owner registered and role assigned successfully!";
+                    TempData["OwnerCreated"] = true;
+                    return RedirectToAction("AddRestaurant", "Admin");
+
+                    //return RedirectToAction("AddRestaurant");
                 }
 
-                await _userManager.AddToRoleAsync(user, "Owner");
+                foreach (var error in result.Errors)
+                {
+                    TempData["Error"] += error.Description + " ";
+                }
 
-                TempData["Success"] = "Owner registered and role assigned successfully!";
-                TempData["OwnerCreated"] = true;
-                return RedirectToAction("AddRestaurant", "Admin");
-            }
-
-            foreach (var error in result.Errors)
-            {
-                TempData["Error"] += error.Description + " ";
             }
 
             return RedirectToAction("AddRestaurant", "Admin");
         }
+        //-----------------------------------------------------------------------
 
 
 
